@@ -12,7 +12,7 @@
     "fix": "run-s fix:prettier fix:eslint",
     "fix:eslint": "npm run lint:eslint -- --fix",
     "fix:prettier": "npm run lint:prettier -- --write",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
@@ -44,9 +44,9 @@
     "typescript": "^5"
   },
   "lint-staged": {
-   "app/**/*.{js,jsx,ts,tsx}": [
-     "eslint --fix",
-     "prettier --write"
-   ]
- }
+    "app/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
 }
