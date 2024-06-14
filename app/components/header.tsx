@@ -1,8 +1,7 @@
 export const Header = () => {
   return (
-    <header>
-      <h1>予約管理</h1>
-      <p>sample@gmail.com</p>
+    <header className='h-14 border-b bg-card'>
+      <h1 className=''>予約管理アプリ</h1>
     </header>
   )
 }

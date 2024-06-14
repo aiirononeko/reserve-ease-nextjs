@@ -1,9 +1,8 @@
 import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 
-import { Header } from '@/app/components/header'
-import { Sidebar } from '@/app/components/sidebar'
 import { cn } from '@/lib/utils'
+import { Header } from './components/header'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -16,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang='ja' suppressHydrationWarning>
       <head />
       <body
         className={cn(
@@ -25,7 +24,6 @@ export default function RootLayout({
         )}
       >
         <Header />
-        <Sidebar />
         <main>{children}</main>
       </body>
     </html>

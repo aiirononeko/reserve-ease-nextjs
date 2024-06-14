@@ -4,11 +4,14 @@
   "useTabs": false,
   "semi": false,
   "singleQuote": true,
-  "jsxSingleQuote": false,
+  "jsxSingleQuote": true,
   "arrowParens": "always",
   "printWidth": 80,
   "bracketSpacing": true,
-  "plugins": ["prettier-plugin-organize-imports"],
+  "plugins": [
+    "prettier-plugin-organize-imports",
+    "prettier-plugin-tailwindcss"
+  ],
   "overrides": [
     {
       "files": "*.html",
