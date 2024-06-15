@@ -14,19 +14,27 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useRouter } from 'next/navigation'
+import type { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import { storeSchema } from './schema'
 
-export const StoreForm = () => {
+interface Props {
+  store: Database['public']['Tables']['stores']['Row']
+}
+
+export const StoreForm = ({ store }: Props) => {
   const form = useForm<z.infer<typeof storeSchema>>({
+    defaultValues: {
+      name: store.name,
+      address: store.address,
+      phone_number: store.phone_number,
+    },
     resolver: zodResolver(storeSchema),
   })
 
-  const router = useRouter()
-
   const onSubmit = (values: z.infer<typeof storeSchema>) => {
     // TODO
-    router.push('/dashboard/store')
+    toast.success('店舗情報を更新しました！')
   }
 
   return (
