@@ -1,8 +1,8 @@
+import '@/app/globals.css'
 import { Inter as FontSans } from 'next/font/google'
-import './globals.css'
 
+import { Header } from '@/app/header'
 import { cn } from '@/lib/utils'
-import { Header } from './components/header'
 
 const fontSans = FontSans({
   subsets: ['latin'],

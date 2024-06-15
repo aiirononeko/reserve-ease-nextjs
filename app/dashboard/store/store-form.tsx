@@ -15,18 +15,18 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import { loginSchema } from './schema'
+import { storeSchema } from './schema'
 
-export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+export const StoreForm = () => {
+  const form = useForm<z.infer<typeof storeSchema>>({
+    resolver: zodResolver(storeSchema),
   })
 
   const router = useRouter()
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = (values: z.infer<typeof storeSchema>) => {
     // TODO
-    router.push('/dashboard')
+    router.push('/dashboard/store')
   }
 
   return (
@@ -34,14 +34,26 @@ export const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
         <FormField
           control={form.control}
-          name='email'
+          name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メールアドレス</FormLabel>
+              <FormLabel className='font-bold'>店舗名</FormLabel>
+              <FormControl>
+                <Input placeholder='サンプル屋' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='address'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>店舗所在地</FormLabel>
               <FormControl>
                 <Input
-                  type='email'
-                  placeholder='info@hogehoge.com'
+                  placeholder='〒105-0011 東京都港区芝公園4丁目2-8 東京タワー'
                   {...field}
                 />
               </FormControl>
@@ -51,17 +63,12 @@ export const LoginForm = () => {
         />
         <FormField
           control={form.control}
-          name='password'
+          name='phone_number'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>パスワード</FormLabel>
+              <FormLabel className='font-bold'>店舗電話番号</FormLabel>
               <FormControl>
-                <Input
-                  type='password'
-                  placeholder='********'
-                  {...field}
-                  className='placeholder:text-xs placeholder:tracking-widest'
-                />
+                <Input placeholder='08012345678' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +79,7 @@ export const LoginForm = () => {
           disabled={!form.formState.isValid || form.formState.isLoading}
           className='w-full font-bold'
         >
-          ログイン
+          更新
         </Button>
       </form>
     </Form>
