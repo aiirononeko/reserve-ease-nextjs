@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import type { Database } from '@/types/supabase'
 import { toast } from 'sonner'
+import { updateStore } from './action'
 import { storeSchema } from './schema'
 
 interface Props {
@@ -25,15 +26,17 @@ interface Props {
 export const StoreForm = ({ store }: Props) => {
   const form = useForm<z.infer<typeof storeSchema>>({
     defaultValues: {
+      id: store.id,
       name: store.name,
+      post_code: store.post_code,
       address: store.address,
       phone_number: store.phone_number,
     },
     resolver: zodResolver(storeSchema),
   })
 
-  const onSubmit = (values: z.infer<typeof storeSchema>) => {
-    // TODO
+  const onSubmit = async (values: z.infer<typeof storeSchema>) => {
+    await updateStore(values)
     toast.success('店舗情報を更新しました！')
   }
 
@@ -48,6 +51,19 @@ export const StoreForm = ({ store }: Props) => {
               <FormLabel className='font-bold'>店舗名</FormLabel>
               <FormControl>
                 <Input placeholder='サンプル屋' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='post_code'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>店舗郵便番号</FormLabel>
+              <FormControl>
+                <Input placeholder='111-1234' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
