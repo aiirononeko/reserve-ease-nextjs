@@ -28,9 +28,9 @@ export const StoreForm = ({ store }: Props) => {
     defaultValues: {
       id: store.id,
       name: store.name,
-      post_code: store.post_code,
-      address: store.address,
-      phone_number: store.phone_number,
+      post_code: store.post_code ?? '',
+      address: store.address ?? '',
+      phone_number: store.phone_number ?? '',
     },
     resolver: zodResolver(storeSchema),
   })
