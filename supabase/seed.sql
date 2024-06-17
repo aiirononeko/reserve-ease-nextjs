@@ -4,3 +4,8 @@ insert into public.stores (name, address, phone_number, post_code) values
   ('名古屋ストア', '愛知県名古屋市中村区名駅3-3-3', '052-3456-7890', '450-0002'),
   ('福岡ストア', '福岡県福岡市博多区博多駅東4-4-4', '092-4567-8901', '812-0011'),
   ('札幌ストア', '北海道札幌市中央区北五条西5-5-5', '011-5678-9012', '060-0005');
+
+INSERT INTO public.roles (name) VALUES
+  ('admin'),
+  ('owner'),
+  ('staff');

@@ -5,9 +5,9 @@ create table public.stores (
   id bigserial not null,
   name varchar(100) not null,
   description varchar(512),
-  post_code varchar(8) not null unique,
-  address varchar(512) not null unique,
-  phone_number varchar(15) not null unique,
+  post_code varchar(8) unique,
+  address varchar(512) unique,
+  phone_number varchar(15) unique,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 

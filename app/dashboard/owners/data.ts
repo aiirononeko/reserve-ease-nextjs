@@ -1,17 +1,15 @@
-'use server'
-
 import { createClient } from '@/lib/supabase/server'
 
-export const getStore = async () => {
+export const getOwnerRole = async () => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('stores')
+    .from('roles')
     .select('*')
-    .eq('id', 1)
+    .eq('name', 'owner')
     .single()
   if (error) {
-    console.error(error)
+    console.error(error.message)
   }
 
   return data

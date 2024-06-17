@@ -1,6 +1,6 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
 import { storeSchema } from './schema'
@@ -14,12 +14,14 @@ export const updateStore = async (input: z.infer<typeof storeSchema>) => {
     }
   }
 
+  const supabase = createClient()
+
   const { error } = await supabase
     .from('stores')
     .update({ ...input })
     .eq('id', input.id)
   if (error) {
-    console.error(error)
+    console.error(error.message)
   }
 
   revalidatePath('/dashboard/store')

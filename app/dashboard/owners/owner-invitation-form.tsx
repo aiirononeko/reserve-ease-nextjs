@@ -14,16 +14,26 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { login } from './action'
-import { loginSchema } from './schema'
+import { useRouter } from 'next/navigation'
+import { ownerInvitationSchema } from './schema'
 
-export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+interface Props {
+  ownerRoleId: number
+}
+
+export const OwnerInvitationForm = ({ ownerRoleId }: Props) => {
+  const form = useForm<z.infer<typeof ownerInvitationSchema>>({
+    defaultValues: {
+      role_id: ownerRoleId,
+    },
+    resolver: zodResolver(ownerInvitationSchema),
   })
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    await login(values)
+  const router = useRouter()
+
+  const onSubmit = (values: z.infer<typeof ownerInvitationSchema>) => {
+    // TODO
+    router.push('/dashboard')
   }
 
   return (
@@ -31,7 +41,7 @@ export const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
         <FormField
           control={form.control}
-          name='email'
+          name='owner_email'
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>メールアドレス</FormLabel>
@@ -48,17 +58,12 @@ export const LoginForm = () => {
         />
         <FormField
           control={form.control}
-          name='password'
+          name='store_name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>パスワード</FormLabel>
+              <FormLabel className='font-bold'>店舗名</FormLabel>
               <FormControl>
-                <Input
-                  type='password'
-                  placeholder='********'
-                  {...field}
-                  className='placeholder:text-xs placeholder:tracking-widest'
-                />
+                <Input placeholder='東京ストア' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,7 +74,7 @@ export const LoginForm = () => {
           disabled={!form.formState.isValid || form.formState.isLoading}
           className='w-full font-bold'
         >
-          ログイン
+          オーナーを招待
         </Button>
       </form>
     </Form>

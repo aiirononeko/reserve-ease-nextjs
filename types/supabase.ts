@@ -51,33 +51,33 @@ export type Database = {
       }
       stores: {
         Row: {
-          address: string
+          address: string | null
           created_at: string
           description: string | null
           id: number
           name: string
-          phone_number: string
-          post_code: string
+          phone_number: string | null
+          post_code: string | null
           updated_at: string
         }
         Insert: {
-          address: string
+          address?: string | null
           created_at?: string
           description?: string | null
           id?: number
           name: string
-          phone_number: string
-          post_code: string
+          phone_number?: string | null
+          post_code?: string | null
           updated_at?: string
         }
         Update: {
-          address?: string
+          address?: string | null
           created_at?: string
           description?: string | null
           id?: number
           name?: string
-          phone_number?: string
-          post_code?: string
+          phone_number?: string | null
+          post_code?: string | null
           updated_at?: string
         }
         Relationships: []
