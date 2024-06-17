@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '店舗用管理画面',
-  description: '店舗ユーザーがアクセスできるサービス管理画面です。',
+  title: 'トップページ | ReserveEase',
+  description:
+    'ReserveEase(リザーブイーズ)は、シンプルで使いやすい予約管理サービスです。',
 }
 
 export default function Page() {
