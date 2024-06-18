@@ -8,7 +8,7 @@ export const getBusinessHours = async (storeId: number) => {
     .select('*')
     .eq('store_id', storeId)
   if (error) {
-    console.error(error)
+    console.error(error.message)
     throw error
   }
 
