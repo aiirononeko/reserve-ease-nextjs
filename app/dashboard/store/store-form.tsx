@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import type { Database } from '@/types/supabase'
 import { toast } from 'sonner'
 import { updateStore } from './action'
@@ -28,6 +29,7 @@ export const StoreForm = ({ store }: Props) => {
     defaultValues: {
       id: store.id,
       name: store.name,
+      description: store.description ?? '',
       post_code: store.post_code ?? '',
       address: store.address ?? '',
       phone_number: store.phone_number ?? '',
@@ -51,6 +53,22 @@ export const StoreForm = ({ store }: Props) => {
               <FormLabel className='font-bold'>店舗名</FormLabel>
               <FormControl>
                 <Input placeholder='サンプル屋' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='description'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>店舗説明</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder='私たちの整体院では、経験豊富な施術師が一人ひとりに合わせたケアを提供します。'
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

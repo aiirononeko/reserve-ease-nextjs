@@ -39,22 +39,22 @@ create table public.users (
   primary key (id)
 );
 
--- /*
---  * 営業時間.
---  */
--- create table public.business_hours (
---   id bigserial not null,
---   day_of_week int not null, -- 0 = Sunday, 1 = Monday, 2 = Tuesday ... 6 = Saturday
---   open_time time not null,
---   close_time time not null,
---   created_at timestamp with time zone not null default now(),
---   updated_at timestamp with time zone not null default now(),
---
---   store_id bigserial not null references public.stores(id) on delete cascade,
---
---   primary key (id)
--- )
---
+/*
+ * 営業時間.
+ */
+create table public.business_hours (
+  id bigserial not null,
+  day_of_week int not null, -- 0 = Sunday, 1 = Monday, 2 = Tuesday ... 6 = Saturday
+  open_time time,
+  close_time time,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+
+  store_id bigserial not null references public.stores(id) on delete cascade,
+
+  primary key (id)
+)
+
 -- /*
 --  * サービス.
 --  */

@@ -11,7 +11,21 @@ export const getStore = async () => {
     .eq('id', 1)
     .single()
   if (error) {
-    console.error(error)
+    console.error(error.message)
+  }
+
+  return data
+}
+
+export const getBusinessHours = async (storeId: string) => {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('business_hours')
+    .select('*')
+    .eq('store_id', storeId)
+  if (error) {
+    console.error(error.message)
   }
 
   return data

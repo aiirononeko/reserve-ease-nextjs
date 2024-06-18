@@ -1,7 +1,10 @@
+import { Menu } from 'lucide-react'
+
 export const Header = () => {
   return (
-    <header className='h-14 border-b bg-card'>
-      <h1 className=''>予約管理アプリ</h1>
+    <header className='flex h-14 flex-row items-center justify-between border-b bg-card px-4'>
+      <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
+      <Menu />
     </header>
   )
 }
