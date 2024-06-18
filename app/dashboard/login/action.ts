@@ -18,7 +18,8 @@ export const login = async (input: z.infer<typeof loginSchema>) => {
   const { error } = await supabase.auth.signInWithPassword({ ...input })
   if (error) {
     console.error(error.message)
+    throw error
   }
 
-  redirect('/dashboard/store')
+  redirect('/dashboard')
 }

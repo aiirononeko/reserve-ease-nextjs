@@ -1,6 +1,6 @@
+import { getUser } from '@/app/auth'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { getUser } from '../auth'
 import { LoginForm } from './login-form'
 
 export default async function Page() {

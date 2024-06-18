@@ -1,7 +1,9 @@
+import { checkAuth } from '@/app/auth'
 import { getStore } from './data'
 import { StoreForm } from './store-form'
 
 export default async function Page() {
+  await checkAuth()
   const store = await getStore()
 
   return (

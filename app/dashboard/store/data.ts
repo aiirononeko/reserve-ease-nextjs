@@ -12,6 +12,7 @@ export const getStore = async () => {
     .single()
   if (error) {
     console.error(error.message)
+    throw error
   }
 
   return data
@@ -26,6 +27,7 @@ export const getBusinessHours = async (storeId: string) => {
     .eq('store_id', storeId)
   if (error) {
     console.error(error.message)
+    throw error
   }
 
   return data
