@@ -5,7 +5,7 @@ import { LoginForm } from './login-form'
 
 export default async function Page() {
   const user = await getUser()
-  if (user) redirect('/dashboard/store')
+  if (user) redirect('/dashboard')
 
   return (
     <div className='mx-4 mt-8 flex flex-col items-center space-y-8 bg-card px-6 py-10'>
