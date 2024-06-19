@@ -2,8 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export const checkAuth = async () => {
-  const user = await getUser()
-  if (user) redirect('/dashboard/login')
+  try {
+    const user = await getUser()
+    if (!user) redirect('/dashboard/login')
+  } catch (e) {
+    redirect('/dashboard/login')
+  }
 }
 
 export const getUser = async () => {
