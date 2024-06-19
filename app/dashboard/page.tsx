@@ -1,4 +1,4 @@
-import { checkAuth } from '@/app/auth'
+import { checkAuth } from '@/app/dashboard/auth'
 
 export default async function Page() {
   await checkAuth()
