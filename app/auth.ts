@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 export const checkAuth = async () => {
   const user = await getUser()
-  if (user) redirect('/dashboard/login')
+  if (!user) redirect('/dashboard/login')
 }
 
 export const getUser = async () => {
@@ -11,12 +11,6 @@ export const getUser = async () => {
 
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser()
-  if (error) {
-    console.error(error.message)
-    throw error
-  }
-
   return user
 }
