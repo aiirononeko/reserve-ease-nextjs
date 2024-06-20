@@ -16,43 +16,22 @@ import {
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { login } from './action'
-import { loginSchema } from './schema'
+import { setPassword } from './action'
+import { setPasswordSchema } from './schema'
 
-export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+export const SetPasswordForm = () => {
+  const form = useForm<z.infer<typeof setPasswordSchema>>({
+    resolver: zodResolver(setPasswordSchema),
   })
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    try {
-      await login(values)
-      toast.success('ログインしました')
-    } catch (e) {
-      toast.error('ログイン情報が間違っています')
-    }
+  const onSubmit = async (values: z.infer<typeof setPasswordSchema>) => {
+    await setPassword(values)
+    toast.success('パスワードを設定しました！')
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
-        <FormField
-          control={form.control}
-          name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className='font-bold'>メールアドレス</FormLabel>
-              <FormControl>
-                <Input
-                  type='email'
-                  placeholder='info@hogehoge.com'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name='password'
@@ -71,15 +50,37 @@ export const LoginForm = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name='passwordConfirm'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>パスワード(確認用)</FormLabel>
+              <FormControl>
+                <Input
+                  type='password'
+                  placeholder='********'
+                  {...field}
+                  className='placeholder:text-xs placeholder:tracking-widest'
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button
           type='submit'
-          disabled={!form.formState.isValid || form.formState.isLoading}
+          disabled={
+            !form.formState.isValid ||
+            !form.formState.isDirty ||
+            form.formState.isLoading
+          }
           className='w-full font-bold'
         >
           {form.formState.isSubmitting ? (
             <Loader2 className='mr-2 size-4 animate-spin' />
           ) : (
-            <>ログイン</>
+            <>更新</>
           )}
         </Button>
       </form>

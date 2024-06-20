@@ -1,8 +1,5 @@
-insert into auth.users (id, email, encrypted_password, role)
-values
-  ('b2c88d43-249b-4c3e-8d45-54672b59de41', 'admin@gmail.com', crypt('password', gen_salt('bf')), 'admin');
-
 insert into public.stores (name, address, phone_number, post_code) values
+  ('管理者ストア', '東京都中央区銀座1-1-1', '03-1234-5678', '104-0061'),
   ('東京ストア', '東京都中央区銀座1-1-1', '03-1234-5678', '104-0061'),
   ('大阪ストア', '大阪府北区梅田2-2-2', '06-2345-6789', '530-0001'),
   ('名古屋ストア', '愛知県名古屋市中村区名駅3-3-3', '052-3456-7890', '450-0002'),
@@ -14,10 +11,7 @@ insert into public.roles (name) values
   ('owner'),
   ('staff');
 
-insert into public.users (id, email, role_id, store_id) values
-  ('b2c88d43-249b-4c3e-8d45-54672b59de41', 'admin@gmail.com', 1, 1);
-
-insert into public.business_hours (day_of_week, open_time, close_time, store_id) values
+INSERT INTO public.business_hours (day_of_week, open_time, close_time, store_id) VALUES
   (0, '08:00', '18:00', 1), -- Sunday for store 1
   (1, '09:00', '19:00', 1), -- Monday for store 1
   (2, null, null, 1),       -- Tuesday for store 1 (closed)

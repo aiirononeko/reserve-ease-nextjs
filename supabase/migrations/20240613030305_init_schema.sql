@@ -1,7 +1,7 @@
 /*
  * 店舗.
  */
-create table public.stores (
+CREATE TABLE public.stores (
   id bigserial not null,
   name varchar(100) not null,
   description varchar(512),
@@ -17,7 +17,7 @@ create table public.stores (
 /*
  * ロール.
  */
-create table public.roles (
+CREATE TABLE public.roles (
   id bigserial not null,
   name varchar(15) not null,
 
@@ -27,7 +27,7 @@ create table public.roles (
 /*
  * ユーザー.
  */
-create table public.users (
+CREATE TABLE public.users (
   id uuid not null references auth.users on delete cascade,
   email varchar(256) not null unique,
   created_at timestamp with time zone not null default now(),
@@ -42,7 +42,7 @@ create table public.users (
 /*
  * 営業時間.
  */
-create table public.business_hours (
+CREATE TABLE public.business_hours (
   id bigserial not null,
   day_of_week int not null, -- 0 = Sunday, 1 = Monday, 2 = Tuesday ... 6 = Saturday
   open_time time,

@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import type { Database } from '@/types/supabase'
+import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { updateStore } from './action'
 import { storeSchema } from './schema'
@@ -118,10 +119,18 @@ export const StoreForm = ({ store }: Props) => {
         />
         <Button
           type='submit'
-          disabled={!form.formState.isValid || form.formState.isLoading}
+          disabled={
+            !form.formState.isValid ||
+            !form.formState.isDirty ||
+            form.formState.isLoading
+          }
           className='w-full font-bold'
         >
-          更新
+          {form.formState.isSubmitting ? (
+            <Loader2 className='mr-2 size-4 animate-spin' />
+          ) : (
+            <>更新</>
+          )}
         </Button>
       </form>
     </Form>

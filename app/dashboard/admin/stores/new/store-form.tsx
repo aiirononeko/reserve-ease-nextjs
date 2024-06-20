@@ -16,21 +16,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { login } from './action'
-import { loginSchema } from './schema'
+import { createStore } from './action'
+import { storeSchema } from './schema'
 
-export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+export const StoreForm = () => {
+  const form = useForm<z.infer<typeof storeSchema>>({
+    resolver: zodResolver(storeSchema),
   })
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    try {
-      await login(values)
-      toast.success('ログインしました')
-    } catch (e) {
-      toast.error('ログイン情報が間違っています')
-    }
+  const onSubmit = async (values: z.infer<typeof storeSchema>) => {
+    await createStore(values)
+    toast.success('店舗を作成してオーナーを追加しました')
   }
 
   return (
@@ -38,16 +34,12 @@ export const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
         <FormField
           control={form.control}
-          name='email'
+          name='storeName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メールアドレス</FormLabel>
+              <FormLabel className='font-bold'>店舗名</FormLabel>
               <FormControl>
-                <Input
-                  type='email'
-                  placeholder='info@hogehoge.com'
-                  {...field}
-                />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -55,17 +47,14 @@ export const LoginForm = () => {
         />
         <FormField
           control={form.control}
-          name='password'
+          name='ownerEmail'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>パスワード</FormLabel>
+              <FormLabel className='font-bold'>
+                オーナーメールアドレス
+              </FormLabel>
               <FormControl>
-                <Input
-                  type='password'
-                  placeholder='********'
-                  {...field}
-                  className='placeholder:text-xs placeholder:tracking-widest'
-                />
+                <Input type='email' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,13 +62,17 @@ export const LoginForm = () => {
         />
         <Button
           type='submit'
-          disabled={!form.formState.isValid || form.formState.isLoading}
+          disabled={
+            !form.formState.isValid ||
+            !form.formState.isDirty ||
+            form.formState.isLoading
+          }
           className='w-full font-bold'
         >
           {form.formState.isSubmitting ? (
             <Loader2 className='mr-2 size-4 animate-spin' />
           ) : (
-            <>ログイン</>
+            <>登録</>
           )}
         </Button>
       </form>
