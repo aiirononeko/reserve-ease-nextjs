@@ -3,17 +3,16 @@
 import { createClient } from '@/lib/supabase/server'
 import type { AuthUser } from '@supabase/supabase-js'
 
-export const getStore = async (user: AuthUser) => {
+export const getMenus = async (user: AuthUser) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('stores')
+    .from('menus')
     .select('*')
-    .eq('id', user.user_metadata.store_id)
-    .single()
+    .eq('user_id', user.id)
+    .order('updated_at', { ascending: false })
   if (error) {
-    console.error(error.message)
-    throw error
+    console.error(error)
   }
 
   return data

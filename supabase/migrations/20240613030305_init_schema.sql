@@ -8,18 +8,9 @@ CREATE TABLE public.stores (
   post_code varchar(8) unique,
   address varchar(512) unique,
   phone_number varchar(15) unique,
+  icon_url varchar(256),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
-
-  primary key (id)
-);
-
-/*
- * ロール.
- */
-CREATE TABLE public.roles (
-  id bigserial not null,
-  name varchar(15) not null,
 
   primary key (id)
 );
@@ -30,11 +21,28 @@ CREATE TABLE public.roles (
 CREATE TABLE public.users (
   id uuid not null references auth.users on delete cascade,
   email varchar(256) not null unique,
+  name varchar(50),
+  profile varchar(512),
+  icon_url varchar(512),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 
-  role_id bigserial not null references public.roles(id) on delete cascade,
-  store_id bigserial not null references public.stores(id) on delete cascade,
+  primary key (id)
+);
+
+/*
+ * メニュー.
+ */
+create table public.menus (
+  id bigserial not null,
+  name varchar(15) not null,
+  description varchar(512) not null,
+  amount int not null,
+  discount int not null default 0,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+
+  user_id uuid not null references public.users(id) on delete cascade,
 
   primary key (id)
 );
@@ -53,24 +61,8 @@ CREATE TABLE public.business_hours (
   store_id bigserial not null references public.stores(id) on delete cascade,
 
   primary key (id)
-)
+);
 
--- /*
---  * サービス.
---  */
--- create table public.services (
---   id bigserial not null,
---   name varchar(15) not null,
---   description varchar(512) not null,
---   amount int not null,
---   discount int not null,
---
---   store_id bigserial not null references public.stores(id) on delete cascade,
---   user_id bigserial not null references public.users(id) on delete cascade,
---
---   primary key (id)
--- )
---
 -- /*
 --  * 顧客.
 --  */
