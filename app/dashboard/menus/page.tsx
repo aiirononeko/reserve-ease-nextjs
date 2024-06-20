@@ -1,11 +1,30 @@
 import { checkAuth } from '@/app/dashboard/auth'
+import { Button } from '@/components/ui/button'
+import { CirclePlus } from 'lucide-react'
+import Link from 'next/link'
+import { getMenus } from './data'
+import { MenuCard } from './menu-card'
 
 export default async function Page() {
-  await checkAuth()
+  const user = await checkAuth()
+  const menus = await getMenus(user)
 
   return (
-    <div className='mx-4 my-6 flex flex-col items-center space-y-8 bg-card px-6 py-8'>
+    <div className='mx-4 flex flex-col items-center space-y-6 py-8'>
       <h1 className='text-xl font-bold'>メニュー管理</h1>
+      <div className='space-y-4'>
+        <div className='flex items-center justify-center rounded border border-dotted border-primary bg-card'>
+          <Button variant='link' asChild>
+            <Link href='/dashboard/menus/new' className='text-xs'>
+              <CirclePlus className='pr-1' />
+              メニューを追加する
+            </Link>
+          </Button>
+        </div>
+        {menus &&
+          menus.length > 0 &&
+          menus.map((menu) => <MenuCard key={menu.id} menu={menu} />)}
+      </div>
     </div>
   )
 }
