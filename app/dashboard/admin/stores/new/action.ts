@@ -1,6 +1,7 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/admin'
+import { redirect } from 'next/navigation'
 import type { z } from 'zod'
 import { storeSchema } from './schema'
 
@@ -25,21 +26,38 @@ export const createStore = async (input: z.infer<typeof storeSchema>) => {
     return
   }
 
-  await inviteOwner(input.ownerEmail, data.id)
+  const user = await inviteOwner(input.ownerEmail, data.id)
+  if (user) await createOwnerUser(user.id, input.ownerEmail)
+
+  redirect('/dashboard/admin/stores')
 }
 
 const inviteOwner = async (ownerEmail: string, storeId: number) => {
   const supabase = createClient()
 
-  const { error } = await supabase.auth.admin.inviteUserByEmail(ownerEmail, {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.admin.inviteUserByEmail(ownerEmail, {
     data: {
       role: 'owner',
       store_id: storeId,
     },
-    redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN}/dashboard/setting-password`,
   })
   if (error) {
     console.error(error.message)
-    return
+  }
+
+  return user
+}
+
+const createOwnerUser = async (ownerUid: string, ownerEmail: string) => {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from('users')
+    .insert({ id: ownerUid, email: ownerEmail })
+  if (error) {
+    console.error(error.message)
   }
 }

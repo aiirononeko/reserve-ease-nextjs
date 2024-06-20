@@ -21,7 +21,7 @@ export const StoreCard = async ({ store }: Props) => {
       <CardHeader>
         <CardTitle>{store.name}</CardTitle>
         <CardDescription>
-          {store.address ?? 'まだ住所が登録されていません'}
+          {store.address ?? '住所が登録されていません'}
         </CardDescription>
       </CardHeader>
       <CardContent className='text-md'>
@@ -29,7 +29,7 @@ export const StoreCard = async ({ store }: Props) => {
           <p>{store.description}</p>
         ) : (
           <p className='text-xs text-muted-foreground'>
-            まだ詳細が登録されていません
+            詳細が登録されていません
           </p>
         )}
       </CardContent>
