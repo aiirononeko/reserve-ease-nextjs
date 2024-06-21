@@ -1,8 +1,11 @@
 import { z } from 'zod'
 
-export const businessHourSchema = z.object({
+const businessHourSchema = z.object({
   id: z.number(),
-  open_time: z.string(),
-  close_time: z.string(),
-  store_id: z.number(),
+  open_time: z.string().optional(),
+  close_time: z.string().optional(),
+})
+
+export const businessHoursSchema = z.object({
+  businessHours: z.array(businessHourSchema),
 })

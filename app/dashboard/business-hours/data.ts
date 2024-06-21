@@ -10,6 +10,7 @@ export const getBusinessHours = async (user: AuthUser) => {
     .from('business_hours')
     .select('*')
     .eq('store_id', user.user_metadata.store_id)
+    .order('day_of_week', { ascending: true })
   if (error) {
     console.error(error.message)
     throw error
