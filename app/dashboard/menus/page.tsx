@@ -12,7 +12,7 @@ export default async function Page() {
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>
       <h1 className='text-xl font-bold'>メニュー管理</h1>
-      <div className='space-y-4'>
+      <div className='w-full space-y-4'>
         <div className='flex items-center justify-center rounded border border-dotted border-primary bg-card'>
           <Button variant='link' asChild>
             <Link href='/dashboard/menus/new' className='text-xs'>

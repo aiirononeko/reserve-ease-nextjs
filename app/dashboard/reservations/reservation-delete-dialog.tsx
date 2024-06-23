@@ -17,24 +17,24 @@ import { Loader2, Trash2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { deleteMenu } from './action'
-import { deleteMenuSchema } from './schema'
+import { deleteReservation } from './action'
+import { deleteReservationSchema } from './schema'
 
 interface Props {
-  menu: Database['public']['Tables']['menus']['Row']
+  reservation: Database['public']['Tables']['reservations']['Row']
 }
 
-export const MenuDeleteDialog = ({ menu }: Props) => {
-  const form = useForm<z.infer<typeof deleteMenuSchema>>({
-    resolver: zodResolver(deleteMenuSchema),
+export const ReservationDeleteDialog = ({ reservation }: Props) => {
+  const form = useForm<z.infer<typeof deleteReservationSchema>>({
+    resolver: zodResolver(deleteReservationSchema),
     defaultValues: {
-      id: menu.id,
+      id: reservation.id,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof deleteMenuSchema>) => {
-    await deleteMenu(values)
-    toast.success('メニューを削除しました')
+  const onSubmit = async (values: z.infer<typeof deleteReservationSchema>) => {
+    await deleteReservation(values)
+    toast.success('予約を削除しました')
   }
 
   return (
@@ -50,7 +50,7 @@ export const MenuDeleteDialog = ({ menu }: Props) => {
           >
             <DialogHeader>
               <DialogDescription>
-                {menu.name}を削除します。
+                予約を削除します。
                 <br />
                 よろしいですか？
               </DialogDescription>

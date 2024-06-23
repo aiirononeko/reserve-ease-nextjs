@@ -17,35 +17,33 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import type { Database } from '@/types/supabase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { updateMenu } from './action'
-import { updateMenuSchema } from './schema'
+import { updateReservation } from './action'
+import { updateReservationSchema } from './schema'
 
 interface Props {
-  menu: Database['public']['Tables']['menus']['Row']
+  reservation: Database['public']['Tables']['reservations']['Row']
 }
 
-export const MenuFormDialog = ({ menu }: Props) => {
-  const form = useForm<z.infer<typeof updateMenuSchema>>({
-    resolver: zodResolver(updateMenuSchema),
+export const ReservationFormDialog = ({ reservation }: Props) => {
+  const form = useForm<z.infer<typeof updateReservationSchema>>({
+    resolver: zodResolver(updateReservationSchema),
     defaultValues: {
-      id: menu.id,
-      name: menu.name,
-      description: menu.description,
-      amount: menu.amount.toString(),
-      discount: menu.discount.toString(),
+      id: reservation.id,
+      reservation_date: reservation.reservation_date,
+      start_time: reservation.start_time,
+      end_time: reservation.end_time,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof updateMenuSchema>) => {
-    await updateMenu(values)
-    toast.success('メニューを更新しました')
+  const onSubmit = async (values: z.infer<typeof updateReservationSchema>) => {
+    await updateReservation(values)
+    toast.success('予約を更新しました')
   }
 
   return (
@@ -55,7 +53,7 @@ export const MenuFormDialog = ({ menu }: Props) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>メニューを編集</DialogTitle>
+          <DialogTitle>予約を編集</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -64,12 +62,12 @@ export const MenuFormDialog = ({ menu }: Props) => {
           >
             <FormField
               control={form.control}
-              name='name'
+              name='reservation_date'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>メニュー名</FormLabel>
+                  <FormLabel>予約日</FormLabel>
                   <FormControl>
-                    <Input placeholder='shadcn' {...field} />
+                    <Input type='date' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,12 +75,12 @@ export const MenuFormDialog = ({ menu }: Props) => {
             />
             <FormField
               control={form.control}
-              name='description'
+              name='start_time'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>サービス内容</FormLabel>
+                  <FormLabel>予約開始時間</FormLabel>
                   <FormControl>
-                    <Textarea placeholder='shadcn' {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,25 +88,12 @@ export const MenuFormDialog = ({ menu }: Props) => {
             />
             <FormField
               control={form.control}
-              name='amount'
+              name='end_time'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>価格(税込)</FormLabel>
+                  <FormLabel>予約終了時間</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder='3000' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='discount'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>割引価格(税込)</FormLabel>
-                  <FormControl>
-                    <Input type='number' placeholder='500' {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

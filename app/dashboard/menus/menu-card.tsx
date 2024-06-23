@@ -9,7 +9,7 @@ import {
 
 import type { Database } from '@/types/supabase'
 
-import { MenuDeleteDialog } from './menu-delete-modal'
+import { MenuDeleteDialog } from './menu-delete-dialog'
 import { MenuFormDialog } from './menu-form-dialog'
 
 interface Props {

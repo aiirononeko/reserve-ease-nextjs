@@ -20,6 +20,9 @@ export const Header = () => {
             <Link href='/dashboard'>ダッシュボード</Link>
           </Button>
           <Button variant='link' asChild>
+            <Link href='/dashboard/reservations'>予約管理</Link>
+          </Button>
+          <Button variant='link' asChild>
             <Link href='/dashboard/menus'>メニュー管理</Link>
           </Button>
           <Button variant='link' asChild>

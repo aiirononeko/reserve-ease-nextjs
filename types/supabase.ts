@@ -113,6 +113,64 @@ export type Database = {
           },
         ]
       }
+      reservations: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: number
+          menu_id: number
+          reservation_date: string
+          start_time: string
+          store_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: number
+          menu_id?: number
+          reservation_date: string
+          start_time: string
+          store_id?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: number
+          menu_id?: number
+          reservation_date?: string
+          start_time?: string
+          store_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'reservations_menu_id_fkey'
+            columns: ['menu_id']
+            isOneToOne: false
+            referencedRelation: 'menus'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'reservations_store_id_fkey'
+            columns: ['store_id']
+            isOneToOne: false
+            referencedRelation: 'stores'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'reservations_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       stores: {
         Row: {
           address: string | null

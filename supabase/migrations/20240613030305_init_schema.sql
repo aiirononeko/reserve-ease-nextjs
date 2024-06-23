@@ -63,30 +63,20 @@ CREATE TABLE public.business_hours (
   primary key (id)
 );
 
--- /*
---  * 顧客.
---  */
--- create table public.customers (
---   id bigserial not null,
---   first_name varchar(10) not null,
---   last_name varchar(10) not null,
---   phone_number varchar(15) not null,
---   email varchar(256) not null
--- )
---
--- /*
---  * 予約.
---  */
--- create table public.reservations (
---   id bigserial not null,
---   reservation_date date not null,
---   start_time time not null,
---   end_time not null,
---
---   store_id bigserial not null references public.stores(id) on delete cascade,
---   user_id bigserial not null references public.users(id) on delete cascade,
---   plan_id bigserial not null references public.plans(id) on delete cascade,
---   customer_id bigserial not null references public.customers(id) on delete cascade,
---
---   primary key (id)
--- )
+/*
+ * 予約.
+ */
+create table public.reservations (
+  id bigserial not null,
+  reservation_date date not null,
+  start_time time not null,
+  end_time time not null,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+
+  store_id bigserial not null references public.stores(id) on delete cascade,
+  user_id uuid not null references public.users(id) on delete cascade,
+  menu_id bigserial not null references public.menus(id) on delete cascade,
+
+  primary key (id)
+);

@@ -59,3 +59,11 @@ INSERT INTO public.business_hours (day_of_week, open_time, close_time, store_id)
   (4, '11:00', '17:00', 3), -- Thursday for store 3
   (5, '11:00', '18:00', 3), -- Friday for store 3
   (6, '11:00', '18:00', 3); -- Saturday for store 3
+
+-- Inserting sample data into the reservations table
+INSERT INTO public.reservations (reservation_date, start_time, end_time, store_id, user_id, menu_id) VALUES
+  ('2024-07-01', '10:00:00', '11:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 1),
+  ('2024-07-02', '12:00:00', '13:00:00', 2, '123e4567-e89b-12d3-a456-426614174003', 2),
+  ('2024-07-03', '14:00:00', '15:00:00', 3, '123e4567-e89b-12d3-a456-426614174003', 3),
+  ('2024-07-04', '16:00:00', '17:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 2),
+  ('2024-07-05', '18:00:00', '19:00:00', 2, '123e4567-e89b-12d3-a456-426614174003', 2);
