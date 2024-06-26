@@ -8,11 +8,22 @@ export const getReservations = async (user: AuthUser) => {
 
   const { data, error } = await supabase
     .from('reservations')
-    .select('*')
+    .select(
+      `
+      *,
+      menus:menu_id (
+        name
+      ),
+      users:user_id (
+        name
+      )
+    `,
+    )
     .eq('store_id', user.user_metadata.store_id)
     .order('created_at', { ascending: false })
   if (error) {
-    console.error(error)
+    console.error(error.message)
+    throw error
   }
 
   return data

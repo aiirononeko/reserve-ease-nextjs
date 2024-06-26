@@ -1,43 +1,51 @@
 'use client'
 
 import type { Database } from '@/types/supabase'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
+import { ReservationCard } from './reservation-card'
 
 interface Props {
   reservations: Database['public']['Tables']['reservations']['Row'][]
 }
 
-export const ReservationCalendar = ({ reservations }: Props) => {
+export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [reservationsState] = useState(reservations)
 
-  const getWeekDates = () => {
-    const start = new Date(currentDate)
-    start.setDate(start.getDate() - start.getDay())
+  const getWeekDates = useMemo(() => {
+    const today = new Date(currentDate)
     return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(start)
-      date.setDate(date.getDate() + i)
+      const date = new Date(today)
+      date.setDate(today.getDate() + i)
       return date
     })
-  }
+  }, [currentDate])
 
-  const getCurrentTimePosition = () => {
-    const now = new Date()
-    const hours = now.getHours()
-    const minutes = now.getMinutes()
-    return (hours + minutes / 60) * 56 // 1時間の高さが56px
-  }
+  const hours = Array.from({ length: 17 }, (_, i) => i + 7) // 7時から23時まで
 
-  const weekDates = getWeekDates()
-  const hours = Array.from({ length: 24 }, (_, i) => i)
+  const isReservationInHour = (
+    date: Date,
+    hour: number,
+    reservation: Database['public']['Tables']['reservations']['Row'],
+  ) => {
+    const reservationDate = new Date(reservation.reservation_date)
+    const startHour = parseInt(reservation.start_time.split(':')[0])
+    const endHour = parseInt(reservation.end_time.split(':')[0])
+    return (
+      reservationDate.getDate() === date.getDate() &&
+      reservationDate.getMonth() === date.getMonth() &&
+      reservationDate.getFullYear() === date.getFullYear() &&
+      startHour <= hour &&
+      endHour > hour
+    )
+  }
 
   return (
     <div className='w-full'>
       <ReservationCalendarHeader
         currentDate={currentDate}
         setCurrentDate={setCurrentDate}
-        weekDates={weekDates}
+        weekDates={getWeekDates}
       />
       <div className='flex overflow-x-auto'>
         <div className='sticky left-0 z-10'>
@@ -53,7 +61,7 @@ export const ReservationCalendar = ({ reservations }: Props) => {
         </div>
         <div className='grow'>
           <div className='grid grid-cols-7'>
-            {weekDates.map((date, dateIndex) => (
+            {getWeekDates.map((date, dateIndex) => (
               <div key={dateIndex}>
                 <div className='sticky top-0 z-10 border-b border-gray-200 p-2 text-center'>
                   <div className='text-sm font-bold'>{date.getDate()}</div>
@@ -65,46 +73,34 @@ export const ReservationCalendar = ({ reservations }: Props) => {
             ))}
           </div>
           <div className='relative grid w-[975px] grid-cols-7 gap-px bg-gray-100 md:w-full'>
-            {weekDates.map((date, dateIndex) => (
+            {getWeekDates.map((date, dateIndex) => (
               <div key={dateIndex} className='bg-background'>
                 {hours.map((hour) => {
-                  // TODO: その日のReservationsを作る
+                  const reservationsInHour = reservations.filter(
+                    (reservation) =>
+                      isReservationInHour(date, hour, reservation),
+                  )
                   return (
                     <div
                       key={hour}
                       className='relative h-14 border-b border-gray-100'
                     >
-                      {reservationsState
-                        .filter((event) => {
-                          const eventStart = parseInt(
-                            event.start_time.split(':')[0],
-                          )
-                          return eventStart === hour
-                        })
-                        .map((event) => (
-                          <div
-                            key={event.id}
-                            className='absolute mb-1 w-full truncate rounded-lg bg-blue-100 p-1 text-xs text-blue-800'
-                            style={{
-                              top: `${(parseInt(event.start_time.split(':')[1]) / 60) * 56}px`,
-                              height: `${((parseInt(event.end_time.split(':')[0]) * 60 + parseInt(event.end_time.split(':')[1]) - (parseInt(event.start_time.split(':')[0]) * 60 + parseInt(event.start_time.split(':')[1]))) / 60) * 56}px`,
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                            }}
-                          >
-                            {event.store_id}
-                          </div>
-                        ))}
+                      {reservationsInHour.map((reservation) => (
+                        <ReservationCard
+                          key={reservation.id}
+                          start_time={reservation.start_time}
+                          end_time={reservation.end_time}
+                          // @ts-expect-error because hoge
+                          menuName={reservation.menus.name}
+                          // @ts-expect-error because hoge
+                          userName={reservation.users.name}
+                        />
+                      ))}
                     </div>
                   )
                 })}
               </div>
             ))}
-            <div
-              className='index-x-0 absolute z-20 h-0.5 bg-red-500'
-              style={{ top: `${getCurrentTimePosition()}px` }}
-            ></div>
           </div>
         </div>
       </div>
