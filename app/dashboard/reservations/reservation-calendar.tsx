@@ -4,13 +4,17 @@ import type { Database } from '@/types/supabase'
 import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
+import { ReservationModal } from './reservation-modal'
+import type { ReservationType } from './type'
 
 interface Props {
-  reservations: Database['public']['Tables']['reservations']['Row'][]
+  reservations: ReservationType[]
 }
 
 export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedReservation, setSelectedReservation] =
+    useState<ReservationType | null>(null)
 
   const getWeekDates = useMemo(() => {
     const today = new Date(currentDate)
@@ -38,6 +42,26 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
       startHour <= hour &&
       endHour > hour
     )
+  }
+
+  const handleReservationClick = (reservation: ReservationType) => {
+    setSelectedReservation(reservation)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedReservation(null)
+  }
+
+  const handleEditReservation = (reservation: ReservationType) => {
+    // 編集ロジックをここに実装
+    console.log('Edit reservation:', reservation)
+    handleCloseModal()
+  }
+
+  const handleDeleteReservation = (reservationId: number) => {
+    // 削除ロジックをここに実装
+    console.log('Delete reservation:', reservationId)
+    handleCloseModal()
   }
 
   return (
@@ -88,12 +112,8 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
                       {reservationsInHour.map((reservation) => (
                         <ReservationCard
                           key={reservation.id}
-                          start_time={reservation.start_time}
-                          end_time={reservation.end_time}
-                          // @ts-expect-error because hoge
-                          menuName={reservation.menus.name}
-                          // @ts-expect-error because hoge
-                          userName={reservation.users.name}
+                          handleReservationClick={handleReservationClick}
+                          reservation={reservation}
                         />
                       ))}
                     </div>
@@ -104,6 +124,13 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
           </div>
         </div>
       </div>
+      <ReservationModal
+        isOpen={!!selectedReservation}
+        onClose={handleCloseModal}
+        reservation={selectedReservation}
+        onEdit={handleEditReservation}
+        onDelete={handleDeleteReservation}
+      />
     </div>
   )
 }

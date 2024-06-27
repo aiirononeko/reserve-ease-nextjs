@@ -1,16 +1,15 @@
+import type { ReservationType } from './type'
+
 interface Props {
-  start_time: string
-  end_time: string
-  menuName: string
-  userName: string
+  reservation: ReservationType
+  handleReservationClick: (reservation: ReservationType) => void
 }
 
 export const ReservationCard = ({
-  start_time,
-  end_time,
-  menuName,
-  userName,
+  reservation,
+  handleReservationClick,
 }: Props) => {
+  const { start_time, end_time, menus, users } = reservation
   return (
     <div
       className='absolute mb-1 w-full truncate rounded-lg bg-primary p-1 text-xs text-primary-foreground'
@@ -18,15 +17,13 @@ export const ReservationCard = ({
         top: '0',
         height: '100%',
       }}
-      onClick={(e) => {
-        e.stopPropagation()
-      }}
+      onClick={() => handleReservationClick(reservation)}
     >
       {start_time} ~ {end_time}
       <br />
-      {menuName}
+      {menus.name}
       <br />
-      {userName}
+      {users.name}
     </div>
   )
 }
