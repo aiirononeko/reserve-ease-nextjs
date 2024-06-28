@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'トップページ | ReserveEase',
+  title: 'フリーランス向けの圧倒的低価格な予約システム | ReserveEase',
   description:
-    'ReserveEase(リザーブイーズ)は、シンプルで使いやすい予約管理サービスです。',
+    '月額980円、従量課金なしで利用できるフリーランス・個人店向け予約管理システムです。初月無料、最短3分で導入できるため、今すぐあなたのビジネスの予約を管理できます。',
 }
 
 export default function Page() {
@@ -29,7 +29,7 @@ export default function Page() {
             </span>
           </div>
           <p className='font-semibold leading-7'>
-            フリーランサーや個人店向けに、
+            フリーランスや個人店向けに、
             <br />
             シンプルで低価格な予約管理を実現。
             <br />
