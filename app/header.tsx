@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 export const Header = () => {
   return (
-    <header className='flex h-14 flex-row items-center justify-between border-b px-4'>
+    <header className='flex h-14 flex-row items-center justify-between border-b bg-background px-4'>
       <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
       <Popover>
         <PopoverTrigger>

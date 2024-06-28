@@ -5,16 +5,16 @@ import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
 import { ReservationModal } from './reservation-modal'
-import type { ReservationType } from './type'
+import type { Reservation } from './type'
 
 interface Props {
-  reservations: ReservationType[]
+  reservations: Reservation[]
 }
 
 export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedReservation, setSelectedReservation] =
-    useState<ReservationType | null>(null)
+    useState<Reservation | null>(null)
 
   const getWeekDates = useMemo(() => {
     const today = new Date(currentDate)
@@ -44,7 +44,7 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
     )
   }
 
-  const handleReservationClick = (reservation: ReservationType) => {
+  const handleReservationClick = (reservation: Reservation) => {
     setSelectedReservation(reservation)
   }
 
@@ -52,7 +52,7 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
     setSelectedReservation(null)
   }
 
-  const handleEditReservation = (reservation: ReservationType) => {
+  const handleEditReservation = (reservation: Reservation) => {
     // 編集ロジックをここに実装
     console.log('Edit reservation:', reservation)
     handleCloseModal()

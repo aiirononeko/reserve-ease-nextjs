@@ -1,4 +1,7 @@
+import { Button } from '@/components/ui/button'
+import { Mail } from 'lucide-react'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'トップページ | ReserveEase',
@@ -8,8 +11,34 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className='mx-4 my-6 flex flex-col items-center space-y-8 bg-card px-6 py-8'>
-      <h1 className='text-xl font-semibold'>ユーザー用トップページ</h1>
+    <div className='mx-4 my-8'>
+      <div className='flex flex-col space-y-6'>
+        <div className='relative'>
+          <h2 className='relative z-10 text-4xl font-bold leading-[50px]'>
+            革新的な
+            <br />
+            予約管理システム
+          </h2>
+          <span className='absolute -top-10 left-0 -z-50 whitespace-nowrap text-8xl font-bold text-gray-100'>
+            Reserve
+            <br />
+            Ease
+          </span>
+        </div>
+        <p className='font-semibold leading-7'>
+          フリーランサーや個人店向けに、
+          <br />
+          シンプルで低価格な予約管理を実現。
+          <br />
+          完全月額980円でお使いいただけます。
+        </p>
+        <Button variant='outline' asChild>
+          <Link href='/'>
+            お問い合わせ
+            <Mail className='ml-2' />
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }
