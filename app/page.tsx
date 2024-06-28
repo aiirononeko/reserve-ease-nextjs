@@ -21,10 +21,10 @@ export default function Page() {
               <br />
               予約管理システム
             </h2>
-            <span className='absolute -top-14 left-4 -z-50 whitespace-nowrap text-[72px] font-bold text-gray-100'>
+            <span className='absolute -top-14 right-4 -z-50 whitespace-nowrap text-[80px] font-bold text-gray-100'>
               Reserve
             </span>
-            <span className='rotate-370 absolute -right-4 -top-4 -z-50 whitespace-nowrap text-[72px] font-bold text-gray-100 [text-orientation:mixed] [writing-mode:vertical-rl]'>
+            <span className='rotate-370 absolute -right-4 top-10 -z-50 whitespace-nowrap text-[80px] font-bold text-gray-100 [text-orientation:mixed] [writing-mode:vertical-rl]'>
               Ease
             </span>
           </div>
@@ -50,7 +50,7 @@ export default function Page() {
           fill={true}
           className='object-cover'
         />
-        <div className='absolute left-4 top-52 z-10 flex h-full flex-col items-center'>
+        <div className='absolute left-4 top-32 z-10 flex h-full flex-col items-center'>
           <span className='rotate-270 text-sm font-bold tracking-widest text-background [writing-mode:vertical-rl]'>
             SCROLL
           </span>
