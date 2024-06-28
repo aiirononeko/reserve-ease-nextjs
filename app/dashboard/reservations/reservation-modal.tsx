@@ -7,13 +7,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import React from 'react'
-import type { ReservationType } from './type'
+import type { Reservation } from './type'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  reservation: ReservationType | null
-  onEdit: (reservation: ReservationType) => void
+  reservation: Reservation | null
+  onEdit: (reservation: Reservation) => void
   onDelete: (reservationId: number) => void
 }
 

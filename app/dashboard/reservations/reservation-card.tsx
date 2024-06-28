@@ -1,10 +1,7 @@
 import type { Reservation } from './type'
 
 interface Props {
-  reservation: Reservation & {
-    menus: { name: string }
-    users: { name: string }
-  }
+  reservation: Reservation
   handleReservationClick: (reservation: Reservation) => void
 }
 
@@ -12,6 +9,7 @@ export const ReservationCard = ({
   reservation,
   handleReservationClick,
 }: Props) => {
+  // @ts-expect-error because JOINした時の型定義あとでやる
   const { start_time, end_time, menus, users } = reservation
   return (
     <div
