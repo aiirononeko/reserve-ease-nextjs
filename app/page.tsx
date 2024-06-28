@@ -21,10 +21,10 @@ export default function Page() {
               <br />
               予約管理システム
             </h2>
-            <span className='absolute -top-14 left-0 -z-50 whitespace-nowrap text-[80px] font-bold text-gray-100'>
+            <span className='absolute -top-14 left-4 -z-50 whitespace-nowrap text-[72px] font-bold text-gray-100'>
               Reserve
             </span>
-            <span className='rotate-370 absolute -right-8 -top-4 -z-50 whitespace-nowrap text-[80px] font-bold text-gray-100 [text-orientation:mixed] [writing-mode:vertical-rl]'>
+            <span className='rotate-370 absolute -right-4 -top-4 -z-50 whitespace-nowrap text-[72px] font-bold text-gray-100 [text-orientation:mixed] [writing-mode:vertical-rl]'>
               Ease
             </span>
           </div>
