@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className='my-8 flex flex-col'>
-      <div className='mx-4 mb-10 flex flex-col space-y-8'>
+      <div className='mx-4 mb-8 flex flex-col space-y-8'>
         <div className='space-y-4'>
           <div className='relative'>
             <h2 className='relative z-10 text-4xl font-bold leading-[50px]'>
@@ -50,7 +50,7 @@ export default function Page() {
           fill={true}
           className='object-cover'
         />
-        <div className='absolute left-4 top-64 z-10 flex h-full flex-col items-center'>
+        <div className='absolute left-4 top-52 z-10 flex h-full flex-col items-center'>
           <span className='rotate-270 text-sm font-bold tracking-widest text-background [writing-mode:vertical-rl]'>
             SCROLL
           </span>
@@ -64,32 +64,34 @@ export default function Page() {
         </div>
         <div className='mx-4 grid grid-cols-1 gap-8 md:grid-cols-2'>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-background text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
               01.
             </div>
             <div className='space-y-1'>
               <p className='text-xl font-bold'>圧倒的低価格でコスト削減</p>
-              <p>
+              <p className='text-gray-200'>
                 洗練された予約管理機能のみを提供するため、圧倒的低価格です。
               </p>
             </div>
           </div>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-background text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
               02.
             </div>
             <div className='space-y-1'>
               <p className='text-xl font-bold'>シンプルで直感的な操作感</p>
-              <p>使いやすく誰でも簡単に予約管理ができます。</p>
+              <p className='text-gray-200'>
+                使いやすく誰でも簡単に予約管理ができます。
+              </p>
             </div>
           </div>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-background text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
               03.
             </div>
             <div className='space-y-1'>
               <p className='text-xl font-bold'>追加課金なし</p>
-              <p>
+              <p className='text-gray-200'>
                 スタッフや店舗を追加しても、
                 <br />
                 月額980円でご利用いただけます。
@@ -97,12 +99,14 @@ export default function Page() {
             </div>
           </div>
           <div className='mb-4 flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-background text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
               04.
             </div>
             <div className='space-y-1'>
               <p className='text-xl font-bold'>最速でシステム導入が可能</p>
-              <p>お問い合わせいただいてから最短3分で利用開始できます。</p>
+              <p className='text-gray-200'>
+                お問い合わせいただいてから最短3分で利用開始できます。
+              </p>
             </div>
           </div>
           <Button variant='outline' asChild>
