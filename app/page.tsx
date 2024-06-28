@@ -62,9 +62,9 @@ export default function Page() {
           <h2 className='text-center text-4xl font-bold'>Service</h2>
           <h3 className='text-center text-xl font-bold'>導入メリット</h3>
         </div>
-        <div className='mx-4 grid grid-cols-1 gap-8 md:grid-cols-2'>
+        <div className='mx-4 grid grid-cols-1 gap-8 text-gray-100 md:grid-cols-2'>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-100 text-xl font-bold text-primary'>
               01.
             </div>
             <div className='space-y-1'>
@@ -75,7 +75,7 @@ export default function Page() {
             </div>
           </div>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-100 text-xl font-bold text-primary'>
               02.
             </div>
             <div className='space-y-1'>
@@ -86,7 +86,7 @@ export default function Page() {
             </div>
           </div>
           <div className='flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-100 text-xl font-bold text-primary'>
               03.
             </div>
             <div className='space-y-1'>
@@ -99,7 +99,7 @@ export default function Page() {
             </div>
           </div>
           <div className='mb-4 flex items-center space-x-6'>
-            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-200 text-xl font-bold text-primary'>
+            <div className='flex size-14 shrink-0 items-center justify-center rounded-br-2xl bg-gray-100 text-xl font-bold text-primary'>
               04.
             </div>
             <div className='space-y-1'>
