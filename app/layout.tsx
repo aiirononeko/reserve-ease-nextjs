@@ -1,4 +1,5 @@
 import '@/app/globals.css'
+import { GoogleTagManager } from '@next/third-parties/google'
 import { Inter as FontSans } from 'next/font/google'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -30,6 +31,7 @@ export default function RootLayout({
         <Toaster />
         <Footer />
       </body>
+      <GoogleTagManager gtmId='GTM-TBW47KX9' />
     </html>
   )
 }
