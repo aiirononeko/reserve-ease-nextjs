@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Mail } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -38,8 +38,8 @@ export default function Page() {
         </div>
         <Button variant='default' asChild>
           <Link href='/'>
-            お問い合わせ
-            <Mail className='ml-2' />
+            初月無料で始める
+            <ChevronRight className='ml-1' />
           </Link>
         </Button>
       </div>
@@ -111,8 +111,8 @@ export default function Page() {
           </div>
           <Button variant='outline' asChild>
             <Link href='/' className='text-primary'>
-              お問い合わせ
-              <Mail className='ml-2' />
+              初月無料で始める
+              <ChevronRight className='ml-1' />
             </Link>
           </Button>
         </div>
