@@ -93,8 +93,8 @@ create table public.reservations (
 
   store_id bigserial not null references public.stores(id) on delete cascade,
   user_id uuid not null references public.users(id) on delete cascade,
-  customer_id bigserial not null references public.customers(id) on delete cascade,
-  menu_id bigserial not null references public.menus(id) on delete cascade,
+  customer_id bigserial references public.customers(id) on delete cascade,
+  menu_id bigserial references public.menus(id) on delete cascade,
 
   primary key (id)
 );

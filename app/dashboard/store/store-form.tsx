@@ -40,8 +40,12 @@ export const StoreForm = ({ store }: Props) => {
   })
 
   const onSubmit = async (values: z.infer<typeof storeSchema>) => {
-    await updateStore(values)
-    toast.success('店舗情報を更新しました！')
+    try {
+      await updateStore(values)
+      toast.success('店舗情報を更新しました')
+    } catch (e) {
+      toast.error('店舗情報の更新に失敗しました')
+    }
   }
 
   return (

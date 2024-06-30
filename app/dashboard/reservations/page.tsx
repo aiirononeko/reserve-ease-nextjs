@@ -9,7 +9,9 @@ export default async function Page() {
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>
       <h1 className='text-xl font-bold'>予約管理</h1>
-      {reservations && <ReservationCalendar reservations={reservations} />}
+      {reservations && (
+        <ReservationCalendar reservations={reservations} user={user} />
+      )}
     </div>
   )
 }

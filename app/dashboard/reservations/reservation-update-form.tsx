@@ -73,7 +73,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
             <FormItem>
               <FormLabel className='font-bold'>予約日時</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type='date' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,7 +86,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
             <FormItem>
               <FormLabel className='font-bold'>予約開始時刻</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type='time' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,7 +99,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
             <FormItem>
               <FormLabel className='font-bold'>予約終了時刻</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type='time' />
               </FormControl>
               <FormMessage />
             </FormItem>

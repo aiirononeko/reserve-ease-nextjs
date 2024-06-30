@@ -1,6 +1,7 @@
 'use client'
 
 import type { Database } from '@/types/supabase'
+import type { AuthUser } from '@supabase/supabase-js'
 import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
@@ -9,12 +10,22 @@ import type { Reservation } from './type'
 
 interface Props {
   reservations: Reservation[]
+  user: AuthUser
 }
 
-export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
+export const ReservationCalendar: React.FC<Props> = ({
+  reservations,
+  user,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedReservation, setSelectedReservation] =
     useState<Reservation | null>(null)
+  const [newReservationDate, setNewReservationDate] = useState<Date | null>(
+    null,
+  )
+  const [newReservationTime, setNewReservationTime] = useState<string | null>(
+    null,
+  )
 
   const getWeekDates = useMemo(() => {
     const today = new Date(currentDate)
@@ -44,12 +55,20 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
     )
   }
 
+  const handleEmptySlotClick = (date: Date, hour: number) => {
+    setNewReservationDate(date)
+    setNewReservationTime(`${hour.toString().padStart(2, '0')}:00`)
+    setSelectedReservation(null)
+  }
+
   const handleReservationClick = (reservation: Reservation) => {
     setSelectedReservation(reservation)
   }
 
   const handleCloseModal = () => {
     setSelectedReservation(null)
+    setNewReservationDate(null)
+    setNewReservationTime(null)
   }
 
   return (
@@ -96,6 +115,7 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
                     <div
                       key={hour}
                       className='relative h-14 border-b border-gray-100'
+                      onClick={() => handleEmptySlotClick(date, hour)}
                     >
                       {reservationsInHour.map((reservation) => (
                         <ReservationCard
@@ -110,13 +130,19 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
               </div>
             ))}
           </div>
+          <ReservationModal
+            isOpen={
+              !!selectedReservation ||
+              (!!newReservationDate && !!newReservationTime)
+            }
+            onClose={handleCloseModal}
+            reservation={selectedReservation}
+            user={user}
+            newReservationDate={newReservationDate}
+            newReservationTime={newReservationTime}
+          />
         </div>
       </div>
-      <ReservationModal
-        isOpen={!!selectedReservation}
-        onClose={handleCloseModal}
-        reservation={selectedReservation}
-      />
     </div>
   )
 }
