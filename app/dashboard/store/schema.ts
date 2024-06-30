@@ -7,4 +7,5 @@ export const storeSchema = z.object({
   post_code: z.string().min(1).max(8),
   address: z.string().min(1).max(512),
   phone_number: z.string().min(1).max(15),
+  max_reservation_count: z.string().min(1).max(1000),
 })

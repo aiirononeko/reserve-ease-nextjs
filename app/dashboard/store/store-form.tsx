@@ -34,6 +34,7 @@ export const StoreForm = ({ store }: Props) => {
       post_code: store.post_code ?? '',
       address: store.address ?? '',
       phone_number: store.phone_number ?? '',
+      max_reservation_count: store.max_reservation_count.toString(),
     },
     resolver: zodResolver(storeSchema),
   })
@@ -112,6 +113,19 @@ export const StoreForm = ({ store }: Props) => {
               <FormLabel className='font-bold'>店舗電話番号</FormLabel>
               <FormControl>
                 <Input placeholder='08012345678' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='max_reservation_count'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>同時予約可能数</FormLabel>
+              <FormControl>
+                <Input type='number' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

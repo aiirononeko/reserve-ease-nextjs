@@ -4,9 +4,7 @@ export const Footer = () => {
       <div className='container mx-auto px-4 py-8'>
         <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
           <div>
-            <h3 className='mb-4 text-lg font-semibold'>
-              ReserveEase (リザーブイーズ)
-            </h3>
+            <h3 className='mb-4 text-lg font-semibold'>ReserveEase</h3>
             <p className='text-sm'>
               シンプルで使いやすい予約管理サービス。
               <br />

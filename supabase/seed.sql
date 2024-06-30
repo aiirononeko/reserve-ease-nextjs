@@ -60,10 +60,23 @@ INSERT INTO public.business_hours (day_of_week, open_time, close_time, store_id)
   (5, '11:00', '18:00', 3), -- Friday for store 3
   (6, '11:00', '18:00', 3); -- Saturday for store 3
 
+-- シードデータのインサート
+INSERT INTO public.customers (name, email, phone_number, store_id) VALUES
+  ('山田太郎', 'taro.yamada@example.com', '080-1234-5678', 1),
+  ('佐藤花子', 'hanako.sato@example.com', '090-2345-6789', 1),
+  ('鈴木次郎', 'jiro.suzuki@example.com', '070-3456-7890', 2),
+  ('高橋美咲', 'misaki.takahashi@example.com', '080-4567-8901', 2),
+  ('田中和夫', 'kazuo.tanaka@example.com', '090-5678-9012', 3),
+  ('伊藤理恵', 'rie.ito@example.com', '070-6789-0123', 3),
+  ('渡辺健', 'ken.watanabe@example.com', '080-7890-1234', 4),
+  ('中村優子', 'yuko.nakamura@example.com', '090-8901-2345', 4),
+  ('小林大輔', 'daisuke.kobayashi@example.com', '070-9012-3456', 5),
+  ('加藤明子', 'akiko.kato@example.com', '080-0123-4567', 5);
+
 -- Inserting sample data into the reservations table
-INSERT INTO public.reservations (reservation_date, start_time, end_time, store_id, user_id, menu_id) VALUES
-  ('2024-07-01', '10:00:00', '11:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 1),
-  ('2024-07-02', '12:00:00', '13:00:00', 2, '123e4567-e89b-12d3-a456-426614174003', 2),
-  ('2024-07-03', '14:00:00', '15:00:00', 3, '123e4567-e89b-12d3-a456-426614174003', 3),
-  ('2024-07-04', '16:00:00', '17:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 2),
-  ('2024-07-05', '18:00:00', '19:00:00', 2, '123e4567-e89b-12d3-a456-426614174003', 2);
+INSERT INTO public.reservations (reservation_date, start_time, end_time, store_id, user_id, menu_id, customer_id) VALUES
+  ('2024-07-01', '10:00:00', '11:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 1, 1),
+  ('2024-07-02', '12:00:00', '13:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 2),
+  ('2024-07-03', '14:00:00', '15:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 3, 3),
+  ('2024-07-04', '16:00:00', '17:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 4),
+  ('2024-07-05', '18:00:00', '19:00:00', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 5);

@@ -52,18 +52,6 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
     setSelectedReservation(null)
   }
 
-  const handleEditReservation = (reservation: Reservation) => {
-    // 編集ロジックをここに実装
-    console.log('Edit reservation:', reservation)
-    handleCloseModal()
-  }
-
-  const handleDeleteReservation = (reservationId: number) => {
-    // 削除ロジックをここに実装
-    console.log('Delete reservation:', reservationId)
-    handleCloseModal()
-  }
-
   return (
     <div className='w-full'>
       <ReservationCalendarHeader
@@ -128,8 +116,6 @@ export const ReservationCalendar: React.FC<Props> = ({ reservations }) => {
         isOpen={!!selectedReservation}
         onClose={handleCloseModal}
         reservation={selectedReservation}
-        onEdit={handleEditReservation}
-        onDelete={handleDeleteReservation}
       />
     </div>
   )

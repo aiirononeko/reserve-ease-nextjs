@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
-import { deleteReservationSchema, updateReservationSchema } from './schema'
+import { updateReservationSchema } from './schema'
 
 export const updateReservation = async (
   input: z.infer<typeof updateReservationSchema>,
@@ -29,30 +29,22 @@ export const updateReservation = async (
     .eq('id', input.id)
   if (error) {
     console.error(error.message)
+    throw error
   }
 
   revalidatePath('/dashboard/reservations')
 }
 
-export const deleteReservation = async (
-  input: z.infer<typeof deleteReservationSchema>,
-) => {
-  const result = deleteReservationSchema.safeParse(input)
-  if (!result.success) {
-    return {
-      success: false,
-      error: result.error.errors,
-    }
-  }
-
+export const deleteReservation = async (reservationId: number) => {
   const supabase = createClient()
 
   const { error } = await supabase
     .from('reservations')
     .delete()
-    .eq('id', input.id)
+    .eq('id', reservationId)
   if (error) {
     console.error(error.message)
+    throw error
   }
 
   revalidatePath('/dashboard/reservations')

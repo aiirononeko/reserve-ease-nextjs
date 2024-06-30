@@ -16,6 +16,9 @@ export const getReservations = async (user: AuthUser) => {
       ),
       users:user_id (
         name
+      ),
+      customers:customer_id (
+        name
       )
     `,
     )

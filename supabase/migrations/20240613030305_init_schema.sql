@@ -8,6 +8,7 @@ CREATE TABLE public.stores (
   post_code varchar(8) unique,
   address varchar(512) unique,
   phone_number varchar(15) unique,
+  max_reservation_count int not null default 1,
   icon_url varchar(256),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
@@ -63,6 +64,22 @@ CREATE TABLE public.business_hours (
   primary key (id)
 );
 
+/**
+ * 顧客.
+ */
+create table public.customers (
+  id bigserial not null,
+  name varchar(51),
+  email varchar(257) not null,
+  phone_number varchar(16),
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now(),
+
+  store_id bigserial not null references public.stores(id) on delete cascade,
+
+  primary key (id)
+);
+
 /*
  * 予約.
  */
@@ -76,6 +93,7 @@ create table public.reservations (
 
   store_id bigserial not null references public.stores(id) on delete cascade,
   user_id uuid not null references public.users(id) on delete cascade,
+  customer_id bigserial not null references public.customers(id) on delete cascade,
   menu_id bigserial not null references public.menus(id) on delete cascade,
 
   primary key (id)

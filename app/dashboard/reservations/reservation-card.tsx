@@ -10,7 +10,7 @@ export const ReservationCard = ({
   handleReservationClick,
 }: Props) => {
   // @ts-expect-error because JOINした時の型定義あとでやる
-  const { start_time, end_time, menus, users } = reservation
+  const { start_time, end_time, menus, customers } = reservation
   return (
     <div
       className='absolute mb-1 w-full truncate rounded-lg bg-primary p-1 text-xs text-primary-foreground'
@@ -22,9 +22,9 @@ export const ReservationCard = ({
     >
       {start_time} ~ {end_time}
       <br />
-      {menus.name}
+      {customers.name}
       <br />
-      {users.name}
+      {menus.name}
     </div>
   )
 }

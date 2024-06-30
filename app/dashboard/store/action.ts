@@ -18,10 +18,14 @@ export const updateStore = async (input: z.infer<typeof storeSchema>) => {
 
   const { error } = await supabase
     .from('stores')
-    .update({ ...input })
+    .update({
+      ...input,
+      max_reservation_count: Number(input.max_reservation_count),
+    })
     .eq('id', input.id)
   if (error) {
     console.error(error.message)
+    throw error
   }
 
   revalidatePath('/dashboard/store')
