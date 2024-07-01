@@ -45,12 +45,12 @@ export default function Page() {
       </div>
       <div className='relative h-[400px] w-full'>
         <Image
-          src='/reserve-ease-top.png'
+          src='/top.jpg'
           alt='トップページの画像'
           fill={true}
           className='object-cover'
         />
-        <div className='absolute left-4 top-32 z-10 flex h-full flex-col items-center'>
+        <div className='absolute left-4 top-44 z-10 flex h-full flex-col items-center'>
           <span className='rotate-270 text-sm font-bold tracking-widest text-background [writing-mode:vertical-rl]'>
             SCROLL
           </span>
