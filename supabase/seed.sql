@@ -37,30 +37,15 @@ INSERT INTO public.menus (name, description, amount, discount, user_id) VALUES
   ('ヘアカラー', 'イメージチェンジに最適なプロのヘアカラーリングサービスです。', 7000, 0, '123e4567-e89b-12d3-a456-426614174003'),
   ('カイロプラクティック', '姿勢を整え、痛みを軽減する脊椎調整です。', 5000, 400, '123e4567-e89b-12d3-a456-426614174003');
 
-INSERT INTO public.business_hours (day_of_week, open_time, close_time, store_id) VALUES
-  (0, '08:00', '18:00', 1), -- Sunday for store 1
-  (1, '09:00', '19:00', 1), -- Monday for store 1
-  (2, null, null, 1),       -- Tuesday for store 1 (closed)
-  (3, '09:00', '19:00', 1), -- Wednesday for store 1
-  (4, '09:00', '19:00', 1), -- Thursday for store 1
-  (5, '09:00', '20:00', 1), -- Friday for store 1
-  (6, '09:00', '20:00', 1), -- Saturday for store 1
-  (0, '10:00', '16:00', 2), -- Sunday for store 2
-  (1, '10:00', '18:00', 2), -- Monday for store 2
-  (2, '10:00', '18:00', 2), -- Tuesday for store 2
-  (3, '10:00', '18:00', 2), -- Wednesday for store 2
-  (4, '10:00', '18:00', 2), -- Thursday for store 2
-  (5, '10:00', '19:00', 2), -- Friday for store 2
-  (6, '10:00', '19:00', 2), -- Saturday for store 2
-  (0, null, null, 3),       -- Sunday for store 3 (closed)
-  (1, '11:00', '17:00', 3), -- Monday for store 3
-  (2, '11:00', '17:00', 3), -- Tuesday for store 3
-  (3, '11:00', '17:00', 3), -- Wednesday for store 3
-  (4, '11:00', '17:00', 3), -- Thursday for store 3
-  (5, '11:00', '18:00', 3), -- Friday for store 3
-  (6, '11:00', '18:00', 3); -- Saturday for store 3
+INSERT INTO public.business_hours (day_of_week, open_period, store_id) VALUES
+  (0, '[8,18]', 1), -- Sunday for store 1
+  (1, '[9,19]', 1), -- Monday for store 1
+  (2, null, 1),     -- Tuesday for store 1 (closed)
+  (3, '[9,19]', 1), -- Wednesday for store 1
+  (4, '[9,19]', 1), -- Thursday for store 1
+  (5, '[9,20]', 1), -- Friday for store 1
+  (6, '[9,2]', 1);  -- Saturday for store 1
 
--- シードデータのインサート
 INSERT INTO public.customers (name, email, phone_number, store_id) VALUES
   ('山田太郎', 'taro.yamada@example.com', '080-1234-5678', 1),
   ('佐藤花子', 'hanako.sato@example.com', '090-2345-6789', 1),

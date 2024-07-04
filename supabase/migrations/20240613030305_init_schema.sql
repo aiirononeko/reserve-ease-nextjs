@@ -54,10 +54,7 @@ create table public.menus (
 CREATE TABLE public.business_hours (
   id bigserial not null,
   day_of_week int not null, -- 0 = Sunday, 1 = Monday, 2 = Tuesday ... 6 = Saturday
-  open_time time,
-  close_time time,
-  created_at timestamp with time zone not null default now(),
-  updated_at timestamp with time zone not null default now(),
+  open_period numrange,
 
   store_id bigserial not null references public.stores(id) on delete cascade,
 
