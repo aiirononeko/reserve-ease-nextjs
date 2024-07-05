@@ -46,12 +46,14 @@ const parseNumrange = (
   const open_time = format({
     date: addHour(dayStart(new Date()), start),
     format: 'HH:mm',
+    locale: 'ja',
     tz: 'Asia/Tokyo',
   })
 
   const close_time = format({
     date: addHour(dayStart(new Date()), end),
     format: 'HH:mm',
+    locale: 'ja',
     tz: 'Asia/Tokyo',
   })
 

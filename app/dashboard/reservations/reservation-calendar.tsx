@@ -1,7 +1,7 @@
 'use client'
 
 import type { AuthUser } from '@supabase/supabase-js'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
 import { ReservationModal } from './reservation-modal'
@@ -33,10 +33,6 @@ export const ReservationCalendar: React.FC<Props> = ({
   const [newReservationTime, setNewReservationTime] = useState<string | null>(
     null,
   )
-
-  useEffect(() => {
-    console.log(selectedReservation)
-  }, [selectedReservation])
 
   const getWeekDates = useMemo(() => {
     const today = new Date(currentDate)
