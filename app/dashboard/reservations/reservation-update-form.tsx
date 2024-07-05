@@ -16,10 +16,14 @@ import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { deleteReservation, updateReservation } from './action'
 import { updateReservationSchema } from './schema'
-import type { Reservation } from './type'
 
 interface Props {
-  reservation: Reservation
+  reservation: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  }
   onClose: () => void
 }
 
@@ -27,7 +31,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
   const form = useForm<z.infer<typeof updateReservationSchema>>({
     defaultValues: {
       id: reservation.id,
-      reservation_date: reservation.reservation_date,
+      date: reservation.date,
       start_time: reservation.start_time,
       end_time: reservation.end_time,
     },
@@ -68,7 +72,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
         </div>
         <FormField
           control={form.control}
-          name='reservation_date'
+          name='date'
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>予約日時</FormLabel>

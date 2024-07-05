@@ -84,7 +84,7 @@ create extension if not exists btree_gist;
  */
 create table public.reservations (
   id bigserial not null,
-  reservation_period tstzrange,
+  reservation_period tstzrange not null,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 

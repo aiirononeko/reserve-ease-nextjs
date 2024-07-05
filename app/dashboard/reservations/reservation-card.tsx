@@ -1,8 +1,16 @@
-import type { Reservation } from './type'
-
 interface Props {
-  reservation: Reservation
-  handleReservationClick: (reservation: Reservation) => void
+  reservation: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  }
+  handleReservationClick: (reservation: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  }) => void
 }
 
 export const ReservationCard = ({

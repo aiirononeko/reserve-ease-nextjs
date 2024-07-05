@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const createReservationSchema = z.object({
-  reservation_date: z.string(),
+  date: z.string(),
   start_time: z.string(),
   end_time: z.string(),
   store_id: z.string(),
@@ -12,7 +12,7 @@ export const createReservationSchema = z.object({
 
 export const updateReservationSchema = z.object({
   id: z.number(),
-  reservation_date: z.string(),
+  date: z.string(),
   start_time: z.string(),
   end_time: z.string(),
 })

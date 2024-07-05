@@ -8,12 +8,16 @@ import type { AuthUser } from '@supabase/supabase-js'
 import React from 'react'
 import { ReservationCreateForm } from './reservation-create-form'
 import { ReservationUpdateForm } from './reservation-update-form'
-import type { Reservation } from './type'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  reservation: Reservation | null
+  reservation: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  } | null
   user: AuthUser
   newReservationDate: Date | null
   newReservationTime: string | null

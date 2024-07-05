@@ -148,7 +148,7 @@ export type Database = {
           customer_id: number
           id: number
           menu_id: number
-          reservation_period: unknown | null
+          reservation_period: string
           store_id: number
           updated_at: string
           user_id: string
@@ -158,7 +158,7 @@ export type Database = {
           customer_id?: number
           id?: number
           menu_id?: number
-          reservation_period?: unknown | null
+          reservation_period: string
           store_id?: number
           updated_at?: string
           user_id: string
@@ -168,7 +168,7 @@ export type Database = {
           customer_id?: number
           id?: number
           menu_id?: number
-          reservation_period?: unknown | null
+          reservation_period?: string
           store_id?: number
           updated_at?: string
           user_id?: string

@@ -1,15 +1,18 @@
 'use client'
 
-import type { Database } from '@/types/supabase'
 import type { AuthUser } from '@supabase/supabase-js'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
 import { ReservationModal } from './reservation-modal'
-import type { Reservation } from './type'
 
 interface Props {
-  reservations: Reservation[]
+  reservations: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  }[]
   user: AuthUser
 }
 
@@ -18,14 +21,22 @@ export const ReservationCalendar: React.FC<Props> = ({
   user,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedReservation, setSelectedReservation] =
-    useState<Reservation | null>(null)
+  const [selectedReservation, setSelectedReservation] = useState<{
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  } | null>(null)
   const [newReservationDate, setNewReservationDate] = useState<Date | null>(
     null,
   )
   const [newReservationTime, setNewReservationTime] = useState<string | null>(
     null,
   )
+
+  useEffect(() => {
+    console.log(selectedReservation)
+  }, [selectedReservation])
 
   const getWeekDates = useMemo(() => {
     const today = new Date(currentDate)
@@ -41,9 +52,14 @@ export const ReservationCalendar: React.FC<Props> = ({
   const isReservationInHour = (
     date: Date,
     hour: number,
-    reservation: Database['public']['Tables']['reservations']['Row'],
+    reservation: {
+      id: number
+      date: string
+      start_time: string
+      end_time: string
+    },
   ) => {
-    const reservationDate = new Date(reservation.reservation_date)
+    const reservationDate = new Date(reservation.date)
     const startHour = parseInt(reservation.start_time.split(':')[0])
     const endHour = parseInt(reservation.end_time.split(':')[0])
     return (
@@ -58,10 +74,15 @@ export const ReservationCalendar: React.FC<Props> = ({
   const handleEmptySlotClick = (date: Date, hour: number) => {
     setNewReservationDate(date)
     setNewReservationTime(`${hour.toString().padStart(2, '0')}:00`)
-    setSelectedReservation(null)
+    // setSelectedReservation(null)
   }
 
-  const handleReservationClick = (reservation: Reservation) => {
+  const handleReservationClick = (reservation: {
+    id: number
+    date: string
+    start_time: string
+    end_time: string
+  }) => {
     setSelectedReservation(reservation)
   }
 

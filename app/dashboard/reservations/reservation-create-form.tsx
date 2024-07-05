@@ -32,7 +32,7 @@ export const ReservationCreateForm = ({
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
-      reservation_date: initialDate.toISOString().split('T')[0],
+      date: initialDate.toISOString().split('T')[0],
       start_time: initialTime,
       end_time: '',
       store_id: user.user_metadata.store_id.toString(),
