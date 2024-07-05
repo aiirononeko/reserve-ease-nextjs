@@ -58,7 +58,7 @@ export const ReservationCreateForm = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
         <FormField
           control={form.control}
-          name='reservation_date'
+          name='date'
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>予約日時</FormLabel>

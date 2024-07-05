@@ -20,7 +20,7 @@ export const updateStore = async (input: z.infer<typeof storeSchema>) => {
     .from('stores')
     .update({
       ...input,
-      max_reservation_count: Number(input.max_reservation_count),
+      max_capacity: Number(input.max_capacity),
     })
     .eq('id', input.id)
   if (error) {

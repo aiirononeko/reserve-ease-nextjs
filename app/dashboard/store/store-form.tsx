@@ -34,7 +34,7 @@ export const StoreForm = ({ store }: Props) => {
       post_code: store.post_code ?? '',
       address: store.address ?? '',
       phone_number: store.phone_number ?? '',
-      max_reservation_count: store.max_reservation_count.toString(),
+      max_capacity: store.max_capacity.toString(),
     },
     resolver: zodResolver(storeSchema),
   })
@@ -124,7 +124,7 @@ export const StoreForm = ({ store }: Props) => {
         />
         <FormField
           control={form.control}
-          name='max_reservation_count'
+          name='max_capacity'
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>同時予約可能数</FormLabel>

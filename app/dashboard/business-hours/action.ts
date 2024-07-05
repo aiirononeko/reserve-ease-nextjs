@@ -22,8 +22,6 @@ export const updateBusinessHours = async (
       businessHour.open_time,
       businessHour.close_time,
     )
-    console.log(open_period)
-
     const { error } = await supabase
       .from('business_hours')
       .update({ open_period })
