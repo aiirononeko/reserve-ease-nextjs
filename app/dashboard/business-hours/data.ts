@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { addHour, dayStart, format } from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 
 export const getBusinessHours = async (user: AuthUser) => {
@@ -39,23 +38,18 @@ const parseNumrange = (
     throw new Error('Invalid numrange format')
   }
 
-  // 数値部分を抽出してnumber型に変換
+  // 数値部分を抽出して number 型に変換
   const start = parseInt(matches[1], 10)
   const end = parseInt(matches[2], 10)
 
-  const open_time = format({
-    date: addHour(dayStart(new Date()), start),
-    format: 'HH:mm',
-    locale: 'ja',
-    tz: 'Asia/Tokyo',
-  })
+  // HH:mm 形式の文字列に変換する関数
+  const formatTime = (hours: number): string => {
+    const h = hours % 24
+    return `${h.toString().padStart(2, '0')}:00`
+  }
 
-  const close_time = format({
-    date: addHour(dayStart(new Date()), end),
-    format: 'HH:mm',
-    locale: 'ja',
-    tz: 'Asia/Tokyo',
-  })
+  const open_time = formatTime(start)
+  const close_time = formatTime(end)
 
   return { open_time, close_time }
 }
