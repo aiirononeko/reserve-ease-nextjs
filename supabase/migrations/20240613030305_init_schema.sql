@@ -28,6 +28,8 @@ create table public.users (
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 
+  store_id bigserial not null references public.stores(id) on delete cascade,
+
   primary key (id)
 );
 

@@ -23,12 +23,12 @@ INSERT INTO public.stores (name, address, phone_number, post_code) VALUES
   ('福岡ストア', '福岡県福岡市博多区博多駅東4-4-4', '092-4567-8901', '812-0011'),
   ('札幌ストア', '北海道札幌市中央区北五条西5-5-5', '011-5678-9012', '060-0005');
 
-INSERT INTO public.users (id, email, name, profile) VALUES
-  ('123e4567-e89b-12d3-a456-426614174000', 'user1@example.com', '石橋ネオ', '美容師。10年以上の経験を持つ。'),
-  ('123e4567-e89b-12d3-a456-426614174001', 'user2@example.com', '梅村祐樹', '整体師。専門はスポーツマッサージ。'),
-  ('123e4567-e89b-12d3-a456-426614174002', 'user3@example.com', '大門しゅう', '美容院経営者。最新のトレンドに精通。'),
-  ('123e4567-e89b-12d3-a456-426614174003', 'test@example.com', '片田凌太', '美容院経営者。最新のトレンドに精通。'),
-  ('123e4567-e89b-12d3-a456-426614174004', 'user5@example.com', '庄司隼人', '美容院経営者。最新のトレンドに精通。');
+INSERT INTO public.users (id, email, name, profile, store_id) VALUES
+  ('123e4567-e89b-12d3-a456-426614174000', 'user1@example.com', '石橋ネオ', '美容師。10年以上の経験を持つ。', 1),
+  ('123e4567-e89b-12d3-a456-426614174001', 'user2@example.com', '梅村祐樹', '整体師。専門はスポーツマッサージ。', 1),
+  ('123e4567-e89b-12d3-a456-426614174002', 'user3@example.com', '大門しゅう', '美容院経営者。最新のトレンドに精通。', 1),
+  ('123e4567-e89b-12d3-a456-426614174003', 'test@example.com', '片田凌太', '美容院経営者。最新のトレンドに精通。', 1),
+  ('123e4567-e89b-12d3-a456-426614174004', 'user5@example.com', '庄司隼人', '美容院経営者。最新のトレンドに精通。', 2);
 
 INSERT INTO public.menus (name, description, amount, discount, user_id) VALUES
   ('カット', 'お客様のご希望に合わせたプロフェッショナルなカットです。', 3000, 200, '123e4567-e89b-12d3-a456-426614174003'),

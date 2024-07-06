@@ -31,6 +31,9 @@ export const Header = () => {
           <Button variant='link' asChild>
             <Link href='/dashboard/business-hours'>営業時間管理</Link>
           </Button>
+          <Button variant='link' asChild>
+            <Link href='/dashboard/staff'>スタッフ管理</Link>
+          </Button>
         </PopoverContent>
       </Popover>
     </header>

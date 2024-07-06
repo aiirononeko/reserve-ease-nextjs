@@ -251,6 +251,7 @@ export type Database = {
           id: string
           name: string | null
           profile: string | null
+          store_id: number
           updated_at: string
         }
         Insert: {
@@ -260,6 +261,7 @@ export type Database = {
           id: string
           name?: string | null
           profile?: string | null
+          store_id?: number
           updated_at?: string
         }
         Update: {
@@ -269,6 +271,7 @@ export type Database = {
           id?: string
           name?: string | null
           profile?: string | null
+          store_id?: number
           updated_at?: string
         }
         Relationships: [
@@ -277,6 +280,13 @@ export type Database = {
             columns: ['id']
             isOneToOne: true
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'users_store_id_fkey'
+            columns: ['store_id']
+            isOneToOne: false
+            referencedRelation: 'stores'
             referencedColumns: ['id']
           },
         ]
