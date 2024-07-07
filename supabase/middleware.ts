@@ -1,60 +1,51 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+export async function updateSession(req: NextRequest) {
+  let res = NextResponse.next({ request: req })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return req.cookies.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+
+        setAll(newCookies) {
+          newCookies.forEach((c) => req.cookies.set(c))
+
+          res = NextResponse.next({ request: req })
+          newCookies.forEach((c) => res.cookies.set(c))
         },
       },
     },
   )
 
-  await supabase.auth.getUser()
+  // ログインユーザーのみアクセス可能
+  if (req.nextUrl.pathname.startsWith('/dashboard')) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  return response
+    if (!user) {
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/login`)
+    }
+
+    // オーナーユーザーのみアクセス可能
+    if (
+      req.nextUrl.pathname.endsWith('/store') ||
+      req.nextUrl.pathname.endsWith('/business-hours') ||
+      req.nextUrl.pathname.endsWith('/staff')
+    ) {
+      if (user.user_metadata.role !== 'owner') {
+        return NextResponse.redirect(
+          `${process.env.NEXT_PUBLIC_DOMAIN}/dashboard`,
+        )
+      }
+    }
+  }
+
+  return res
 }

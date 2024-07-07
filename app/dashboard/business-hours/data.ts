@@ -1,10 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { AuthUser } from '@supabase/supabase-js'
 
-export const getBusinessHours = async (user: AuthUser) => {
+export const getBusinessHours = async () => {
   const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found')
+  }
 
   const { data, error } = await supabase
     .from('business_hours')

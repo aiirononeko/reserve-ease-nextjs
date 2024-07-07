@@ -1,4 +1,3 @@
-import { checkAuth } from '@/app/dashboard/auth'
 import { Button } from '@/components/ui/button'
 import { CirclePlus } from 'lucide-react'
 import Link from 'next/link'
@@ -6,8 +5,7 @@ import { getMenus } from './data'
 import { MenuCard } from './menu-card'
 
 export default async function Page() {
-  const user = await checkAuth()
-  const menus = await getMenus(user)
+  const menus = await getMenus()
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>

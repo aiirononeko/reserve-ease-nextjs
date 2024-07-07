@@ -1,10 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { AuthUser } from '@supabase/supabase-js'
 
-export const getMenus = async (user: AuthUser) => {
+export const getMenus = async () => {
   const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found')
+  }
 
   const { data, error } = await supabase
     .from('menus')

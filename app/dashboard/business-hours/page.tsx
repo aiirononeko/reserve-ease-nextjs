@@ -1,10 +1,8 @@
-import { checkAuth } from '@/app/dashboard/auth'
 import { BusinessHoursForm } from './business-hours-form'
 import { getBusinessHours } from './data'
 
 export default async function Page() {
-  const user = await checkAuth()
-  const businessHours = await getBusinessHours(user)
+  const businessHours = await getBusinessHours()
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>

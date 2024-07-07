@@ -1,4 +1,3 @@
-import { checkAuth } from '@/app/dashboard/auth'
 import { Button } from '@/components/ui/button'
 import { CirclePlus } from 'lucide-react'
 import Link from 'next/link'
@@ -6,8 +5,7 @@ import { getAllStaff } from './data'
 import { StaffTable } from './staff-table'
 
 export default async function Page() {
-  const user = await checkAuth()
-  const allStaff = await getAllStaff(user)
+  const allStaff = await getAllStaff()
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>

@@ -1,10 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { AuthUser } from '@supabase/supabase-js'
 
-export const getStore = async (user: AuthUser) => {
+export const getStore = async () => {
   const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found')
+  }
 
   const { data, error } = await supabase
     .from('stores')
@@ -12,7 +18,6 @@ export const getStore = async (user: AuthUser) => {
     .eq('id', user.user_metadata.store_id)
     .single()
   if (error) {
-    console.error(error.message)
     throw error
   }
 

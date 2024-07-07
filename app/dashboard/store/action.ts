@@ -24,7 +24,6 @@ export const updateStore = async (input: z.infer<typeof storeSchema>) => {
     })
     .eq('id', input.id)
   if (error) {
-    console.error(error.message)
     throw error
   }
 

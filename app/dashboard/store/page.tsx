@@ -1,10 +1,8 @@
-import { checkAuth } from '@/app/dashboard/auth'
 import { getStore } from './data'
 import { StoreForm } from './store-form'
 
 export default async function Page() {
-  const user = await checkAuth()
-  const store = await getStore(user)
+  const store = await getStore()
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-8 py-8'>
