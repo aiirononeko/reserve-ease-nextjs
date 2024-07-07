@@ -9,6 +9,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { useDropzone } from 'react-dropzone'
 
 export default function ImageSelector({
+  width = '100%',
   aspectRatio = 1,
   resultWidth,
   value = '',
@@ -60,6 +61,7 @@ export default function ImageSelector({
             isDragAccept ? 'scale-150 bg-primary' : 'bg-muted',
           )}
           style={{
+            width,
             aspectRatio,
           }}
           {...getRootProps()}

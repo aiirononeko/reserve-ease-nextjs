@@ -26,10 +26,10 @@ export const Header = async () => {
               <Link href='/dashboard'>ダッシュボード</Link>
             </Button>
             <Button variant='link' asChild>
-              <Link href='/dashboard/reservations'>予約管理</Link>
+              <Link href='/dashboard/menus'>メニュー管理</Link>
             </Button>
             <Button variant='link' asChild>
-              <Link href='/dashboard/menus'>メニュー管理</Link>
+              <Link href='/dashboard/profile'>プロフィール管理</Link>
             </Button>
             {userRole === 'owner' && (
               <>

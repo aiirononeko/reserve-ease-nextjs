@@ -14,13 +14,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import ImageSelector from '@/components/ui/image-selector'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import type { Database } from '@/types/supabase'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { updateStore } from './action'
-import ImageSelector from './image-selector'
 import { storeSchema } from './schema'
 
 interface Props {
