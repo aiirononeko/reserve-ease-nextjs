@@ -22,7 +22,7 @@ const Label = React.forwardRef<
     VariantProps<typeof labelVariants>
 >(({ className, ...props }, ref) => (
   <div className={containerValiants()}>
-    <span className={spanVariants()}>必須</span>
+    {props['aria-required'] && <span className={spanVariants()}>必須</span>}
     <LabelPrimitive.Root
       ref={ref}
       className={cn(labelVariants(), className)}

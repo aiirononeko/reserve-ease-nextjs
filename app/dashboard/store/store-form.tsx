@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,6 +20,7 @@ import type { Database } from '@/types/supabase'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { updateStore } from './action'
+import ImageSelector from './image-selector'
 import { storeSchema } from './schema'
 
 interface Props {
@@ -30,10 +32,11 @@ export const StoreForm = ({ store }: Props) => {
     defaultValues: {
       id: store.id,
       name: store.name,
+      icon_url: store.icon_url ?? '',
       description: store.description ?? '',
+      phone_number: store.phone_number ?? '',
       post_code: store.post_code ?? '',
       address: store.address ?? '',
-      phone_number: store.phone_number ?? '',
       max_capacity: store.max_capacity.toString(),
     },
     resolver: zodResolver(storeSchema),
@@ -56,9 +59,29 @@ export const StoreForm = ({ store }: Props) => {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>店舗名</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                店舗名
+              </FormLabel>
               <FormControl>
                 <Input placeholder='サンプル屋' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='icon_url'
+          render={({ field }) => (
+            <FormItem className='w-full'>
+              <FormLabel aria-required={true} className='font-bold'>
+                店舗アイコン
+              </FormLabel>
+              <FormControl>
+                <ImageSelector
+                  resultWidth={390}
+                  aspectRatio={390 / 400}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,12 +92,29 @@ export const StoreForm = ({ store }: Props) => {
           name='description'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>店舗説明</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                店舗説明
+              </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder='私たちの整体院では、経験豊富な施術師が一人ひとりに合わせたケアを提供します。'
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='phone_number'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel aria-required={true} className='font-bold'>
+                店舗電話番号
+              </FormLabel>
+              <FormControl>
+                <Input placeholder='08012345678' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -89,6 +129,9 @@ export const StoreForm = ({ store }: Props) => {
               <FormControl>
                 <Input placeholder='111-1234' {...field} />
               </FormControl>
+              <FormDescription>
+                設定しない場合は、予約管理ページから予約毎に施術場所やオンラインURLを設定してください。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -105,19 +148,9 @@ export const StoreForm = ({ store }: Props) => {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='phone_number'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className='font-bold'>店舗電話番号</FormLabel>
-              <FormControl>
-                <Input placeholder='08012345678' {...field} />
-              </FormControl>
+              <FormDescription>
+                設定しない場合は、予約管理ページから予約毎に施術場所やオンラインURLを設定してください。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -127,7 +160,9 @@ export const StoreForm = ({ store }: Props) => {
           name='max_capacity'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>同時予約可能数</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                同時予約可能数
+              </FormLabel>
               <FormControl>
                 <Input type='number' {...field} />
               </FormControl>
@@ -139,7 +174,7 @@ export const StoreForm = ({ store }: Props) => {
           type='submit'
           disabled={
             !form.formState.isValid ||
-            !form.formState.isDirty ||
+            // !form.formState.isDirty ||
             form.formState.isLoading
           }
           className='w-full font-bold'

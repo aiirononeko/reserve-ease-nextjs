@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -49,7 +50,9 @@ export const MenuForm = ({ user }: Props) => {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メニュー名</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                メニュー名
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -62,7 +65,9 @@ export const MenuForm = ({ user }: Props) => {
           name='description'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>サービス内容</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                サービス内容
+              </FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -75,7 +80,9 @@ export const MenuForm = ({ user }: Props) => {
           name='amount'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>価格(税込)</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                価格(税込)
+              </FormLabel>
               <FormControl>
                 <Input type='number' placeholder='3000' {...field} />
               </FormControl>
@@ -88,10 +95,15 @@ export const MenuForm = ({ user }: Props) => {
           name='discount'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>割引価格(税込)</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                割引価格(税込)
+              </FormLabel>
               <FormControl>
                 <Input type='number' placeholder='500' {...field} />
               </FormControl>
+              <FormDescription>
+                0以上の数値を設定すると、割引価格が表示されます。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

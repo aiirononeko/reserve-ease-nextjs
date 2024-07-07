@@ -67,7 +67,9 @@ export const MenuFormDialog = ({ menu }: Props) => {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>メニュー名</FormLabel>
+                  <FormLabel aria-required={true} className='font-bold'>
+                    メニュー名
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder='shadcn' {...field} />
                   </FormControl>
@@ -80,7 +82,9 @@ export const MenuFormDialog = ({ menu }: Props) => {
               name='description'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>サービス内容</FormLabel>
+                  <FormLabel aria-required={true} className='font-bold'>
+                    サービス内容
+                  </FormLabel>
                   <FormControl>
                     <Textarea placeholder='shadcn' {...field} />
                   </FormControl>
@@ -93,7 +97,9 @@ export const MenuFormDialog = ({ menu }: Props) => {
               name='amount'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>価格(税込)</FormLabel>
+                  <FormLabel aria-required={true} className='font-bold'>
+                    価格(税込)
+                  </FormLabel>
                   <FormControl>
                     <Input type='number' placeholder='3000' {...field} />
                   </FormControl>
@@ -106,7 +112,9 @@ export const MenuFormDialog = ({ menu }: Props) => {
               name='discount'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>割引価格(税込)</FormLabel>
+                  <FormLabel aria-required={true} className='font-bold'>
+                    割引価格(税込)
+                  </FormLabel>
                   <FormControl>
                     <Input type='number' placeholder='500' {...field} />
                   </FormControl>

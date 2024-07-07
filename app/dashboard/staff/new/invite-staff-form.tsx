@@ -34,8 +34,12 @@ export const InviteStaffForm = ({ user }: Props) => {
   })
 
   const onSubmit = async (values: z.infer<typeof inviteStaffSchema>) => {
-    await inviteStaff(values)
-    toast.success('スタッフを招待しました')
+    try {
+      await inviteStaff(values)
+      toast.success('スタッフを招待しました')
+    } catch {
+      toast.error('スタッフの招待に失敗しました')
+    }
   }
 
   return (
@@ -46,7 +50,9 @@ export const InviteStaffForm = ({ user }: Props) => {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>氏名</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                氏名
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -59,7 +65,9 @@ export const InviteStaffForm = ({ user }: Props) => {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メールアドレス</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                メールアドレス
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

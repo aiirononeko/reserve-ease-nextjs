@@ -61,7 +61,9 @@ export const ReservationCreateForm = ({
           name='date'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>予約日時</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                予約日時
+              </FormLabel>
               <FormControl>
                 <Input {...field} type='date' />
               </FormControl>
@@ -74,7 +76,9 @@ export const ReservationCreateForm = ({
           name='start_time'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>予約開始時刻</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                予約開始時刻
+              </FormLabel>
               <FormControl>
                 <Input {...field} type='time' />
               </FormControl>
@@ -87,7 +91,9 @@ export const ReservationCreateForm = ({
           name='end_time'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>予約終了時刻</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                予約終了時刻
+              </FormLabel>
               <FormControl>
                 <Input {...field} type='time' />
               </FormControl>
@@ -123,7 +129,7 @@ export const ReservationCreateForm = ({
         />
         <Button
           type='submit'
-          // disabled={!form.formState.isValid || form.formState.isSubmitting}
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
           className='w-full font-bold'
         >
           {form.formState.isSubmitting ? (

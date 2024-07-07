@@ -3,7 +3,7 @@ import { LoginForm } from './login-form'
 
 export default async function Page() {
   return (
-    <div className='mx-4 flex flex-col items-center space-y-8 py-8'>
+    <div className='mx-4 flex flex-col items-center space-y-6 py-8'>
       <h1 className='text-xl font-bold'>ログイン</h1>
       <div className='flex w-full flex-col items-center justify-center space-y-4 px-4'>
         <LoginForm />
