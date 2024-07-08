@@ -18,6 +18,20 @@ export const createReservation = async (
 
   const supabase = createClient()
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found.')
+  }
+
+  const customer = await createCustomer(
+    input.customer_name,
+    input.customer_phone_number,
+    input.customer_email,
+    user.user_metadata.store_id,
+  )
+
   const reservation_period = generateTstzrange(
     input.date,
     input.start_time,
@@ -27,7 +41,7 @@ export const createReservation = async (
     reservation_period,
     store_id: Number(input.store_id),
     user_id: input.user_id,
-    customer_id: input.customer_id ? Number(input.customer_id) : undefined,
+    customer_id: customer ? customer.id : undefined,
     menu_id: input.menu_id ? Number(input.menu_id) : undefined,
   })
   if (error) {
@@ -36,6 +50,35 @@ export const createReservation = async (
   }
 
   revalidatePath('/dashboard/reservations')
+}
+
+const createCustomer = async (
+  name: string | undefined,
+  phoneNumber: string | undefined,
+  email: string | undefined,
+  storeId: number,
+) => {
+  if (!name && phoneNumber && email) {
+    return undefined
+  }
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('customers')
+    .insert({
+      name,
+      email,
+      phone_number: phoneNumber,
+      store_id: storeId,
+    })
+    .select()
+    .single()
+  if (error) {
+    throw error
+  }
+
+  return data
 }
 
 export const updateReservation = async (

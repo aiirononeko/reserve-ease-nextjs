@@ -4,6 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import type { Database } from '@/types/supabase'
 import type { AuthUser } from '@supabase/supabase-js'
 import React from 'react'
 import { ReservationCreateForm } from './reservation-create-form'
@@ -21,6 +22,7 @@ interface Props {
   user: AuthUser
   newReservationDate: Date | null
   newReservationTime: string | null
+  menus: Database['public']['Tables']['menus']['Row'][]
 }
 
 export const ReservationModal: React.FC<Props> = ({
@@ -30,6 +32,7 @@ export const ReservationModal: React.FC<Props> = ({
   user,
   newReservationDate,
   newReservationTime,
+  menus,
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -49,6 +52,7 @@ export const ReservationModal: React.FC<Props> = ({
             initialDate={newReservationDate}
             initialTime={newReservationTime}
             user={user}
+            menus={menus}
             onClose={onClose}
           />
         </DialogContent>

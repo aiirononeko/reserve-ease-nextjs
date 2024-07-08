@@ -6,8 +6,10 @@ export const createReservationSchema = z.object({
   end_time: z.string(),
   store_id: z.string(),
   user_id: z.string(),
-  customer_id: z.string().optional(),
   menu_id: z.string().optional(),
+  customer_name: z.string().optional(),
+  customer_phone_number: z.string().optional(),
+  customer_email: z.string().optional(),
 })
 
 export const updateReservationSchema = z.object({

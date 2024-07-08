@@ -69,7 +69,7 @@ create table public.business_hours (
 create table public.customers (
   id bigserial not null,
   name varchar(51),
-  email varchar(257) not null,
+  email varchar(257),
   phone_number varchar(16),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),

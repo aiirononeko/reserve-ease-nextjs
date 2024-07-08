@@ -1,5 +1,6 @@
 'use client'
 
+import type { Database } from '@/types/supabase'
 import type { AuthUser } from '@supabase/supabase-js'
 import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
@@ -14,11 +15,13 @@ interface Props {
     end_time: string
   }[]
   user: AuthUser
+  menus: Database['public']['Tables']['menus']['Row'][]
 }
 
 export const ReservationCalendar: React.FC<Props> = ({
   reservations,
   user,
+  menus,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedReservation, setSelectedReservation] = useState<{
@@ -157,6 +160,7 @@ export const ReservationCalendar: React.FC<Props> = ({
             user={user}
             newReservationDate={newReservationDate}
             newReservationTime={newReservationTime}
+            menus={menus}
           />
         </div>
       </div>

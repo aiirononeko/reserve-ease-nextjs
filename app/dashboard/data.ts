@@ -1,10 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { AuthUser } from '@supabase/supabase-js'
 
-export const getReservations = async (user: AuthUser) => {
+export const getReservations = async () => {
   const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found.')
+  }
 
   const { data, error } = await supabase
     .from('reservations')
@@ -25,25 +31,27 @@ export const getReservations = async (user: AuthUser) => {
     .eq('store_id', user.user_metadata.store_id)
     .order('created_at', { ascending: false })
   if (error) {
-    console.error(error.message)
     throw error
   }
 
-  return data.map((reservation) => {
-    const { date, start_time, end_time } = parseTstzrange(
-      reservation.reservation_period,
-    )
+  return {
+    user,
+    reservations: data.map((reservation) => {
+      const { date, start_time, end_time } = parseTstzrange(
+        reservation.reservation_period,
+      )
 
-    return {
-      id: reservation.id,
-      menus: reservation.menus,
-      customers: reservation.customers,
-      users: reservation.users,
-      date,
-      start_time,
-      end_time,
-    }
-  })
+      return {
+        id: reservation.id,
+        menus: reservation.menus,
+        customers: reservation.customers,
+        users: reservation.users,
+        date,
+        start_time,
+        end_time,
+      }
+    }),
+  }
 }
 
 const parseTstzrange = (
@@ -64,4 +72,25 @@ const parseTstzrange = (
   const end_time = matches[4] // matches[4]で終了時刻を正しく抽出
 
   return { date, start_time, end_time }
+}
+
+export const getMenus = async () => {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found.')
+  }
+
+  const { data, error } = await supabase
+    .from('menus')
+    .select('*')
+    .eq('user_id', user.id)
+  if (error) {
+    throw error
+  }
+
+  return data
 }

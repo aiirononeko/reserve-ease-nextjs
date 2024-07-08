@@ -1,5 +1,12 @@
 import { Button } from '@/components/ui/button'
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command'
+import {
   Form,
   FormControl,
   FormField,
@@ -8,9 +15,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
+import type { Database } from '@/types/supabase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { AuthUser } from '@supabase/supabase-js'
-import { Loader2 } from 'lucide-react'
+import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -21,6 +35,7 @@ interface Props {
   initialDate: Date
   initialTime: string
   user: AuthUser
+  menus: Database['public']['Tables']['menus']['Row'][]
   onClose: () => void
 }
 
@@ -28,6 +43,7 @@ export const ReservationCreateForm = ({
   initialDate,
   initialTime,
   user,
+  menus,
   onClose,
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
@@ -37,10 +53,19 @@ export const ReservationCreateForm = ({
       end_time: '',
       store_id: user.user_metadata.store_id.toString(),
       user_id: user.id,
-      customer_id: undefined,
       menu_id: undefined,
+      customer_name: undefined,
+      customer_phone_number: undefined,
+      customer_email: undefined,
     },
     resolver: zodResolver(createReservationSchema),
+  })
+
+  const menuOptions = menus.map((menu) => {
+    return {
+      label: menu.name,
+      value: menu.id.toString(),
+    }
   })
 
   const onSubmit = async (values: z.infer<typeof createReservationSchema>) => {
@@ -107,6 +132,66 @@ export const ReservationCreateForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>メニュー</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant='outline'
+                      role='combobox'
+                      className={cn(
+                        'w-80 justify-between',
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      {field.value
+                        ? menuOptions.find(
+                            (option) => option.value === field.value,
+                          )?.label
+                        : '選択してください'}
+                      <ChevronsUpDown className='ml-2 size-4 shrink-0 opacity-50' />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent {...field} side='top' className='w-80 p-0'>
+                  <Command>
+                    <CommandInput placeholder='メニュー名で検索' />
+                    <CommandEmpty className='py-2 text-center text-xs'>
+                      メニューが見つかりません
+                    </CommandEmpty>
+                    <CommandGroup className='h-80 overflow-auto'>
+                      {menuOptions.map((option) => (
+                        <CommandItem
+                          value={option.label}
+                          key={option.value}
+                          onSelect={() => {
+                            form.setValue('menu_id', option.value)
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4',
+                              option.value === field.value
+                                ? 'opacity-100'
+                                : 'opacity-0',
+                            )}
+                          />
+                          {option.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='customer_name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>お客様氏名</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -116,10 +201,23 @@ export const ReservationCreateForm = ({
         />
         <FormField
           control={form.control}
-          name='customer_id'
+          name='customer_phone_number'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>顧客情報</FormLabel>
+              <FormLabel className='font-bold'>お客様電話番号</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='customer_email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='font-bold'>お客様メールアドレス</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
