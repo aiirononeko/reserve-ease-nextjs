@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 import { Footer } from './footer'
 import { Header } from './header'
+import { Providers } from './providers'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -26,10 +27,12 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Header />
-        <main>{children}</main>
-        <Toaster />
-        <Footer />
+        <Providers>
+          <Header />
+          <main>{children}</main>
+          <Toaster />
+          <Footer />
+        </Providers>
       </body>
       <GoogleTagManager gtmId='GTM-TBW47KX9' />
     </html>
