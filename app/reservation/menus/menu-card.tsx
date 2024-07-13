@@ -1,4 +1,6 @@
+import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
+import Link from 'next/link'
 
 interface Props {
   menu: Database['public']['Tables']['menus']['Row']
@@ -24,6 +26,13 @@ export const MenuCard = ({ menu }: Props) => {
           </p>
         )}
       </div>
+      <Button asChild className='h-8 text-xs'>
+        <Link
+          href={`/reservation/dates?staff_id=${menu.user_id}&menu_id=${menu.id}`}
+        >
+          このメニューで予約する
+        </Link>
+      </Button>
     </div>
   )
 }
