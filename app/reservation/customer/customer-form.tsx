@@ -14,20 +14,37 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { reservationAtom } from '../jotai'
+import { createCustomer } from './action'
 import { customerSchema } from './schema'
 
 export const CustomerForm = () => {
+  const router = useRouter()
+  const [reservation, setReservation] = useAtom(reservationAtom)
+
   const form = useForm<z.infer<typeof customerSchema>>({
+    defaultValues: {
+      store_id: reservation.store.id,
+    },
     resolver: zodResolver(customerSchema),
   })
 
-  const router = useRouter()
-
   const onSubmit = async (values: z.infer<typeof customerSchema>) => {
-    console.log(values) // TODO
-    router.push('/reservation/confirm')
+    const customer = await createCustomer(values)
+
+    if (customer) {
+      setReservation({
+        ...reservation,
+        customer,
+      })
+      router.push('/reservation/confirm')
+    } else {
+      toast.error('もう一度情報を入力して送信してください')
+    }
   }
 
   return (

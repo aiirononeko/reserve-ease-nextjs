@@ -1,12 +1,26 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
-import Link from 'next/link'
+import { useAtom } from 'jotai'
+import { useRouter } from 'next/navigation'
+import { reservationAtom } from '../jotai'
 
 interface Props {
   menu: Database['public']['Tables']['menus']['Row']
 }
 
 export const MenuCard = ({ menu }: Props) => {
+  const router = useRouter()
+  const [reservation, setReservation] = useAtom(reservationAtom)
+
+  const handleClick = () => {
+    setReservation({ ...reservation, menu })
+    router.push(
+      `/reservation/dates?staff_id=${menu.user_id}&menu_id=${menu.id}`,
+    )
+  }
+
   return (
     <div className='w-full space-y-4 border border-primary p-4'>
       <p className='text-lg font-bold'>{menu.name}</p>
@@ -26,12 +40,8 @@ export const MenuCard = ({ menu }: Props) => {
           </p>
         )}
       </div>
-      <Button asChild className='h-8 text-xs'>
-        <Link
-          href={`/reservation/dates?staff_id=${menu.user_id}&menu_id=${menu.id}`}
-        >
-          このメニューで予約する
-        </Link>
+      <Button onClick={handleClick} className='h-8 text-xs'>
+        このメニューで予約する
       </Button>
     </div>
   )

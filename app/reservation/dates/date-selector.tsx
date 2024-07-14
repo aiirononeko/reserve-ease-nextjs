@@ -2,15 +2,14 @@
 
 import { Button } from '@/components/ui/button'
 import { addDay, format } from '@formkit/tempo'
-import Link from 'next/link'
+import { useAtom } from 'jotai'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { reservationAtom } from '../jotai'
 
-interface Props {
-  staffId: string
-  menuId: number
-}
-
-export default function DateSelector({ staffId, menuId }: Props) {
+export default function DateSelector() {
+  const router = useRouter()
+  const [reservation, setReservation] = useAtom(reservationAtom)
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
 
   const today = new Date()
@@ -40,6 +39,11 @@ export default function DateSelector({ staffId, menuId }: Props) {
   ]
 
   const disabledTimes = ['11:30', '12:00', '14:30']
+
+  const handleClick = (t: string) => {
+    setReservation({ ...reservation, date: t })
+    router.push('/reservation/customer')
+  }
 
   return (
     <div className='mx-4 w-full bg-background p-4 shadow'>
@@ -73,14 +77,10 @@ export default function DateSelector({ staffId, menuId }: Props) {
             key={t}
             variant='outline'
             disabled={disabledTimes.includes(t)}
-            asChild
+            onClick={() => handleClick(t)}
             className='w-full'
           >
-            <Link
-              href={`/reservation/customer?staff_id=${staffId}&menu_id=${menuId}&date=${t}`}
-            >
-              {t}
-            </Link>
+            {t}
           </Button>
         ))}
       </div>
