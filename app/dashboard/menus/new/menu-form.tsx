@@ -33,6 +33,7 @@ export const MenuForm = ({ user }: Props) => {
       description: '',
       amount: undefined,
       discount: '0',
+      minutes: '60',
       user_id: user.id,
     },
   })
@@ -103,6 +104,24 @@ export const MenuForm = ({ user }: Props) => {
               </FormControl>
               <FormDescription>
                 0以上の数値を設定すると、割引価格が表示されます。
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='minutes'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel aria-required={true} className='font-bold'>
+                所要時間(目安)(分)
+              </FormLabel>
+              <FormControl>
+                <Input type='number' placeholder='60' {...field} />
+              </FormControl>
+              <FormDescription>
+                分単位で入力してください。例: 1時間の場合→60
               </FormDescription>
               <FormMessage />
             </FormItem>

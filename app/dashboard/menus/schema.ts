@@ -6,6 +6,7 @@ export const updateMenuSchema = z.object({
   description: z.string().min(1).max(512),
   amount: z.string(),
   discount: z.string(),
+  minutes: z.string(),
 })
 
 export const deleteMenuSchema = z.object({

@@ -11,6 +11,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -40,6 +41,7 @@ export const MenuFormDialog = ({ menu }: Props) => {
       description: menu.description,
       amount: menu.amount.toString(),
       discount: menu.discount.toString(),
+      minutes: menu.minutes.toString(),
     },
   })
 
@@ -118,6 +120,27 @@ export const MenuFormDialog = ({ menu }: Props) => {
                   <FormControl>
                     <Input type='number' placeholder='500' {...field} />
                   </FormControl>
+                  <FormDescription>
+                    0以上の数値を設定すると、割引価格が表示されます。
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='minutes'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel aria-required={true} className='font-bold'>
+                    所要時間(目安)(分)
+                  </FormLabel>
+                  <FormControl>
+                    <Input type='number' placeholder='60' {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    分単位で入力してください。例: 1時間の場合→60
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -42,6 +42,7 @@ create table public.menus (
   description varchar(512) not null,
   amount int not null,
   discount int not null default 0,
+  minutes int not null default 0, -- 30分刻み
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 
