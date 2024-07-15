@@ -1,5 +1,6 @@
 'use server'
 
+import { parseNumrange } from '@/app/utils'
 import { createClient } from '@/lib/supabase/server'
 
 export const getBusinessHours = async () => {
@@ -23,7 +24,11 @@ export const getBusinessHours = async () => {
   }
 
   return data.map((businessHour) => {
-    const { open_time, close_time } = parseNumrange(businessHour.open_period)
+    const openPeriod = parseNumrange(businessHour.open_period)
+    const { open_time, close_time } = formatNumRange(
+      openPeriod?.openHour,
+      openPeriod?.closeHour,
+    )
     return {
       id: businessHour.id,
       day_of_week: businessHour.day_of_week,
@@ -33,29 +38,19 @@ export const getBusinessHours = async () => {
   })
 }
 
-const parseNumrange = (
-  numrange: string | null,
+const formatNumRange = (
+  openHour: number | undefined,
+  closeHour: number | undefined,
 ): { open_time: string; close_time: string } => {
-  if (!numrange) return { open_time: '', close_time: '' }
-
-  // 正規表現で数値部分を抽出
-  const matches = numrange.match(/(\d+),(\d+)/)
-  if (!matches || matches.length < 3) {
-    throw new Error('Invalid numrange format')
-  }
-
-  // 数値部分を抽出して number 型に変換
-  const start = parseInt(matches[1], 10)
-  const end = parseInt(matches[2], 10)
-
+  if (!openHour || !closeHour) return { open_time: '', close_time: '' }
   // HH:mm 形式の文字列に変換する関数
   const formatTime = (hours: number): string => {
     const h = hours % 24
     return `${h.toString().padStart(2, '0')}:00`
   }
 
-  const open_time = formatTime(start)
-  const close_time = formatTime(end)
+  const open_time = formatTime(openHour)
+  const close_time = formatTime(closeHour)
 
   return { open_time, close_time }
 }

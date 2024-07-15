@@ -1,44 +1,32 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import type { Database } from '@/types/supabase'
 import { addDay, format } from '@formkit/tempo'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { reservationAtom } from '../jotai'
+import { getDisabledTimes, getTimes } from './utils'
 
-export default function DateSelector() {
+interface Props {
+  businessHours: Database['public']['Tables']['business_hours']['Row'][]
+}
+
+export default function DateSelector({ businessHours }: Props) {
   const router = useRouter()
   const [reservation, setReservation] = useAtom(reservationAtom)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [times, setTimes] = useState<string[]>()
 
   const today = new Date()
   const dates = Array.from({ length: 14 }, (_, i) => addDay(today, i))
 
-  const times = [
-    '09:00',
-    '09:30',
-    '10:00',
-    '10:30',
-    '11:00',
-    '11:30',
-    '12:00',
-    '12:30',
-    '13:00',
-    '13:30',
-    '14:00',
-    '14:30',
-    '15:00',
-    '15:30',
-    '16:00',
-    '16:30',
-    '17:00',
-    '17:30',
-    '18:00',
-    '18:30',
-  ]
+  const disabledTimes = getDisabledTimes()
 
-  const disabledTimes = ['11:30', '12:00', '14:30']
+  useEffect(() => {
+    setTimes(getTimes(businessHours, selectedDate))
+  }, [businessHours, selectedDate])
 
   const handleClick = (t: string) => {
     setReservation({ ...reservation, date: t })
@@ -72,17 +60,18 @@ export default function DateSelector() {
         </div>
       </div>
       <div className='grid grid-cols-2 gap-2'>
-        {times.map((t) => (
-          <Button
-            key={t}
-            variant='outline'
-            disabled={disabledTimes.includes(t)}
-            onClick={() => handleClick(t)}
-            className='w-full'
-          >
-            {t}
-          </Button>
-        ))}
+        {times &&
+          times.map((t) => (
+            <Button
+              key={t}
+              variant='outline'
+              disabled={disabledTimes.includes(t)}
+              onClick={() => handleClick(t)}
+              className='w-full'
+            >
+              {t}
+            </Button>
+          ))}
       </div>
     </div>
   )

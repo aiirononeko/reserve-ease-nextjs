@@ -16,7 +16,7 @@ export const MenuCard = ({ menu }: Props) => {
 
   const handleClick = () => {
     setReservation({ ...reservation, menu })
-    router.push(`/reservation/date?staff_id=${menu.user_id}&menu_id=${menu.id}`)
+    router.push(`/reservation/date?store_id=${reservation.store.id}`)
   }
 
   return (
