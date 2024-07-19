@@ -57,7 +57,8 @@ create table public.menus (
 create table public.business_hours (
   id bigserial not null,
   day_of_week int not null, -- 0 = Sunday, 1 = Monday, 2 = Tuesday ... 6 = Saturday
-  open_period numrange,
+  open_time time,
+  close_time time,
 
   store_id bigserial not null references public.stores(id) on delete cascade,
 
@@ -69,7 +70,7 @@ create table public.business_hours (
  */
 create table public.customers (
   id bigserial not null,
-  name varchar(51),
+  name varchar(50),
   email varchar(257),
   phone_number varchar(16),
   created_at timestamp with time zone not null default now(),
@@ -80,14 +81,14 @@ create table public.customers (
   primary key (id)
 );
 
-create extension if not exists btree_gist;
-
 /*
  * 予約.
  */
 create table public.reservations (
   id bigserial not null,
-  reservation_period tstzrange not null,
+  date date not null,
+  start_time time not null,
+  end_time time not null,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 
@@ -96,7 +97,5 @@ create table public.reservations (
   customer_id bigserial references public.customers(id) on delete cascade,
   menu_id bigserial references public.menus(id) on delete cascade,
 
-  primary key (id),
-
-  constraint exclude_reservation_period exclude using gist (store_id with=, user_id with=, reservation_period with &&)
+  primary key (id)
 );

@@ -15,18 +15,28 @@ interface Props {
 
 export default function DateSelector({ businessHours }: Props) {
   const router = useRouter()
+
   const [reservation, setReservation] = useAtom(reservationAtom)
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [times, setTimes] = useState<string[]>()
+  const [disabledTimes, setDisabledTimes] = useState<string[]>()
 
   const today = new Date()
   const dates = Array.from({ length: 14 }, (_, i) => addDay(today, i))
 
-  const disabledTimes = getDisabledTimes()
+  useEffect(() => {
+    const result = getTimes(businessHours, selectedDate)
+    setTimes(result)
+  }, [businessHours, selectedDate])
 
   useEffect(() => {
-    setTimes(getTimes(businessHours, selectedDate))
-  }, [businessHours, selectedDate])
+    const result = getDisabledTimes(
+      selectedDate,
+      reservation.store.max_capacity,
+    )
+    setDisabledTimes(result)
+  }, [selectedDate])
 
   const handleClick = (t: string) => {
     setReservation({ ...reservation, date: t })
@@ -61,6 +71,7 @@ export default function DateSelector({ businessHours }: Props) {
       </div>
       <div className='grid grid-cols-2 gap-2'>
         {times &&
+          disabledTimes &&
           times.map((t) => (
             <Button
               key={t}

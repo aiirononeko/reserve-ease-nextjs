@@ -18,38 +18,16 @@ export const updateBusinessHours = async (
   const supabase = createClient()
 
   input.businessHours.forEach(async (businessHour) => {
-    const open_period = generateOpenPeriod(
-      businessHour.open_time,
-      businessHour.close_time,
-    )
     const { error } = await supabase
       .from('business_hours')
-      .update({ open_period })
+      .update({
+        open_time: businessHour.open_time,
+        close_time: businessHour.close_time,
+      })
       .eq('id', businessHour.id)
     if (error) {
       console.error(error.message)
       throw error
     }
   })
-}
-
-const generateOpenPeriod = (
-  open_time: string | undefined,
-  close_time: string | undefined,
-): string | null => {
-  if (!open_time || !close_time) return null
-
-  // 正規表現で時刻形式をチェック
-  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
-
-  if (!timeRegex.test(open_time) || !timeRegex.test(close_time)) {
-    throw new Error('Invalid time format. Expected HH:MM format.')
-  }
-
-  // 時間部分を数値に変換
-  const [openHour] = open_time.split(':').map(Number)
-  const [closeHour] = close_time.split(':').map(Number)
-
-  // numrange形式の文字列を生成
-  return `[${openHour},${closeHour})`
 }

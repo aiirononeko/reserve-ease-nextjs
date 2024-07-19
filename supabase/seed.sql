@@ -37,14 +37,14 @@ INSERT INTO public.menus (name, description, amount, discount, minutes, user_id)
   ('ヘアカラー', 'イメージチェンジに最適なプロのヘアカラーリングサービスです。', 7000, 0, 60, '123e4567-e89b-12d3-a456-426614174003'),
   ('カイロプラクティック', '姿勢を整え、痛みを軽減する脊椎調整です。', 5000, 400, 90, '123e4567-e89b-12d3-a456-426614174003');
 
-INSERT INTO public.business_hours (day_of_week, open_period, store_id) VALUES
-  (0, '[8,18)', 1), -- Sunday for store 1
-  (1, '[9,19)', 1), -- Monday for store 1
-  (2, null, 1),     -- Tuesday for store 1 (closed)
-  (3, '[9,19)', 1), -- Wednesday for store 1
-  (4, '[9,19)', 1), -- Thursday for store 1
-  (5, '[9,20)', 1), -- Friday for store 1
-  (6, '[9,20)', 1);  -- Saturday for store 1
+INSERT INTO public.business_hours (day_of_week, open_time, close_time, store_id) VALUES
+  (0, '08:00:00', '18:00:00', 1),   -- Sunday for store 1
+  (1, '08:00:00', '20:00:00', 1),   -- Monday for store 1
+  (2, null, null, 1),               -- Tuesday for store 1 (closed)
+  (3, '08:00:00', '20:00:00', 1),   -- Wednesday for store 1
+  (4, null, null, 1),               -- Thursday for store 1 (closed)
+  (5, '08:00:00', '20:00:00', 1),   -- Friday for store 1
+  (6, '08:00:00', '18:00:00', 1);   -- Saturday for store 1
 
 INSERT INTO public.customers (name, email, phone_number, store_id) VALUES
   ('山田太郎', 'taro.yamada@example.com', '080-1234-5678', 1),
@@ -58,9 +58,9 @@ INSERT INTO public.customers (name, email, phone_number, store_id) VALUES
   ('小林大輔', 'daisuke.kobayashi@example.com', '070-9012-3456', 5),
   ('加藤明子', 'akiko.kato@example.com', '080-0123-4567', 5);
 
-INSERT INTO public.reservations (reservation_period, store_id, user_id, menu_id, customer_id) VALUES
-  ('[2024-07-07 10:00:00, 2024-07-07 11:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 1, 1),
-  ('[2024-07-08 12:00:00, 2024-07-08 13:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 2),
-  ('[2024-07-09 14:00:00, 2024-07-09 15:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 3, 3),
-  ('[2024-07-10 16:00:00, 2024-07-10 17:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 4),
-  ('[2024-07-11 18:00:00, 2024-07-11 19:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 5);
+-- INSERT INTO public.reservations (reservation_period, store_id, user_id, menu_id, customer_id) VALUES
+--   ('[2024-07-07 10:00:00, 2024-07-07 11:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 1, 1),
+--   ('[2024-07-08 12:00:00, 2024-07-08 13:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 2),
+--   ('[2024-07-09 14:00:00, 2024-07-09 15:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 3, 3),
+--   ('[2024-07-10 16:00:00, 2024-07-10 17:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 4),
+--   ('[2024-07-11 18:00:00, 2024-07-11 19:00:00)', 1, '123e4567-e89b-12d3-a456-426614174003', 2, 5);

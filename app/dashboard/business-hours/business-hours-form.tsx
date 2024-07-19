@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import type { Database } from '@/types/supabase'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { updateBusinessHours } from './action'
@@ -20,12 +21,7 @@ import { DAYS } from './constants'
 import { businessHoursSchema } from './schema'
 
 interface Props {
-  businessHours: {
-    id: number
-    day_of_week: number
-    open_time: string
-    close_time: string
-  }[]
+  businessHours: Database['public']['Tables']['business_hours']['Row'][]
 }
 
 export const BusinessHoursForm = ({ businessHours }: Props) => {
@@ -34,8 +30,8 @@ export const BusinessHoursForm = ({ businessHours }: Props) => {
       businessHours: businessHours.map((businesshour) => {
         return {
           id: businesshour.id,
-          open_time: businesshour.open_time,
-          close_time: businesshour.close_time,
+          open_time: businesshour.open_time ?? '',
+          close_time: businesshour.close_time ?? '',
         }
       }),
     },
