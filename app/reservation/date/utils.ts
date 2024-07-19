@@ -7,21 +7,42 @@ export const getTimes = (
   const todaysBusinessHour = businessHours.find((businessHour) => {
     return businessHour.day_of_week === selectedDate.getDay()
   })
+  if (!todaysBusinessHour) return []
 
-  return []
-
-  // return generateBusinessHourStrings(openPeriod.openHour, openPeriod.closeHour)
+  return generateBusinessHourStrings(
+    todaysBusinessHour.open_time,
+    todaysBusinessHour.close_time,
+  )
 }
 
 const generateBusinessHourStrings = (
-  openHour: number,
-  closeHour: number,
+  openTime: string | null,
+  closeTime: string | null,
 ): string[] => {
+  if (!openTime || !closeTime) return []
   const result: string[] = []
-  for (let hour = openHour; hour < closeHour; hour++) {
-    result.push(`${hour.toString().padStart(2, '0')}:00`)
-    result.push(`${hour.toString().padStart(2, '0')}:30`)
+
+  const [openHour, openMinute] = openTime.split(':').map(Number)
+  const [closeHour, closeMinute] = closeTime.split(':').map(Number)
+
+  let currentHour = openHour
+  let currentMinute = openMinute
+
+  while (
+    currentHour < closeHour ||
+    (currentHour === closeHour && currentMinute < closeMinute)
+  ) {
+    result.push(
+      `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`,
+    )
+
+    currentMinute += 30
+    if (currentMinute >= 60) {
+      currentHour++
+      currentMinute = 0
+    }
   }
+
   return result
 }
 
