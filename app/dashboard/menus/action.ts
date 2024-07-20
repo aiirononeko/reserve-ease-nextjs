@@ -23,6 +23,7 @@ export const updateMenu = async (input: z.infer<typeof updateMenuSchema>) => {
       ...input,
       amount: Number(input.amount),
       discount: Number(input.discount),
+      minutes: Number(input.minutes),
     })
     .eq('id', input.id)
   if (error) {

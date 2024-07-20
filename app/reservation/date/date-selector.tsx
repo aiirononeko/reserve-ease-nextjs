@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
-import { addDay, format } from '@formkit/tempo'
+import { addDay, date, format } from '@formkit/tempo'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ export default function DateSelector({ businessHours }: Props) {
 
   const [reservation, setReservation] = useAtom(reservationAtom)
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(date())
   const [times, setTimes] = useState<string[]>()
   const [disabledTimes, setDisabledTimes] = useState<string[]>()
 
@@ -31,11 +31,16 @@ export default function DateSelector({ businessHours }: Props) {
   }, [businessHours, selectedDate])
 
   useEffect(() => {
-    const result = getDisabledTimes(
-      selectedDate,
-      reservation.store.max_capacity,
-    )
-    setDisabledTimes(result)
+    const fetchAndSetDisabledTimes = async () => {
+      const result = await getDisabledTimes(
+        reservation.store.id,
+        selectedDate,
+        reservation.store.max_capacity,
+      )
+      setDisabledTimes(result)
+    }
+
+    fetchAndSetDisabledTimes()
   }, [selectedDate])
 
   const handleClick = (t: string) => {

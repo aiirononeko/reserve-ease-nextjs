@@ -21,6 +21,7 @@ export const createMenu = async (input: z.infer<typeof createMenuSchema>) => {
     ...input,
     amount: Number(input.amount),
     discount: Number(input.discount),
+    minutes: Number(input.minutes),
   })
   if (error) {
     console.error(error.message)

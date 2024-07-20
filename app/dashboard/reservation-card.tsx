@@ -19,6 +19,10 @@ export const ReservationCard = ({
 }: Props) => {
   // @ts-expect-error because JOINした時の型定義あとでやる
   const { start_time, end_time, menus, customers } = reservation
+  // TODO: 決めうちでJSTにしているが、offsetから計算できるようにする
+  // const t = offset(reservationDate, 'UTC')
+  const startHour = Number(start_time.split(':')[0]) + 9
+  const endHour = Number(end_time.split(':')[0]) + 9
   return (
     <div
       className='absolute mb-1 w-full truncate rounded-lg bg-primary p-1 text-xs text-primary-foreground'
@@ -28,7 +32,7 @@ export const ReservationCard = ({
       }}
       onClick={() => handleReservationClick(reservation)}
     >
-      {start_time} ~ {end_time}
+      {startHour}:00 ~ {endHour}:00
       <br />
       {customers.name}
       <br />

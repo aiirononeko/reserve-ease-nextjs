@@ -50,7 +50,6 @@ export const ReservationModal: React.FC<Props> = ({
           </DialogHeader>
           <ReservationCreateForm
             initialDate={newReservationDate}
-            initialTime={newReservationTime}
             user={user}
             menus={menus}
             onClose={onClose}

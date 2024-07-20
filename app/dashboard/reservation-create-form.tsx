@@ -33,7 +33,6 @@ import { createReservationSchema } from './schema'
 
 interface Props {
   initialDate: Date
-  initialTime: string
   user: AuthUser
   menus: Database['public']['Tables']['menus']['Row'][]
   onClose: () => void
@@ -41,16 +40,14 @@ interface Props {
 
 export const ReservationCreateForm = ({
   initialDate,
-  initialTime,
   user,
   menus,
   onClose,
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
-      date: initialDate.toISOString().split('T')[0],
-      start_time: initialTime,
-      end_time: '',
+      start_datetime: initialDate.toISOString(),
+      end_datetime: '',
       store_id: user.user_metadata.store_id.toString(),
       user_id: user.id,
       menu_id: undefined,
@@ -81,31 +78,31 @@ export const ReservationCreateForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
+        {/* <FormField */}
+        {/*   control={form.control} */}
+        {/*   name='date' */}
+        {/*   render={({ field }) => ( */}
+        {/*     <FormItem> */}
+        {/*       <FormLabel aria-required={true} className='font-bold'> */}
+        {/*         予約日時 */}
+        {/*       </FormLabel> */}
+        {/*       <FormControl> */}
+        {/*         <Input {...field} type='date' /> */}
+        {/*       </FormControl> */}
+        {/*       <FormMessage /> */}
+        {/*     </FormItem> */}
+        {/*   )} */}
+        {/* /> */}
         <FormField
           control={form.control}
-          name='date'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel aria-required={true} className='font-bold'>
-                予約日時
-              </FormLabel>
-              <FormControl>
-                <Input {...field} type='date' />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='start_time'
+          name='start_datetime'
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required={true} className='font-bold'>
                 予約開始時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='time' />
+                <Input {...field} type='datetime-local' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -113,14 +110,14 @@ export const ReservationCreateForm = ({
         />
         <FormField
           control={form.control}
-          name='end_time'
+          name='end_datetime'
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required={true} className='font-bold'>
                 予約終了時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='time' />
+                <Input {...field} type='datetime-local' />
               </FormControl>
               <FormMessage />
             </FormItem>

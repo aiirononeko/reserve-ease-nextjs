@@ -1,6 +1,7 @@
 'use client'
 
 import type { Database } from '@/types/supabase'
+import { date, dayStart } from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 import { useMemo, useState } from 'react'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
@@ -23,7 +24,7 @@ export const ReservationCalendar: React.FC<Props> = ({
   user,
   menus,
 }) => {
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const [currentDate, setCurrentDate] = useState(dayStart(date()))
   const [selectedReservation, setSelectedReservation] = useState<{
     id: number
     date: string
@@ -38,19 +39,19 @@ export const ReservationCalendar: React.FC<Props> = ({
   )
 
   const getWeekDates = useMemo(() => {
-    const today = new Date(currentDate)
+    const today = dayStart(date())
     return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      return date
+      const weekDate = date(today)
+      weekDate.setDate(today.getDate() + i)
+      return weekDate
     })
   }, [currentDate])
 
-  const hours = Array.from({ length: 17 }, (_, i) => i + 7) // 7時から23時まで
+  const hours = Array.from({ length: 18 }, (_, i) => i + 7) // 7時から24時まで
 
   const isReservationInHour = (
-    date: Date,
-    hour: number,
+    targetDate: Date,
+    targetHour: number,
     reservation: {
       id: number
       date: string
@@ -58,15 +59,17 @@ export const ReservationCalendar: React.FC<Props> = ({
       end_time: string
     },
   ) => {
-    const reservationDate = new Date(reservation.date)
-    const startHour = parseInt(reservation.start_time.split(':')[0])
-    const endHour = parseInt(reservation.end_time.split(':')[0])
+    const reservationDate = date(reservation.date)
+    // TODO: 決めうちでJSTにしているが、offsetから計算できるようにする
+    // const t = offset(reservationDate, 'UTC')
+    const startHour = Number(reservation.start_time.split(':')[0]) + 9
+    const endHour = Number(reservation.end_time.split(':')[0]) + 9
     return (
-      reservationDate.getDate() === date.getDate() &&
-      reservationDate.getMonth() === date.getMonth() &&
-      reservationDate.getFullYear() === date.getFullYear() &&
-      startHour <= hour &&
-      endHour > hour
+      reservationDate.getDate() === targetDate.getDate() &&
+      reservationDate.getMonth() === targetDate.getMonth() &&
+      reservationDate.getFullYear() === targetDate.getFullYear() &&
+      startHour <= targetHour &&
+      endHour > targetHour
     )
   }
 
@@ -124,18 +127,18 @@ export const ReservationCalendar: React.FC<Props> = ({
             ))}
           </div>
           <div className='relative grid w-[975px] grid-cols-7 gap-px bg-gray-100 md:w-full'>
-            {getWeekDates.map((date, dateIndex) => (
+            {getWeekDates.map((weekDate, dateIndex) => (
               <div key={dateIndex} className='bg-background'>
                 {hours.map((hour) => {
                   const reservationsInHour = reservations.filter(
                     (reservation) =>
-                      isReservationInHour(date, hour, reservation),
+                      isReservationInHour(weekDate, hour, reservation),
                   )
                   return (
                     <div
                       key={hour}
                       className='relative h-14 border-b border-gray-100'
-                      onClick={() => handleEmptySlotClick(date, hour)}
+                      onClick={() => handleEmptySlotClick(weekDate, hour)}
                     >
                       {reservationsInHour.map((reservation) => (
                         <ReservationCard
