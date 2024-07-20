@@ -6,5 +6,5 @@ export const reservationAtom = atom({
   staff: {} as Database['public']['Tables']['users']['Row'],
   menu: {} as Database['public']['Tables']['menus']['Row'],
   customer: {} as Database['public']['Tables']['customers']['Row'],
-  date: '',
+  startDatetime: '',
 })

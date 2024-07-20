@@ -2,7 +2,14 @@
 
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
-import { addDay, date, format } from '@formkit/tempo'
+import {
+  addDay,
+  addHour,
+  addMinute,
+  date,
+  dayStart,
+  format,
+} from '@formkit/tempo'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -18,11 +25,11 @@ export default function DateSelector({ businessHours }: Props) {
 
   const [reservation, setReservation] = useAtom(reservationAtom)
 
-  const [selectedDate, setSelectedDate] = useState<Date>(date())
+  const [selectedDate, setSelectedDate] = useState<Date>(dayStart(date()))
   const [times, setTimes] = useState<string[]>()
   const [disabledTimes, setDisabledTimes] = useState<string[]>()
 
-  const today = new Date()
+  const today = dayStart(date())
   const dates = Array.from({ length: 14 }, (_, i) => addDay(today, i))
 
   useEffect(() => {
@@ -43,8 +50,13 @@ export default function DateSelector({ businessHours }: Props) {
     fetchAndSetDisabledTimes()
   }, [selectedDate])
 
-  const handleClick = (t: string) => {
-    setReservation({ ...reservation, date: t })
+  const handleClick = (selectedDate: Date, selectedTime: string) => {
+    const [hours, minutes] = selectedTime.split(':').map(Number)
+    const startDatetime = addHour(
+      addMinute(date(selectedDate), minutes),
+      hours,
+    ).toISOString()
+    setReservation({ ...reservation, startDatetime })
     router.push('/reservation/customer')
   }
 
@@ -82,11 +94,23 @@ export default function DateSelector({ businessHours }: Props) {
               key={t}
               variant='outline'
               disabled={disabledTimes.includes(t)}
-              onClick={() => handleClick(t)}
-              className='w-full'
+              onClick={() => handleClick(selectedDate, t)}
+              className={
+                disabledTimes.includes(t) ? 'w-full bg-gray-300' : 'w-full'
+              }
             >
-              {t}
+              {disabledTimes.includes(t) ? (
+                <span className='line-through'>{t}</span>
+              ) : (
+                <span className='font-bold'>{t}</span>
+              )}
             </Button>
+          ))}
+        {!times ||
+          (times.length === 0 && (
+            <p className='col-span-2 text-center text-xs'>
+              ご予約いただける時間がありません
+            </p>
           ))}
       </div>
     </div>
