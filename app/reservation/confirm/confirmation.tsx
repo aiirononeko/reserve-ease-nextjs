@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { reservationAtom } from '../jotai'
 import { createReservation } from './action'
+import { sendEmailToCustomer, sendEmailToStaff } from './email'
 
 export const Confirmation = () => {
   const router = useRouter()
@@ -20,7 +21,13 @@ export const Confirmation = () => {
   const handleClick = () => {
     const reserve = async () => {
       try {
+        // reservationsテーブルに予約データ作成
         await createReservation(reservation)
+        // お客様にメール送信
+        await sendEmailToCustomer(reservation)
+        // スタッフにメール送信
+        await sendEmailToStaff(reservation)
+
         router.push('/reservation/complete')
       } catch (e) {
         toast.error(
@@ -37,7 +44,7 @@ export const Confirmation = () => {
       <div className='space-y-4'>
         <p className='text-lg font-bold'>予約内容</p>
         <div className='grid grid-cols-2 gap-4 px-4'>
-          <p className='text-sm font-bold'>サロン名</p>
+          <p className='text-sm font-bold'>店舗名</p>
           <p>{reservation.store.name}</p>
           <p className='text-sm font-bold'>スタッフ</p>
           <p>{reservation.staff.name}</p>
