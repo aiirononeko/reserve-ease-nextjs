@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'xvmvitbhulbtaikejszo.supabase.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.microcms-assets.io',
+      },
     ],
   },
 }
