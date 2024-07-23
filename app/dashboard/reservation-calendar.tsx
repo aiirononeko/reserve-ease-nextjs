@@ -8,13 +8,13 @@ import { HOURS } from './constants'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
 import { ReservationModal } from './reservation-modal'
+import { generateHourlyIntervals } from './utils'
 
 interface Props {
   reservations: {
     id: number
-    date: string
-    start_time: string
-    end_time: string
+    start_datetime: string
+    end_datetime: string
   }[]
   user: AuthUser
   menus: Database['public']['Tables']['menus']['Row'][]
@@ -29,9 +29,8 @@ export const ReservationCalendar: React.FC<Props> = ({
   const [selectedReservation, setSelectedReservation] = useState<
     | {
         id: number
-        date: string
-        start_time: string
-        end_time: string
+        start_datetime: string
+        end_datetime: string
       }
     | undefined
   >(undefined)
@@ -45,28 +44,34 @@ export const ReservationCalendar: React.FC<Props> = ({
     })
   }, [currentDate])
 
+  const times = generateHourlyIntervals(
+    addHour(dayStart(date()), 7),
+    addHour(dayStart(date()), 22),
+  )
+
   const isReservationInHour = (
-    targetDate: Date,
-    targetHour: number,
+    targetDatetime: Date,
     reservation: {
       id: number
-      date: string
-      start_time: string
-      end_time: string
+      start_datetime: string
+      end_datetime: string
     },
   ) => {
-    const reservationDate = date(reservation.date)
-    // TODO: 決めうちでJSTにしているが、offsetから計算できるようにする
-    // const t = offset(reservationDate, 'UTC')
-    const startHour = Number(reservation.start_time.split(':')[0]) + 9
-    const endHour = Number(reservation.end_time.split(':')[0]) + 9
-    return (
-      reservationDate.getDate() === targetDate.getDate() &&
-      reservationDate.getMonth() === targetDate.getMonth() &&
-      reservationDate.getFullYear() === targetDate.getFullYear() &&
-      startHour <= targetHour &&
-      endHour > targetHour
-    )
+    const startDatetime = date(reservation.start_datetime)
+    const endDatetime = date(reservation.end_datetime)
+
+    return false
+    // sameDay(targetDatetime, startDatetime) &&
+    // isAfter(targetDatetime, startDatetime) &&
+    // isBefore(targetDatetime, endDatetime)
+    // sameDay(targetDate, startDatetime) &&
+    // isAfter(targetDate, startDatetime)
+    // isBefore(targetDate, endDatetime)
+    // reservationDate.getDate() === targetDate.getDate() &&
+    // reservationDate.getMonth() === targetDate.getMonth() &&
+    // reservationDate.getFullYear() === targetDate.getFullYear() &&
+    // startHour <= targetHour &&
+    // endHour > targetHour
   }
 
   const handleEmptySlotClick = (datetime: Date) => {
@@ -75,9 +80,8 @@ export const ReservationCalendar: React.FC<Props> = ({
 
   const handleReservationClick = (reservation: {
     id: number
-    date: string
-    start_time: string
-    end_time: string
+    start_datetime: string
+    end_datetime: string
   }) => {
     setSelectedReservation(reservation)
   }
@@ -122,18 +126,15 @@ export const ReservationCalendar: React.FC<Props> = ({
           <div className='relative grid w-[975px] grid-cols-7 gap-px bg-gray-100 md:w-full'>
             {weekDates.map((weekDate, dateIndex) => (
               <div key={dateIndex} className='bg-background'>
-                {HOURS.map((hour) => {
+                {times.map((time) => {
                   const reservationsInHour = reservations.filter(
-                    (reservation) =>
-                      isReservationInHour(weekDate, hour, reservation),
+                    (reservation) => isReservationInHour(time, reservation),
                   )
                   return (
                     <div
-                      key={hour}
+                      key={time.toISOString()}
                       className='relative h-14 border-b border-gray-100'
-                      onClick={() =>
-                        handleEmptySlotClick(addHour(weekDate, hour))
-                      }
+                      onClick={() => handleEmptySlotClick(time)}
                     >
                       {reservationsInHour.map((reservation) => (
                         <ReservationCard

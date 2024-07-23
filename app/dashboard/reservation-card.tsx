@@ -1,15 +1,17 @@
+'use client'
+
+import { date, format } from '@formkit/tempo'
+
 interface Props {
   reservation: {
     id: number
-    date: string
-    start_time: string
-    end_time: string
+    start_datetime: string
+    end_datetime: string
   }
   handleReservationClick: (reservation: {
     id: number
-    date: string
-    start_time: string
-    end_time: string
+    start_datetime: string
+    end_datetime: string
   }) => void
 }
 
@@ -18,11 +20,17 @@ export const ReservationCard = ({
   handleReservationClick,
 }: Props) => {
   // @ts-expect-error because JOINした時の型定義あとでやる
-  const { start_time, end_time, menus, customers } = reservation
-  // TODO: 決めうちでJSTにしているが、offsetから計算できるようにする
-  // const t = offset(reservationDate, 'UTC')
-  const startHour = Number(start_time.split(':')[0]) + 9
-  const endHour = Number(end_time.split(':')[0]) + 9
+  const { start_datetime, end_datetime, menus, customers } = reservation
+
+  const startTime = format({
+    date: date(start_datetime),
+    format: 'HH:MM',
+  })
+  const endTime = format({
+    date: date(end_datetime),
+    format: 'HH:MM',
+  })
+
   return (
     <div
       className='absolute mb-1 w-full truncate rounded-lg bg-primary p-1 text-xs text-primary-foreground'
@@ -32,11 +40,11 @@ export const ReservationCard = ({
       }}
       onClick={() => handleReservationClick(reservation)}
     >
-      {startHour}:00 ~ {endHour}:00
-      <br />
-      {customers.name}
-      <br />
-      {menus.name}
+      <p>
+        {startTime} ~ {endTime}
+      </p>
+      <p>{customers.name}</p>
+      <p>{menus.name}</p>
     </div>
   )
 }

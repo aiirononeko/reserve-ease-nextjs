@@ -16,9 +16,8 @@ interface Props {
   reservation:
     | {
         id: number
-        date: string
-        start_time: string
-        end_time: string
+        start_datetime: string
+        end_datetime: string
       }
     | undefined
   user: AuthUser

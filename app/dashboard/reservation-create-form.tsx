@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -50,12 +52,10 @@ export const ReservationCreateForm = ({
       start_datetime: format({
         date: initialDate,
         format: 'YYYY-MM-DDTHH:mm',
-        tz: 'Asia/Tokyo',
       }),
       end_datetime: format({
         date: addHour(initialDate, 1),
         format: 'YYYY-MM-DDTHH:mm',
-        tz: 'Asia/Tokyo',
       }),
       store_id: user.user_metadata.store_id.toString(),
       user_id: user.id,

@@ -86,9 +86,8 @@ create table public.customers (
  */
 create table public.reservations (
   id bigserial not null,
-  date date not null,
-  start_time time not null,
-  end_time time not null,
+  start_datetime timestamp not null,
+  end_datetime timestamp not null,
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 

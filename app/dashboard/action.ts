@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { date, format } from '@formkit/tempo'
+import { date } from '@formkit/tempo'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
 import { createReservationSchema, updateReservationSchema } from './schema'
@@ -33,30 +33,9 @@ export const createReservation = async (
     user.user_metadata.store_id,
   )
 
-  const reservationStartDatetime = date(input.start_datetime)
-  const reservationEndDatetime = date(input.end_datetime)
-
-  // MEMO: Local Timezone -> UTC
-  const reservationDate = format({
-    date: reservationStartDatetime.toISOString(),
-    format: 'YYYY-MM-DD',
-    tz: 'UTC',
-  })
-  const reservationStartTime = format({
-    date: reservationStartDatetime.toISOString(),
-    format: 'HH:mm',
-    tz: 'UTC',
-  })
-  const reservationEndTime = format({
-    date: reservationEndDatetime.toISOString(),
-    format: 'HH:mm',
-    tz: 'UTC',
-  })
-
   const { error } = await supabase.from('reservations').insert({
-    date: reservationDate,
-    start_time: reservationStartTime + ':00',
-    end_time: reservationEndTime + ':00',
+    start_datetime: date(input.start_datetime).toISOString(),
+    end_datetime: date(input.end_datetime).toISOString(),
     store_id: Number(input.store_id),
     user_id: input.user_id,
     customer_id: customer ? customer.id : undefined,
@@ -110,32 +89,11 @@ export const updateReservation = async (
 
   const supabase = createClient()
 
-  const reservationStartDatetime = date(input.start_datetime)
-  const reservationEndDatetime = date(input.end_datetime)
-
-  // MEMO: Local Timezone -> UTC
-  const reservationDate = format({
-    date: reservationStartDatetime.toISOString(),
-    format: 'YYYY-MM-DD',
-    tz: 'UTC',
-  })
-  const reservationStartTime = format({
-    date: reservationStartDatetime.toISOString(),
-    format: 'HH:mm',
-    tz: 'UTC',
-  })
-  const reservationEndTime = format({
-    date: reservationEndDatetime.toISOString(),
-    format: 'HH:mm',
-    tz: 'UTC',
-  })
-
   const { error } = await supabase
     .from('reservations')
     .update({
-      date: reservationDate,
-      start_time: reservationStartTime + ':00',
-      end_time: reservationEndTime + ':00',
+      start_datetime: date(input.start_datetime).toISOString(),
+      end_datetime: date(input.end_datetime).toISOString(),
     })
     .eq('id', input.id)
   if (error) {

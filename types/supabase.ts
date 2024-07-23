@@ -152,11 +152,10 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: number
-          date: string
-          end_time: string
+          end_datetime: string
           id: number
           menu_id: number
-          start_time: string
+          start_datetime: string
           store_id: number
           updated_at: string
           user_id: string
@@ -164,11 +163,10 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id?: number
-          date: string
-          end_time: string
+          end_datetime: string
           id?: number
           menu_id?: number
-          start_time: string
+          start_datetime: string
           store_id?: number
           updated_at?: string
           user_id: string
@@ -176,11 +174,10 @@ export type Database = {
         Update: {
           created_at?: string
           customer_id?: number
-          date?: string
-          end_time?: string
+          end_datetime?: string
           id?: number
           menu_id?: number
-          start_time?: string
+          start_datetime?: string
           store_id?: number
           updated_at?: string
           user_id?: string

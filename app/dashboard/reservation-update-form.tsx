@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
@@ -12,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { addMinute, date, format } from '@formkit/tempo'
+import { date, format } from '@formkit/tempo'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { deleteReservation, updateReservation } from './action'
@@ -21,33 +23,23 @@ import { updateReservationSchema } from './schema'
 interface Props {
   reservation: {
     id: number
-    date: string
-    start_time: string
-    end_time: string
+    start_datetime: string
+    end_datetime: string
   }
   onClose: () => void
 }
 
 export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
-  const reservationDate = date(reservation.date)
-  const [startHours, startMinutes] = reservation.start_time
-    .split(':')
-    .map(Number)
-  const [endHours, endMinutes] = reservation.end_time.split(':').map(Number)
-
   const form = useForm<z.infer<typeof updateReservationSchema>>({
-    // TODO: 決めうちでJSTにしているので、offsetから計算するようにする
     defaultValues: {
       id: reservation.id,
       start_datetime: format({
-        date: addMinute(reservationDate, (startHours + 9) * 60 + startMinutes),
+        date: date(reservation.start_datetime),
         format: 'YYYY-MM-DDTHH:mm',
-        tz: 'Asia/Tokyo',
       }),
       end_datetime: format({
-        date: addMinute(reservationDate, (endHours + 9) * 60 + endMinutes),
+        date: date(reservation.end_datetime),
         format: 'YYYY-MM-DDTHH:mm',
-        tz: 'Asia/Tokyo',
       }),
     },
     resolver: zodResolver(updateReservationSchema),
