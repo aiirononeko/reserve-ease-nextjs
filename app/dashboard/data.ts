@@ -75,6 +75,7 @@ export const getStore = async () => {
     .from('stores')
     .select('*')
     .eq('id', user.user_metadata.store_id)
+    .single()
   if (error) {
     throw error
   }
