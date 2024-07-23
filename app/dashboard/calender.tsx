@@ -8,6 +8,8 @@ import {
   dayStart,
   diffMinutes,
   format,
+  isAfter,
+  isBefore,
   sameHour,
   sameMinute,
 } from '@formkit/tempo'
@@ -32,18 +34,32 @@ export function Calender({ reservations, menus }: Props) {
     )
   }, [currentDate])
 
+  /*
+   * 対象の時刻から始まる予約を取得する.
+   */
   const checkReservations = (target: Date) => {
-    const result = reservations.filter((reservation) => {
+    return reservations.filter((reservation) => {
       return (
         sameHour(addHour(date(reservation.start_datetime), 9), target) &&
         sameMinute(addHour(date(reservation.start_datetime)), target)
       )
     })
-    console.log(result)
-    return result
+  }
+
+  /*
+   * 対象の時刻Rowに他の予約がかぶっていないか？
+   */
+  const withInReservation = (target: Date) => {
+    return reservations.some((reservation) => {
+      return (
+        isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
+        isBefore(target, addHour(date(reservation.end_datetime), 9))
+      )
+    })
   }
 
   // TODO: でたりでなかったりする。。レンダリングのタイミングの問題か？
+  // stylesにかく
   const getHeight = (
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => {
@@ -83,46 +99,46 @@ export function Calender({ reservations, menus }: Props) {
           ))}
         </div>
         <div className='col-span-5 py-5'>
-          {times.map((time, index) => (
+          {times.map((time) => (
             <div key={time.toISOString()}>
-              {times.length > index + 1 ? (
-                <div className='flex flex-row'>
-                  {checkReservations(time).map((reservation) => (
-                    <div key={reservation.id} className='flex flex-row'>
-                      <div
-                        key={reservation.id}
-                        className={`flex w-full flex-col justify-center space-y-1 border bg-primary p-2 text-xs font-semibold tracking-wide text-white ${getHeight(reservation)}`}
-                      >
-                        <div className='space-x-1'>
-                          <span>
-                            {format(
-                              addHour(date(reservation.start_datetime), 9),
-                              'HH:mm',
-                            )}
-                          </span>
-                          <span>~</span>
-                          <span>
-                            {format(
-                              addHour(date(reservation.end_datetime), 9),
-                              'HH:mm',
-                            )}
-                          </span>
-                        </div>
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        {reservation.customers.name && (
-                          <p>{reservation.customers.name} 様</p>
-                        )}
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        <p>{reservation.menus.name}</p>
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        <p>{reservation.users.name}</p>
+              <div className='flex flex-row'>
+                {checkReservations(time).length > 0 ||
+                withInReservation(time) ? (
+                  checkReservations(time).map((reservation) => (
+                    <div
+                      key={reservation.id}
+                      className={`flex w-full flex-col justify-center space-y-1 border bg-primary p-2 text-xs font-semibold tracking-wide text-white ${getHeight(reservation)}`}
+                    >
+                      <div className='space-x-1'>
+                        <span>
+                          {format(
+                            addHour(date(reservation.start_datetime), 9),
+                            'HH:mm',
+                          )}
+                        </span>
+                        <span>~</span>
+                        <span>
+                          {format(
+                            addHour(date(reservation.end_datetime), 9),
+                            'HH:mm',
+                          )}
+                        </span>
                       </div>
+                      {/* @ts-expect-error because JOINした時の型定義あとでやる */}
+                      {reservation.customers.name && (
+                        // @ts-expect-error because JOINした時の型定義あとでやる
+                        <p>{reservation.customers.name} 様</p>
+                      )}
+                      {/* @ts-expect-error because JOINした時の型定義あとでやる */}
+                      <p>{reservation.menus.name}</p>
+                      {/* @ts-expect-error because JOINした時の型定義あとでやる */}
+                      <p>{reservation.users.name}</p>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className='w-full bg-gray-500'></div>
-              )}
+                  ))
+                ) : (
+                  <div className='h-[80px] w-full'>{time.toLocaleString()}</div>
+                )}
+              </div>
             </div>
           ))}
         </div>
