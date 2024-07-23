@@ -110,19 +110,32 @@ export const updateReservation = async (
 
   const supabase = createClient()
 
+  const reservationStartDatetime = date(input.start_datetime)
+  const reservationEndDatetime = date(input.end_datetime)
+
+  // MEMO: Local Timezone -> UTC
   const reservationDate = format({
-    date: date(input.date),
+    date: reservationStartDatetime.toISOString(),
     format: 'YYYY-MM-DD',
-    locale: 'ja',
-    tz: 'Asia/Tokyo',
+    tz: 'UTC',
+  })
+  const reservationStartTime = format({
+    date: reservationStartDatetime.toISOString(),
+    format: 'HH:mm',
+    tz: 'UTC',
+  })
+  const reservationEndTime = format({
+    date: reservationEndDatetime.toISOString(),
+    format: 'HH:mm',
+    tz: 'UTC',
   })
 
   const { error } = await supabase
     .from('reservations')
     .update({
       date: reservationDate,
-      start_time: input.start_time,
-      end_time: input.end_time,
+      start_time: reservationStartTime + ':00',
+      end_time: reservationEndTime + ':00',
     })
     .eq('id', input.id)
   if (error) {

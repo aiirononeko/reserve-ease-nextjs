@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import type { Database } from '@/types/supabase'
+import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { AuthUser } from '@supabase/supabase-js'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
@@ -46,8 +47,16 @@ export const ReservationCreateForm = ({
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
-      start_datetime: initialDate.toISOString(),
-      end_datetime: '',
+      start_datetime: format({
+        date: initialDate,
+        format: 'YYYY-MM-DDTHH:mm',
+        tz: 'Asia/Tokyo',
+      }),
+      end_datetime: format({
+        date: addHour(initialDate, 1),
+        format: 'YYYY-MM-DDTHH:mm',
+        tz: 'Asia/Tokyo',
+      }),
       store_id: user.user_metadata.store_id.toString(),
       user_id: user.id,
       menu_id: undefined,
@@ -78,21 +87,6 @@ export const ReservationCreateForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
-        {/* <FormField */}
-        {/*   control={form.control} */}
-        {/*   name='date' */}
-        {/*   render={({ field }) => ( */}
-        {/*     <FormItem> */}
-        {/*       <FormLabel aria-required={true} className='font-bold'> */}
-        {/*         予約日時 */}
-        {/*       </FormLabel> */}
-        {/*       <FormControl> */}
-        {/*         <Input {...field} type='date' /> */}
-        {/*       </FormControl> */}
-        {/*       <FormMessage /> */}
-        {/*     </FormItem> */}
-        {/*   )} */}
-        {/* /> */}
         <FormField
           control={form.control}
           name='start_datetime'
@@ -128,7 +122,9 @@ export const ReservationCreateForm = ({
           name='menu_id'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メニュー</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                メニュー
+              </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>

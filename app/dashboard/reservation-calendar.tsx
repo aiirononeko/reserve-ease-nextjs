@@ -1,9 +1,10 @@
 'use client'
 
 import type { Database } from '@/types/supabase'
-import { date, dayStart } from '@formkit/tempo'
+import { addDay, addHour, date, dayStart } from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 import { useMemo, useState } from 'react'
+import { HOURS } from './constants'
 import { ReservationCalendarHeader } from './reservation-calendar-header'
 import { ReservationCard } from './reservation-card'
 import { ReservationModal } from './reservation-modal'
@@ -25,29 +26,24 @@ export const ReservationCalendar: React.FC<Props> = ({
   menus,
 }) => {
   const [currentDate, setCurrentDate] = useState(dayStart(date()))
-  const [selectedReservation, setSelectedReservation] = useState<{
-    id: number
-    date: string
-    start_time: string
-    end_time: string
-  } | null>(null)
-  const [newReservationDate, setNewReservationDate] = useState<Date | null>(
-    null,
-  )
-  const [newReservationTime, setNewReservationTime] = useState<string | null>(
-    null,
-  )
+  const [selectedReservation, setSelectedReservation] = useState<
+    | {
+        id: number
+        date: string
+        start_time: string
+        end_time: string
+      }
+    | undefined
+  >(undefined)
+  const [newReservationDatetime, setNewReservationDatetime] = useState<
+    Date | undefined
+  >(undefined)
 
-  const getWeekDates = useMemo(() => {
-    const today = dayStart(date())
+  const weekDates = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
-      const weekDate = date(today)
-      weekDate.setDate(today.getDate() + i)
-      return weekDate
+      return addDay(currentDate, i)
     })
   }, [currentDate])
-
-  const hours = Array.from({ length: 18 }, (_, i) => i + 7) // 7時から24時まで
 
   const isReservationInHour = (
     targetDate: Date,
@@ -73,10 +69,8 @@ export const ReservationCalendar: React.FC<Props> = ({
     )
   }
 
-  const handleEmptySlotClick = (date: Date, hour: number) => {
-    setNewReservationDate(date)
-    setNewReservationTime(`${hour.toString().padStart(2, '0')}:00`)
-    // setSelectedReservation(null)
+  const handleEmptySlotClick = (datetime: Date) => {
+    setNewReservationDatetime(datetime)
   }
 
   const handleReservationClick = (reservation: {
@@ -89,9 +83,8 @@ export const ReservationCalendar: React.FC<Props> = ({
   }
 
   const handleCloseModal = () => {
-    setSelectedReservation(null)
-    setNewReservationDate(null)
-    setNewReservationTime(null)
+    setSelectedReservation(undefined)
+    setNewReservationDatetime(undefined)
   }
 
   return (
@@ -99,12 +92,12 @@ export const ReservationCalendar: React.FC<Props> = ({
       <ReservationCalendarHeader
         currentDate={currentDate}
         setCurrentDate={setCurrentDate}
-        weekDates={getWeekDates}
+        weekDates={weekDates}
       />
       <div className='flex overflow-x-auto'>
         <div className='sticky left-0 z-10'>
           <div className='h-10 w-16'></div>
-          {hours.map((hour) => (
+          {HOURS.map((hour) => (
             <div
               key={hour}
               className='flex h-14 w-16 items-start justify-start text-sm text-gray-500'
@@ -115,7 +108,7 @@ export const ReservationCalendar: React.FC<Props> = ({
         </div>
         <div className='grow'>
           <div className='grid grid-cols-7'>
-            {getWeekDates.map((date, dateIndex) => (
+            {weekDates.map((date, dateIndex) => (
               <div key={dateIndex}>
                 <div className='sticky top-0 z-10 border-b border-gray-200 p-2 text-center'>
                   <div className='text-sm font-bold'>{date.getDate()}</div>
@@ -127,9 +120,9 @@ export const ReservationCalendar: React.FC<Props> = ({
             ))}
           </div>
           <div className='relative grid w-[975px] grid-cols-7 gap-px bg-gray-100 md:w-full'>
-            {getWeekDates.map((weekDate, dateIndex) => (
+            {weekDates.map((weekDate, dateIndex) => (
               <div key={dateIndex} className='bg-background'>
-                {hours.map((hour) => {
+                {HOURS.map((hour) => {
                   const reservationsInHour = reservations.filter(
                     (reservation) =>
                       isReservationInHour(weekDate, hour, reservation),
@@ -138,7 +131,9 @@ export const ReservationCalendar: React.FC<Props> = ({
                     <div
                       key={hour}
                       className='relative h-14 border-b border-gray-100'
-                      onClick={() => handleEmptySlotClick(weekDate, hour)}
+                      onClick={() =>
+                        handleEmptySlotClick(addHour(weekDate, hour))
+                      }
                     >
                       {reservationsInHour.map((reservation) => (
                         <ReservationCard
@@ -154,15 +149,11 @@ export const ReservationCalendar: React.FC<Props> = ({
             ))}
           </div>
           <ReservationModal
-            isOpen={
-              !!selectedReservation ||
-              (!!newReservationDate && !!newReservationTime)
-            }
+            isOpen={!!selectedReservation || !!newReservationDatetime}
             onClose={handleCloseModal}
             reservation={selectedReservation}
             user={user}
-            newReservationDate={newReservationDate}
-            newReservationTime={newReservationTime}
+            newReservationDatetime={newReservationDatetime}
             menus={menus}
           />
         </div>

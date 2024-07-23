@@ -1,3 +1,5 @@
+import { addDay } from '@formkit/tempo'
+
 interface Props {
   currentDate: Date
   setCurrentDate: React.Dispatch<React.SetStateAction<Date>>
@@ -10,11 +12,11 @@ export const ReservationCalendarHeader = ({
   weekDates,
 }: Props) => {
   const nextWeek = () => {
-    setCurrentDate(new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000))
+    setCurrentDate(addDay(currentDate, 7))
   }
 
   const prevWeek = () => {
-    setCurrentDate(new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000))
+    setCurrentDate(addDay(currentDate, -7))
   }
 
   return (

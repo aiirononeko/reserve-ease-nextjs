@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { addMinute, date, format } from '@formkit/tempo'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { deleteReservation, updateReservation } from './action'
@@ -28,12 +29,26 @@ interface Props {
 }
 
 export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
+  const reservationDate = date(reservation.date)
+  const [startHours, startMinutes] = reservation.start_time
+    .split(':')
+    .map(Number)
+  const [endHours, endMinutes] = reservation.end_time.split(':').map(Number)
+
   const form = useForm<z.infer<typeof updateReservationSchema>>({
+    // TODO: 決めうちでJSTにしているので、offsetから計算するようにする
     defaultValues: {
       id: reservation.id,
-      date: reservation.date,
-      start_time: reservation.start_time,
-      end_time: reservation.end_time,
+      start_datetime: format({
+        date: addMinute(reservationDate, (startHours + 9) * 60 + startMinutes),
+        format: 'YYYY-MM-DDTHH:mm',
+        tz: 'Asia/Tokyo',
+      }),
+      end_datetime: format({
+        date: addMinute(reservationDate, (endHours + 9) * 60 + endMinutes),
+        format: 'YYYY-MM-DDTHH:mm',
+        tz: 'Asia/Tokyo',
+      }),
     },
     resolver: zodResolver(updateReservationSchema),
   })
@@ -54,7 +69,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
       onClose()
       toast.success('予約内容を変更しました')
     } catch (e) {
-      // TODO: Rollbackできるようにする
+      // TODO: Rollback
       toast.error('予約内容の変更に失敗しました')
     }
   }
@@ -72,29 +87,14 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
         </div>
         <FormField
           control={form.control}
-          name='date'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel aria-required={true} className='font-bold'>
-                予約日時
-              </FormLabel>
-              <FormControl>
-                <Input {...field} type='date' />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='start_time'
+          name='start_datetime'
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required={true} className='font-bold'>
                 予約開始時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='time' />
+                <Input {...field} type='datetime-local' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,14 +102,14 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
         />
         <FormField
           control={form.control}
-          name='end_time'
+          name='end_datetime'
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required={true} className='font-bold'>
                 予約終了時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='time' />
+                <Input {...field} type='datetime-local' />
               </FormControl>
               <FormMessage />
             </FormItem>

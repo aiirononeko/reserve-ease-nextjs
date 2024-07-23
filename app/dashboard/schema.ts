@@ -5,7 +5,7 @@ export const createReservationSchema = z.object({
   end_datetime: z.string(),
   store_id: z.string(),
   user_id: z.string(),
-  menu_id: z.string().optional(),
+  menu_id: z.string(),
   customer_name: z.string().optional(),
   customer_phone_number: z.string().optional(),
   customer_email: z.string().optional(),
@@ -13,9 +13,8 @@ export const createReservationSchema = z.object({
 
 export const updateReservationSchema = z.object({
   id: z.number(),
-  date: z.string(),
-  start_time: z.string(),
-  end_time: z.string(),
+  start_datetime: z.string(),
+  end_datetime: z.string(),
 })
 
 export const deleteReservationSchema = z.object({
