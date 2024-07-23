@@ -19,13 +19,13 @@ export const getReservations = async () => {
       `
       *,
       menus:menu_id (
-        *
+        name
       ),
       users:user_id (
-        *
+        name
       ),
       customers:customer_id (
-        *
+        name
       )
     `,
     )
@@ -54,6 +54,27 @@ export const getMenus = async () => {
     .from('menus')
     .select('*')
     .eq('user_id', user.id)
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
+export const getStore = async () => {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found.')
+  }
+
+  const { data, error } = await supabase
+    .from('stores')
+    .select('*')
+    .eq('id', user.user_metadata.store_id)
   if (error) {
     throw error
   }
