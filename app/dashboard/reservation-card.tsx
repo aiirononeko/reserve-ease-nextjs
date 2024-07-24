@@ -4,16 +4,19 @@ import { addHour, date, format } from '@formkit/tempo'
 interface Props {
   cardHeight: string
   reservation: Database['public']['Tables']['reservations']['Row']
+  userId: string
 }
 
-export function ReservationCard({ cardHeight, reservation }: Props) {
+export function ReservationCard({ cardHeight, reservation, userId }: Props) {
   const startDatetime = date(reservation.start_datetime)
   const endDatetime = date(reservation.end_datetime)
+
+  const isOwnReservation = reservation.user_id === userId
 
   return (
     <div className='relative h-20'>
       <div
-        className={`absolute flex w-full flex-col justify-center space-y-1 border bg-primary px-2 text-xs font-semibold tracking-wide text-white ${cardHeight}`}
+        className={`absolute flex w-full flex-col justify-center space-y-1 px-2 text-xs font-semibold tracking-wide ${cardHeight} ${isOwnReservation ? 'bg-primary text-white' : 'border border-primary bg-white text-primary'}`}
         onClick={() => console.log(reservation.start_datetime)}
       >
         <div className='space-x-1'>

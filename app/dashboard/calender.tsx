@@ -11,9 +11,10 @@ interface Props {
   reservations: Database['public']['Tables']['reservations']['Row'][]
   store: Database['public']['Tables']['stores']['Row']
   menus: Database['public']['Tables']['menus']['Row'][]
+  userId: string
 }
 
-export function Calender({ reservations, store, menus }: Props) {
+export function Calender({ reservations, store, menus, userId }: Props) {
   const [currentDate, setCurrentDate] = useState(dayStart(date()))
 
   const { times, getGridCols, getReservation, duringReservation, getHeight } =
@@ -32,6 +33,7 @@ export function Calender({ reservations, store, menus }: Props) {
         getReservation={getReservation}
         duringReservation={duringReservation}
         getHeight={getHeight}
+        userId={userId}
       />
     </div>
   )
