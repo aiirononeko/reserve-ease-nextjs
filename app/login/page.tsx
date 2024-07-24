@@ -1,5 +1,14 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { LoginForm } from './login-form'
+
+export const metadata: Metadata = {
+  robots: {
+    googleBot: {
+      index: false,
+    },
+  },
+}
 
 export default async function Page() {
   return (

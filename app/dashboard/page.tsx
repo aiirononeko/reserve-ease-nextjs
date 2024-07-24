@@ -1,5 +1,14 @@
+import type { Metadata } from 'next'
 import { Calender } from './calender'
 import { getMenus, getReservations, getStore } from './data'
+
+export const metadata: Metadata = {
+  robots: {
+    googleBot: {
+      index: false,
+    },
+  },
+}
 
 export default async function Page() {
   const reservations = await getReservations()

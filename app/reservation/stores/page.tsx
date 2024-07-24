@@ -10,7 +10,7 @@ export const generateMetadata = async ({
 
   return {
     title: `${store.name}の予約ページ | ReserveEase`,
-    descripton: `${store.name}のご予約はこちらからどうぞ。シンプルな予約サービスReserveEaseなら、ストレスなくご予約いただけます。`,
+    descripton: `${store.name}のご予約はこちらからどうぞ。ログイン不要で今すぐご予約いただけます。`,
   }
 }
 
