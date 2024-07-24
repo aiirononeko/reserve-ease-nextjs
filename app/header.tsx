@@ -10,15 +10,15 @@ import { getUser } from './data'
 import { checkUserRole } from './utils'
 
 export const Header = async () => {
-  const user = await getUser()
-  const userRole = checkUserRole(user)
+  try {
+    const user = await getUser()
+    const userRole = checkUserRole(user)
 
-  return (
-    <header className='flex h-14 flex-row items-center justify-between border-b bg-background px-4'>
-      <div className='flex flex-row space-x-1'>
-        <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
-      </div>
-      {user && (
+    return (
+      <header className='flex h-14 flex-row items-center justify-between border-b bg-background px-4'>
+        <div className='flex flex-row space-x-1'>
+          <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
+        </div>
         <Popover>
           <PopoverTrigger>
             <Menu />
@@ -48,7 +48,15 @@ export const Header = async () => {
             )}
           </PopoverContent>
         </Popover>
-      )}
-    </header>
-  )
+      </header>
+    )
+  } catch (e) {
+    return (
+      <header className='flex h-14 flex-row items-center justify-between border-b bg-background px-4'>
+        <div className='flex flex-row space-x-1'>
+          <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
+        </div>
+      </header>
+    )
+  }
 }
