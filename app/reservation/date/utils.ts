@@ -1,4 +1,5 @@
 import type { Database } from '@/types/supabase'
+import { date, format } from '@formkit/tempo'
 import { getReservations } from './data'
 
 export const getTimes = (
@@ -56,11 +57,10 @@ export const getDisabledTimes = async (
   const reservationTimes: { [key: string]: number } = {}
 
   reservations.forEach((reservation) => {
-    // TODO: 決めうちでJSTに変換しているため、offsetで計算するようにする
-    const startHour = Number(reservation.start_time.split(':')[0]) + 9
-    const startMinute = Number(reservation.start_time.split(':')[1])
-    const endHour = Number(reservation.end_time.split(':')[0]) + 9
-    const endMinute = Number(reservation.end_time.split(':')[1])
+    const startHour = Number(format(date(reservation.start_datetime), 'HH'))
+    const startMinute = Number(format(date(reservation.start_datetime), 'mm'))
+    const endHour = Number(format(date(reservation.end_datetime), 'HH'))
+    const endMinute = Number(format(date(reservation.end_datetime), 'mm'))
 
     // start から end までの各30分枠をカウント
     let currentHour = startHour
