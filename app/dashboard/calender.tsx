@@ -15,13 +15,9 @@ interface Props {
 
 export function Calender({ reservations, store, menus }: Props) {
   const [currentDate, setCurrentDate] = useState(dayStart(date()))
-  const {
-    times,
-    reservationExists,
-    getReservation,
-    duringReservation,
-    getHeight,
-  } = useCalendar(currentDate, reservations)
+
+  const { times, getGridCols, getReservation, duringReservation, getHeight } =
+    useCalendar(currentDate, reservations)
 
   const prev = () => setCurrentDate(addDay(currentDate, -1))
   const next = () => setCurrentDate(addDay(currentDate, 1))
@@ -31,7 +27,8 @@ export function Calender({ reservations, store, menus }: Props) {
       <DateSelector currentDate={currentDate} prev={prev} next={next} />
       <TimeGrid
         times={times}
-        reservationExists={reservationExists}
+        maxCapacity={store.max_capacity}
+        getGridCols={getGridCols}
         getReservation={getReservation}
         duringReservation={duringReservation}
         getHeight={getHeight}

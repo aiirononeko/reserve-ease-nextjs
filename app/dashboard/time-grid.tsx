@@ -1,13 +1,19 @@
 import type { Database } from '@/types/supabase'
-import { addHour, date, format } from '@formkit/tempo'
+import { format } from '@formkit/tempo'
+import type { ReactNode } from 'react'
+import { ReservationCard } from './reservation-card'
 
 interface Props {
   times: Date[]
-  reservationExists: (time: Date) => boolean
+  maxCapacity: number
+  getGridCols: (maxCapacity: number) => string
   getReservation: (
     time: Date,
   ) => Database['public']['Tables']['reservations']['Row'][]
-  duringReservation: (time: Date) => boolean
+  duringReservation: (
+    time: Date,
+    reservation: Database['public']['Tables']['reservations']['Row'],
+  ) => boolean
   getHeight: (
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => string
@@ -15,7 +21,8 @@ interface Props {
 
 export function TimeGrid({
   times,
-  reservationExists,
+  maxCapacity,
+  getGridCols,
   getReservation,
   duringReservation,
   getHeight,
@@ -39,58 +46,86 @@ export function TimeGrid({
       </div>
       <div className='col-span-5 py-5'>
         {times.map((time, index) => (
-          <div key={time.toISOString()}>
-            <div className='grid grid-cols-2'>
-              {reservationExists(time) ? (
-                getReservation(time).map((reservation) => (
-                  <>
-                    {duringReservation(time) && (
-                      <div className='h-20 w-full border-r'></div>
-                    )}
-                    <div className='relative h-20'>
-                      <div
-                        key={reservation.id}
-                        className={`absolute flex w-full flex-col items-start justify-center space-y-1 border bg-primary px-4 text-xs font-semibold tracking-wide text-white ${getHeight(reservation)}`}
-                      >
-                        <div className='space-x-1'>
-                          <span>
-                            {format(
-                              addHour(date(reservation.start_datetime), 9),
-                              'HH:mm',
-                            )}
-                          </span>
-                          <span>~</span>
-                          <span>
-                            {format(
-                              addHour(date(reservation.end_datetime), 9),
-                              'HH:mm',
-                            )}
-                          </span>
-                        </div>
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        {reservation.customers.name && (
-                          // @ts-expect-error because JOINした時の型定義あとでやる
-                          <p>{reservation.customers.name} 様</p>
-                        )}
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        <p>{reservation.menus.name}</p>
-                        {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                        <p>{reservation.users.name}</p>
-                      </div>
-                    </div>
-                    <>
-                      <div className='h-20 w-full border-r'></div>
-                    </>
-                  </>
-                ))
-              ) : (
+          <div
+            key={time.toISOString()}
+            className={`grid h-20 border-t ${getGridCols(maxCapacity)}`}
+          >
+            {((): ReactNode => {
+              // 対象時刻の予約データを取得
+              const reservations = getReservation(time)
+
+              // 対象時刻に予約データが存在するか？
+              return reservations.length > 0 ? (
+                // 予約が存在する場合、予約数やキャパシティに応じてブロックを描画していく
+                // 存在する予約数はmax_capacityの数より少ないか？
                 <>
-                  {times.length > index + 1 && (
-                    <div className='h-20 w-full border-r'></div>
+                  {reservations.length < maxCapacity ? (
+                    // 存在する予約を描画し、足りない数分空のブロックを描画する
+                    <>
+                      {reservations.map((reservation) => (
+                        // 描画しようとしている予約はすでに描画済みか？
+                        <div key={reservation.id}>
+                          {duringReservation(time, reservation) ? (
+                            // 空のブロックを描画して、次の予約が横並びになるようにする
+                            <div className='h-20 w-full border-r'></div>
+                          ) : (
+                            // 予約のブロックを予約時間に応じて高さを計算し、描画する
+                            <ReservationCard
+                              cardHeight={getHeight(reservation)}
+                              reservation={reservation}
+                            />
+                          )}
+                        </div>
+                      ))}
+                      {
+                        // 予約は存在しないがキャパシティが空いている場合、空のブロックを描画する
+                        Array.from({
+                          length: maxCapacity - reservations.length,
+                        }).map((_, index) => (
+                          <div
+                            key={index}
+                            className='h-20 w-full border-r'
+                          ></div>
+                        ))
+                      }
+                    </>
+                  ) : (
+                    // 存在する予約を全て描画する
+                    <>
+                      {reservations.map((reservation) => (
+                        // 描画しようとしている予約はすでに描画済みか？
+                        <div key={reservation.id}>
+                          {duringReservation(time, reservation) ? (
+                            // 空のブロックを描画して、次の予約が横並びになるようにする
+                            <div className='h-20 w-full border-r'></div>
+                          ) : (
+                            // 予約のブロックを予約時間に応じて高さを計算し、描画する
+                            <ReservationCard
+                              cardHeight={getHeight(reservation)}
+                              reservation={reservation}
+                            />
+                          )}
+                        </div>
+                      ))}
+                      {Array.from({
+                        length: maxCapacity - reservations.length,
+                      }).map((_, index) => (
+                        <div key={index} className='h-20 w-full border-r'>
+                          empty card
+                        </div>
+                      ))}
+                    </>
                   )}
                 </>
-              )}
-            </div>
+              ) : (
+                // 予約が存在しない場合、空のブロックをmax_capacity分描画する
+                <>
+                  {Array.from({ length: maxCapacity }).map((_, index) => (
+                    <div key={index} className='h-20 w-full border-r'></div>
+                  ))}
+                </>
+              )
+            })()}
           </div>
         ))}
       </div>

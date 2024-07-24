@@ -22,33 +22,28 @@ export function useCalendar(
     )
   }, [currentDate])
 
-  const reservationExists = (target: Date) => {
-    return reservations.some((reservation) => {
-      return (
-        sameHour(addHour(date(reservation.start_datetime), 9), target) &&
-        sameMinute(addHour(date(reservation.start_datetime)), target)
-      )
-    })
-  }
-
   const getReservation = (target: Date) => {
     return reservations.filter((reservation) => {
       return (
-        sameHour(addHour(date(reservation.start_datetime), 9), target) &&
-        sameMinute(addHour(date(reservation.start_datetime)), target)
+        (sameHour(addHour(date(reservation.start_datetime), 9), target) &&
+          sameMinute(addHour(date(reservation.start_datetime)), target)) ||
+        (isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
+          isBefore(target, addHour(date(reservation.end_datetime), 9)))
       )
     })
   }
 
-  const duringReservation = (target: Date) => {
-    return reservations.some((reservation) => {
-      return (
-        isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
-        isBefore(target, addHour(date(reservation.end_datetime), 9))
-      )
-    })
+  const duringReservation = (
+    target: Date,
+    reservation: Database['public']['Tables']['reservations']['Row'],
+  ) => {
+    return (
+      isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
+      isBefore(target, addHour(date(reservation.end_datetime), 9))
+    )
   }
 
+  // MEMO: レンダリングのタイミングによって効いたり効かなかったりする
   const getHeight = (
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => {
@@ -60,9 +55,16 @@ export function useCalendar(
     return `h-[${n}px]`
   }
 
+  /*
+   * Storeに設定したキャパシティに応じてグリッドのカラム数を決めます.
+   */
+  const getGridCols = (maxCapacity: number) => {
+    return `grid-cols-${maxCapacity}`
+  }
+
   return {
     times,
-    reservationExists,
+    getGridCols,
     getReservation,
     duringReservation,
     getHeight,
