@@ -23,7 +23,7 @@ export const Article = ({ article }: Props) => {
       <div className='relative h-48 w-full'>
         <Image
           src={article.eyecatch.url}
-          alt={`${article.title}のアイキャッチ`}
+          alt={article.eyecatchAlt}
           fill={true}
         />
       </div>

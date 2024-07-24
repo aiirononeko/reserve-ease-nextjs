@@ -11,6 +11,7 @@ interface Article {
     height: number
     width: number
   }
+  eyecatchAlt: string
   category: string[] | null
   metaTitle: string
   metaDescription: string
