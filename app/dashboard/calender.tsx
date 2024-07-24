@@ -34,6 +34,8 @@ export function Calender({ reservations, store, menus, userId }: Props) {
         duringReservation={duringReservation}
         getHeight={getHeight}
         userId={userId}
+        storeId={store.id}
+        menus={menus}
       />
     </div>
   )

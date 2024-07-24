@@ -32,7 +32,7 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
       <DialogTrigger className='w-full'>
         <div className='relative h-20'>
           <div
-            className={`absolute flex w-full flex-col justify-center space-y-1 px-2 text-xs font-semibold tracking-wide ${cardHeight} ${isOwnReservation ? 'bg-primary text-white' : 'border border-primary bg-white text-primary'}`}
+            className={`absolute flex w-full flex-col justify-center space-y-1 px-2 text-xs font-semibold tracking-wide ${cardHeight} ${isOwnReservation ? 'border border-white bg-primary text-white' : 'border border-primary bg-white text-primary'}`}
           >
             <div className='space-x-1'>
               <span>{format(addHour(startDatetime, 9), 'HH:mm')}</span>

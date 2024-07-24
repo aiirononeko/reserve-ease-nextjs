@@ -33,9 +33,9 @@ export const getReservations = async () => {
     `,
     )
     .eq('store_id', user.user_metadata.store_id)
-    .gte('start_datetime', dayStart(date()).toISOString())
-    .lt('start_datetime', dayEnd(date()).toISOString())
-    .order('created_at', { ascending: false })
+    .gte('start_datetime', dayStart(date()).toISOString()) // TODO:
+    .lt('start_datetime', dayEnd(date()).toISOString()) // TODO:
+    .order('start_datetime', { ascending: true })
   if (error) {
     throw error
   }

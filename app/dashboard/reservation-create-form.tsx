@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -26,7 +24,6 @@ import { cn } from '@/lib/utils'
 import type { Database } from '@/types/supabase'
 import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { AuthUser } from '@supabase/supabase-js'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -36,16 +33,16 @@ import { createReservationSchema } from './schema'
 
 interface Props {
   initialDate: Date
-  user: AuthUser
+  userId: string
+  storeId: number
   menus: Database['public']['Tables']['menus']['Row'][]
-  onClose: () => void
 }
 
 export const ReservationCreateForm = ({
   initialDate,
-  user,
+  userId,
+  storeId,
   menus,
-  onClose,
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
@@ -57,8 +54,8 @@ export const ReservationCreateForm = ({
         date: addHour(initialDate, 1),
         format: 'YYYY-MM-DDTHH:mm',
       }),
-      store_id: user.user_metadata.store_id.toString(),
-      user_id: user.id,
+      store_id: String(storeId),
+      user_id: userId,
       menu_id: undefined,
       customer_name: undefined,
       customer_phone_number: undefined,
@@ -77,7 +74,6 @@ export const ReservationCreateForm = ({
   const onSubmit = async (values: z.infer<typeof createReservationSchema>) => {
     try {
       await createReservation(values)
-      onClose()
       toast.success('予約を作成しました')
     } catch (e) {
       toast.error('予約の作成に失敗しました')
@@ -132,7 +128,7 @@ export const ReservationCreateForm = ({
                       variant='outline'
                       role='combobox'
                       className={cn(
-                        'w-80 justify-between',
+                        'w-full justify-between',
                         !field.value && 'text-muted-foreground',
                       )}
                     >

@@ -1,6 +1,7 @@
 import type { Database } from '@/types/supabase'
 import { format } from '@formkit/tempo'
 import type { ReactNode } from 'react'
+import { EmptyCard } from './empty-card'
 import { ReservationCard } from './reservation-card'
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => string
   userId: string
+  storeId: number
+  menus: Database['public']['Tables']['menus']['Row'][]
 }
 
 export function TimeGrid({
@@ -28,6 +31,8 @@ export function TimeGrid({
   duringReservation,
   getHeight,
   userId,
+  storeId,
+  menus,
 }: Props) {
   return (
     <div className='grid grid-cols-6 border-y'>
@@ -70,8 +75,39 @@ export function TimeGrid({
                             // 描画しようとしている予約はすでに描画済みか？
                             <div key={reservation.id}>
                               {duringReservation(time, reservation) ? (
-                                // 空のブロックを描画して、次の予約が横並びになるようにする
-                                <div className='h-20 w-full border-r'></div>
+                                <>
+                                  {/* 同時刻の予約数とキャパが同じかどうか？ */}
+                                  {/* MEMO: 同じでない場合、表示が崩れることがあるため制御する */}
+                                  {reservations.length === maxCapacity ? (
+                                    // 同時刻の予約数とキャパが同じ場合、空のブロックを描画して、次の予約が横並びになるようにする
+                                    <div className='h-20 w-full border-r'>
+                                      during {reservation.id}
+                                    </div>
+                                  ) : (
+                                    // 同時刻の予約数とキャパが違う場合、表示を崩れさせないために制御
+                                    // MEMO: 一個前の時刻の予約を取得して、indexを確認して、indexの分emptyを作る処理してる
+                                    // MEMO: キャパシティ2以上だとバグりそう
+                                    <>
+                                      {((): ReactNode => {
+                                        const prevIndex = getReservation(
+                                          times[index - 1],
+                                        ).indexOf(reservation)
+
+                                        return Array.from({
+                                          length: prevIndex,
+                                        }).map((_, index) => (
+                                          <EmptyCard
+                                            key={index}
+                                            date={time}
+                                            userId={userId}
+                                            storeId={storeId}
+                                            menus={menus}
+                                          />
+                                        ))
+                                      })()}
+                                    </>
+                                  )}
+                                </>
                               ) : (
                                 // 予約のブロックを予約時間に応じて高さを計算し、描画する
                                 <ReservationCard
@@ -87,10 +123,13 @@ export function TimeGrid({
                             Array.from({
                               length: maxCapacity - reservations.length,
                             }).map((_, index) => (
-                              <div
+                              <EmptyCard
                                 key={index}
-                                className='h-20 w-full border-r'
-                              ></div>
+                                date={time}
+                                userId={userId}
+                                storeId={storeId}
+                                menus={menus}
+                              />
                             ))
                           }
                         </>
@@ -102,7 +141,9 @@ export function TimeGrid({
                             <div key={reservation.id}>
                               {duringReservation(time, reservation) ? (
                                 // 空のブロックを描画して、次の予約が横並びになるようにする
-                                <div className='h-20 w-full border-r'></div>
+                                <div className='h-20 w-full border-r'>
+                                  during {reservation.id}
+                                </div>
                               ) : (
                                 // 予約のブロックを予約時間に応じて高さを計算し、描画する
                                 <ReservationCard
@@ -113,13 +154,6 @@ export function TimeGrid({
                               )}
                             </div>
                           ))}
-                          {Array.from({
-                            length: maxCapacity - reservations.length,
-                          }).map((_, index) => (
-                            <div key={index} className='h-20 w-full border-r'>
-                              empty card
-                            </div>
-                          ))}
                         </>
                       )}
                     </>
@@ -127,7 +161,13 @@ export function TimeGrid({
                     // 予約が存在しない場合、空のブロックをmax_capacity分描画する
                     <>
                       {Array.from({ length: maxCapacity }).map((_, index) => (
-                        <div key={index} className='h-20 w-full border-r'></div>
+                        <EmptyCard
+                          key={index}
+                          date={time}
+                          userId={userId}
+                          storeId={storeId}
+                          menus={menus}
+                        />
                       ))}
                     </>
                   )
