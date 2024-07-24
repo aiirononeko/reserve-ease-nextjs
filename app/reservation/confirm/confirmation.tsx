@@ -59,11 +59,11 @@ export const Confirmation = () => {
             <p>
               {(
                 reservation.menu.amount - reservation.menu.discount
-              ).toLocaleString()}
+              )?.toLocaleString()}
               円(税込)
             </p>
           ) : (
-            <p>{reservation.menu.amount.toLocaleString()}円(税込)</p>
+            <p>{reservation.menu.amount?.toLocaleString()}円(税込)</p>
           )}
         </div>
       </div>
