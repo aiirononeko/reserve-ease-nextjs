@@ -19,13 +19,16 @@ export const getReservations = async () => {
       `
       *,
       menus:menu_id (
-        name
+        name,
+        minutes
       ),
       users:user_id (
         name
       ),
       customers:customer_id (
-        name
+        name,
+        phone_number,
+        email
       )
     `,
     )
