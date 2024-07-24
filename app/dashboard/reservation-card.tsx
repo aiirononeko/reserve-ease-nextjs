@@ -58,7 +58,7 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
             {reservation.customers.name
               ? // @ts-expect-error because JOINした時の型定義あとでやる
                 reservation.customers.name
-              : '顧客情報未入力'}
+              : '顧客情報未入力'}{' '}
             様の予約
           </DialogTitle>
           <DialogDescription>
