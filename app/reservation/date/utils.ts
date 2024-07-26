@@ -1,7 +1,8 @@
 import type { Database } from '@/types/supabase'
-import { date, format } from '@formkit/tempo'
+import { addHour, date, format } from '@formkit/tempo'
 import { getReservations } from './data'
 
+// TODO: JSTしか考慮した作りになっているため、国際化対応する
 export const getTimes = (
   businessHours: Database['public']['Tables']['business_hours']['Row'][],
   selectedDate: Date,
@@ -17,6 +18,7 @@ export const getTimes = (
   )
 }
 
+// TODO: JSTしか考慮した作りになっているため、国際化対応する
 const generateBusinessHourStrings = (
   openTime: string | null,
   closeTime: string | null,
@@ -48,6 +50,7 @@ const generateBusinessHourStrings = (
   return result
 }
 
+// TODO: JSTしか考慮した作りになっているため、国際化対応する
 export const getDisabledTimes = async (
   storeId: number,
   selectedDate: Date,
@@ -57,10 +60,13 @@ export const getDisabledTimes = async (
   const reservationTimes: { [key: string]: number } = {}
 
   reservations.forEach((reservation) => {
-    const startHour = Number(format(date(reservation.start_datetime), 'HH'))
-    const startMinute = Number(format(date(reservation.start_datetime), 'mm'))
-    const endHour = Number(format(date(reservation.end_datetime), 'HH'))
-    const endMinute = Number(format(date(reservation.end_datetime), 'mm'))
+    const startDatetime = addHour(date(reservation.start_datetime), 9)
+    const endDatetime = addHour(date(reservation.end_datetime), 9)
+
+    const startHour = Number(format(startDatetime, 'HH'))
+    const startMinute = Number(format(startDatetime, 'mm'))
+    const endHour = Number(format(endDatetime, 'HH'))
+    const endMinute = Number(format(endDatetime, 'mm'))
 
     // start から end までの各30分枠をカウント
     let currentHour = startHour
@@ -83,5 +89,6 @@ export const getDisabledTimes = async (
   const disabledTimes = Object.keys(reservationTimes).filter(
     (timeSlot) => reservationTimes[timeSlot] >= maxReservationsPerSlot,
   )
+  console.log(disabledTimes)
   return disabledTimes
 }
