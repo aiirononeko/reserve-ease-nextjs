@@ -1,9 +1,21 @@
 .content {
-  font-size: 4vw;
-  line-height: 35px;
-  margin-bottom: 4.26666667vw;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 36px;
 
   h2 {
-    font-size: 5.8vw;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 16px;
   }
 }

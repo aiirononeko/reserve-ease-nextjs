@@ -12,7 +12,7 @@ export default async function Page() {
   const articles = await getArticles()
 
   return (
-    <div className='mx-4 items-center space-y-4 py-8'>
+    <div className='mx-4 max-w-96 items-center space-y-4 py-8 md:mx-auto'>
       <div className='space-y-1'>
         <h1 className='text-center text-2xl font-bold'>Articles</h1>
         <p className='text-center text-xs'>記事一覧</p>

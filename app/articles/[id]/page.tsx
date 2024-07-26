@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const article = await getArticle(params.id)
 
   return (
-    <div className='mx-4 items-center py-8'>
+    <div className='mx-4 max-w-96 items-center py-8 md:mx-auto'>
       <Article article={article} />
     </div>
   )

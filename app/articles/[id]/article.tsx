@@ -17,9 +17,9 @@ export const Article = ({ article }: Props) => {
   })
 
   return (
-    <div className='tracking-wide'>
-      <h1>{article.title}</h1>
-      <p>{createdAt}</p>
+    <div className='space-y-2 tracking-wide'>
+      <h1 className='text-xl font-bold'>{article.title}</h1>
+      <p className='text-sm'>{createdAt}</p>
       <div className='relative h-48 w-full'>
         <Image
           src={article.eyecatch.url}
@@ -28,12 +28,14 @@ export const Article = ({ article }: Props) => {
         />
       </div>
       <div className={styles.content}>{parse(article.content)}</div>
-      <Button asChild className='w-full'>
-        <Link href='/'>
-          初月無料でReserveEaseをはじめる
-          <ChevronRight className='ml-1' />
-        </Link>
-      </Button>
+      <div className='pt-6'>
+        <Button asChild className='w-full'>
+          <Link href='/'>
+            初月無料でReserveEaseをはじめる
+            <ChevronRight className='ml-1' />
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }
