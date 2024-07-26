@@ -75,8 +75,12 @@ export const ReservationCreateForm = ({
     try {
       await createReservation(values)
       toast.success('予約を作成しました')
-    } catch (e) {
-      toast.error('予約の作成に失敗しました')
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      } else {
+        toast.error('予約の作成に失敗しました')
+      }
     }
   }
 

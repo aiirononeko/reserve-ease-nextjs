@@ -1,5 +1,3 @@
-'use client'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
@@ -26,10 +24,15 @@ interface Props {
     start_datetime: string
     end_datetime: string
   }
+  storeId: number
   onClose: () => void
 }
 
-export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
+export const ReservationUpdateForm = ({
+  reservation,
+  storeId,
+  onClose,
+}: Props) => {
   const form = useForm<z.infer<typeof updateReservationSchema>>({
     defaultValues: {
       id: reservation.id,
@@ -41,6 +44,7 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
         date: date(reservation.end_datetime),
         format: 'YYYY-MM-DDTHH:mm',
       }),
+      store_id: String(storeId),
     },
     resolver: zodResolver(updateReservationSchema),
   })
@@ -60,9 +64,12 @@ export const ReservationUpdateForm = ({ reservation, onClose }: Props) => {
       await updateReservation(values)
       onClose()
       toast.success('予約内容を変更しました')
-    } catch (e) {
-      // TODO: Rollback
-      toast.error('予約内容の変更に失敗しました')
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      } else {
+        toast.error('予約の変更に失敗しました')
+      }
     }
   }
 

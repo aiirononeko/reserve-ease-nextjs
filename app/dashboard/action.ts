@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { date } from '@formkit/tempo'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
+import { checkReservationDuplication } from '../utils'
 import { createReservationSchema, updateReservationSchema } from './schema'
 
 export const createReservation = async (
@@ -26,6 +27,16 @@ export const createReservation = async (
     throw new Error('User not found.')
   }
 
+  const startDatetime = date(input.start_datetime)
+  const endDatetime = date(input.end_datetime)
+  const storeId = Number(input.store_id)
+
+  if (
+    !(await checkReservationDuplication(startDatetime, endDatetime, storeId))
+  ) {
+    throw new Error('予約の時間が重複しています。別の時間を指定してください。')
+  }
+
   const customer = await createCustomer(
     input.customer_name,
     input.customer_phone_number,
@@ -34,9 +45,9 @@ export const createReservation = async (
   )
 
   const { error } = await supabase.from('reservations').insert({
-    start_datetime: date(input.start_datetime).toISOString(),
-    end_datetime: date(input.end_datetime).toISOString(),
-    store_id: Number(input.store_id),
+    start_datetime: startDatetime.toISOString(),
+    end_datetime: endDatetime.toISOString(),
+    store_id: storeId,
     user_id: input.user_id,
     customer_id: customer ? customer.id : undefined,
     menu_id: input.menu_id ? Number(input.menu_id) : undefined,
@@ -89,11 +100,21 @@ export const updateReservation = async (
 
   const supabase = createClient()
 
+  const startDatetime = date(input.start_datetime)
+  const endDatetime = date(input.end_datetime)
+  const storeId = Number(input.store_id)
+
+  if (
+    !(await checkReservationDuplication(startDatetime, endDatetime, storeId))
+  ) {
+    throw new Error('予約の時間が重複しています。別の時間を指定してください。')
+  }
+
   const { error } = await supabase
     .from('reservations')
     .update({
-      start_datetime: date(input.start_datetime).toISOString(),
-      end_datetime: date(input.end_datetime).toISOString(),
+      start_datetime: startDatetime.toISOString(),
+      end_datetime: endDatetime.toISOString(),
     })
     .eq('id', input.id)
   if (error) {
