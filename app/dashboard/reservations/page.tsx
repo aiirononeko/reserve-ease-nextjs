@@ -17,6 +17,7 @@ export default async function Page() {
   const menus = await getMenus()
   const user = await getUser()
 
+  console.log(reservations)
   return (
     <div className='mx-4 flex flex-col items-center space-y-6 py-4'>
       {reservations && (
