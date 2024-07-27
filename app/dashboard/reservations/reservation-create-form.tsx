@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import type { Database } from '@/types/supabase'
-import { addHour, format } from '@formkit/tempo'
+import { addHour, date, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -73,7 +73,11 @@ export const ReservationCreateForm = ({
 
   const onSubmit = async (values: z.infer<typeof createReservationSchema>) => {
     try {
-      await createReservation(values)
+      await createReservation({
+        ...values,
+        start_datetime: date(values.start_datetime).toISOString(),
+        end_datetime: date(values.end_datetime).toISOString(),
+      })
       toast.success('予約を作成しました')
     } catch (e: unknown) {
       if (e instanceof Error) {

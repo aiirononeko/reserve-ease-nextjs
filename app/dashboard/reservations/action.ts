@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { addHour, date } from '@formkit/tempo'
+import { date } from '@formkit/tempo'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
 import { checkReservationDuplication } from '../../utils'
@@ -27,8 +27,10 @@ export const createReservation = async (
     throw new Error('User not found.')
   }
 
-  const startDatetime = addHour(date(input.start_datetime), -9)
-  const endDatetime = addHour(date(input.end_datetime), -9)
+  // localだと失敗する
+  // 予約追加してもリロードしないと反映されない
+  const startDatetime = date(input.start_datetime)
+  const endDatetime = date(input.end_datetime)
   console.log(
     `DEBUG: ${startDatetime.toISOString()}, ${endDatetime.toISOString()}`,
   )
