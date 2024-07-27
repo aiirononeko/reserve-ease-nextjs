@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { date } from '@formkit/tempo'
+import { tzDate } from '@formkit/tempo'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
 import { checkReservationDuplication } from '../../utils'
@@ -27,11 +27,11 @@ export const createReservation = async (
     throw new Error('User not found.')
   }
 
-  const startDatetime = date(input.start_datetime)
-  const endDatetime = date(input.end_datetime)
+  const startDatetime = tzDate(input.start_datetime, 'Asia/Tokyo')
+  const endDatetime = tzDate(input.end_datetime, 'Asia/Tokyo')
   console.log(`DEBUG1: ${startDatetime}, ${endDatetime}`)
   console.log(
-    `DEBUG2: ${startDatetime.toUTCString()}, ${endDatetime.toUTCString()}`,
+    `DEBUG2: ${startDatetime.toISOString()}, ${endDatetime.toISOString()}`,
   )
   const storeId = Number(input.store_id)
 
@@ -49,8 +49,8 @@ export const createReservation = async (
   )
 
   const { error } = await supabase.from('reservations').insert({
-    start_datetime: startDatetime.toUTCString(),
-    end_datetime: endDatetime.toUTCString(),
+    start_datetime: startDatetime.toISOString(),
+    end_datetime: endDatetime.toISOString(),
     store_id: storeId,
     user_id: input.user_id,
     customer_id: customer ? customer.id : undefined,
