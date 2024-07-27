@@ -29,9 +29,9 @@ export const createReservation = async (
 
   const startDatetime = date(input.start_datetime)
   const endDatetime = date(input.end_datetime)
-  console.log(`DEBUG: ${startDatetime}, ${endDatetime}`)
+  console.log(`DEBUG1: ${startDatetime}, ${endDatetime}`)
   console.log(
-    `DEBUG: ${startDatetime.toISOString()}, ${endDatetime.toISOString()}`,
+    `DEBUG2: ${startDatetime.toUTCString()}, ${endDatetime.toUTCString()}`,
   )
   const storeId = Number(input.store_id)
 
@@ -49,8 +49,8 @@ export const createReservation = async (
   )
 
   const { error } = await supabase.from('reservations').insert({
-    start_datetime: startDatetime.toISOString(),
-    end_datetime: endDatetime.toISOString(),
+    start_datetime: startDatetime.toUTCString(),
+    end_datetime: endDatetime.toUTCString(),
     store_id: storeId,
     user_id: input.user_id,
     customer_id: customer ? customer.id : undefined,
