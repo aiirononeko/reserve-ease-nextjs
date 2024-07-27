@@ -1,9 +1,9 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { dayEnd, dayStart, tzDate } from '@formkit/tempo'
+import { dayEnd } from '@formkit/tempo'
 
-export const getReservations = async () => {
+export const getReservations = async (targetDate: Date) => {
   const supabase = createClient()
 
   const {
@@ -12,6 +12,8 @@ export const getReservations = async () => {
   if (!user) {
     throw new Error('User not found.')
   }
+
+  console.log(`DEBUG: in server ${targetDate.toISOString()}`)
 
   const { data, error } = await supabase
     .from('reservations')
@@ -33,25 +35,12 @@ export const getReservations = async () => {
     `,
     )
     .eq('store_id', user.user_metadata.store_id)
-    .gte(
-      'start_datetime',
-      dayStart(tzDate(new Date(), 'Asia/Tokyo')).toISOString(),
-    ) // TODO:
-    .lt(
-      'start_datetime',
-      dayEnd(tzDate(new Date(), 'Asia/Tokyo')).toISOString(),
-    ) // TODO:
+    .gte('start_datetime', targetDate.toISOString())
+    .lt('start_datetime', dayEnd(targetDate).toISOString())
     .order('start_datetime', { ascending: true })
   if (error) {
     throw error
   }
-
-  console.log(
-    `DEBUG3: ${dayStart(tzDate(new Date(), 'Asia/Tokyo')).toISOString()}`,
-  )
-  console.log(
-    `DEBUG4: ${dayEnd(tzDate(new Date(), 'Asia/Tokyo')).toISOString()}`,
-  )
 
   return data
 }

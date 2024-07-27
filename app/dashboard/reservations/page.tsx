@@ -1,7 +1,7 @@
 import { getUser } from '@/app/data'
 import type { Metadata } from 'next'
 import { Calender } from './calender'
-import { getMenus, getReservations, getStore } from './data'
+import { getMenus, getStore } from './data'
 
 export const metadata: Metadata = {
   robots: {
@@ -12,22 +12,13 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  const reservations = await getReservations()
   const store = await getStore()
   const menus = await getMenus()
   const user = await getUser()
 
-  console.log(reservations)
   return (
     <div className='mx-4 flex flex-col items-center space-y-6 py-4'>
-      {reservations && (
-        <Calender
-          reservations={reservations}
-          store={store}
-          menus={menus}
-          userId={user.id}
-        />
-      )}
+      <Calender store={store} menus={menus} userId={user.id} />
     </div>
   )
 }
