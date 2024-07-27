@@ -40,6 +40,9 @@ export const getReservations = async () => {
     throw error
   }
 
+  console.log(`DEBUG3: ${dayStart(tzDate(date(), 'Asia/Tokyo')).toISOString()}`)
+  console.log(`DEBUG4: ${dayEnd(tzDate(date(), 'Asia/Tokyo')).toISOString()}`)
+
   return data
 }
 
