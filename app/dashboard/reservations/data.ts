@@ -13,8 +13,6 @@ export const getReservations = async (targetDate: Date) => {
     throw new Error('User not found.')
   }
 
-  console.log(`DEBUG: in server ${targetDate.toISOString()}`)
-
   const { data, error } = await supabase
     .from('reservations')
     .select(
