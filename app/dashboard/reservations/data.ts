@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { dayEnd } from '@formkit/tempo'
+import { addDay } from '@formkit/tempo'
 
 export const getReservations = async (targetDate: Date) => {
   const supabase = createClient()
@@ -36,7 +36,7 @@ export const getReservations = async (targetDate: Date) => {
     )
     .eq('store_id', user.user_metadata.store_id)
     .gte('start_datetime', targetDate.toISOString())
-    .lt('start_datetime', dayEnd(targetDate).toISOString())
+    .lt('start_datetime', addDay(targetDate, 1).toISOString())
     .order('start_datetime', { ascending: true })
   if (error) {
     throw error
