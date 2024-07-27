@@ -17,7 +17,7 @@ export default async function Page() {
         <h1 className='text-center text-2xl font-bold'>Articles</h1>
         <p className='text-center text-xs'>記事一覧</p>
       </div>
-      <div className='flex flex-col space-y-8'>
+      <div className='flex flex-col space-y-4'>
         {articles.map((article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
