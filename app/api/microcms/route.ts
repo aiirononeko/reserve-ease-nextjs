@@ -1,7 +1,12 @@
 import crypto from 'crypto'
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+
+type RequestBody = {
+  id: string | null | undefined
+  api: string
+}
 
 export async function POST(request: NextRequest) {
   const bodyText = await request.text()
@@ -14,8 +19,7 @@ export async function POST(request: NextRequest) {
     })
   }
 
-  const { id } = JSON.parse(bodyText)
-  console.log(`revalidate ID: ${id}`)
+  const { id, api: endpoint } = JSON.parse(bodyText) as RequestBody
 
   const secret = process.env.MICROCMS_WEBHOOK_SIGNATURE_SECRET
   if (!secret) {
@@ -51,9 +55,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (id) {
-    revalidatePath(`/articles/${id}`)
+    revalidateTag(`${endpoint}/${id}`)
   }
-  revalidatePath('articles')
+
+  revalidateTag(endpoint)
 
   return NextResponse.json({ message: 'success' })
 }

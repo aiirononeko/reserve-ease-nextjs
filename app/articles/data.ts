@@ -5,6 +5,9 @@ export const getArticles = async (): Promise<Article[]> => {
 
   const { contents } = await microcms.getList({
     endpoint: 'articles',
+    customRequestInit: {
+      next: { tags: ['articles'] },
+    },
   })
   return contents
 }
