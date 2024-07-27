@@ -55,7 +55,8 @@ export const ReservationDeleteDialog = ({ reservation }: Props) => {
           <DialogTitle>
             {/* @ts-expect-error because JOINした時の型定義あとでやる */}
             {reservation.customers.name
-              ? reservation.customers.name
+              ? // @ts-expect-error because JOINした時の型定義あとでやる
+                reservation.customers.name
               : '顧客氏名未入力'}{' '}
             様の予約を削除しますか？
           </DialogTitle>
