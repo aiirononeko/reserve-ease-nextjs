@@ -13,11 +13,11 @@ export default async function Page() {
 
   return (
     <div className='mx-4 max-w-96 items-center space-y-4 py-8 md:mx-auto'>
-      <div className='space-y-1'>
+      <div className='flex flex-col space-y-1'>
         <h1 className='text-center text-2xl font-bold'>Articles</h1>
         <p className='text-center text-xs'>記事一覧</p>
       </div>
-      <div className='space-y-4'>
+      <div className='flex flex-col space-y-8'>
         {articles.map((article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
