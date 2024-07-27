@@ -29,6 +29,10 @@ export const createReservation = async (
 
   const startDatetime = date(input.start_datetime)
   const endDatetime = date(input.end_datetime)
+  console.log(`DEBUG: ${startDatetime}, ${endDatetime}`)
+  console.log(
+    `DEBUG: ${startDatetime.toISOString()}, ${endDatetime.toISOString()}`,
+  )
   const storeId = Number(input.store_id)
 
   if (
