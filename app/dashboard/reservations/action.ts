@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { date } from '@formkit/tempo'
 import { revalidatePath } from 'next/cache'
 import type { z } from 'zod'
-import { checkReservationDuplication } from '../utils'
-import { createReservationSchema, updateReservationSchema } from './schema'
+import { checkReservationDuplication } from '../../utils'
+import { createReservationSchema, deleteReservationSchema } from './schema'
 
 export const createReservation = async (
   input: z.infer<typeof createReservationSchema>,
@@ -87,10 +87,10 @@ const createCustomer = async (
   return data
 }
 
-export const updateReservation = async (
-  input: z.infer<typeof updateReservationSchema>,
+export const deleteReservation = async (
+  input: z.infer<typeof deleteReservationSchema>,
 ) => {
-  const result = updateReservationSchema.safeParse(input)
+  const result = deleteReservationSchema.safeParse(input)
   if (!result.success) {
     return {
       success: false,
@@ -100,38 +100,10 @@ export const updateReservation = async (
 
   const supabase = createClient()
 
-  const startDatetime = date(input.start_datetime)
-  const endDatetime = date(input.end_datetime)
-  const storeId = Number(input.store_id)
-
-  if (
-    !(await checkReservationDuplication(startDatetime, endDatetime, storeId))
-  ) {
-    throw new Error('予約の時間が重複しています。別の時間を指定してください。')
-  }
-
-  const { error } = await supabase
-    .from('reservations')
-    .update({
-      start_datetime: startDatetime.toISOString(),
-      end_datetime: endDatetime.toISOString(),
-    })
-    .eq('id', input.id)
-  if (error) {
-    console.error(error.message)
-    throw error
-  }
-
-  revalidatePath('/dashboard/reservations')
-}
-
-export const deleteReservation = async (reservationId: number) => {
-  const supabase = createClient()
-
   const { error } = await supabase
     .from('reservations')
     .delete()
-    .eq('id', reservationId)
+    .eq('id', Number(input.id))
   if (error) {
     console.error(error.message)
     throw error

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { isBefore } from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 
 export const checkUserRole = (user: AuthUser | null): string => {
@@ -6,12 +7,21 @@ export const checkUserRole = (user: AuthUser | null): string => {
   return user.user_metadata.role ?? ''
 }
 
+/*
+ * 作成しようとしている予約データの有効性を確認
+ */
 export const checkReservationDuplication = async (
   startDatetime: Date,
   endDatetime: Date,
   storeId: number,
 ) => {
   'use server'
+
+  // 開始日時が終了日時よりも先かどうかチェック
+  if (!isBefore(startDatetime, endDatetime)) {
+    console.error('開始日時は終了日時より先の時刻を指定してください')
+    return false
+  }
 
   const supabase = createClient()
 
@@ -26,6 +36,7 @@ export const checkReservationDuplication = async (
 
   const capacity = await getStoreCapacity(storeId)
 
+  // 同じ時刻の総予約数が店舗のキャパシティを上回らないかチェック
   if (data.length < capacity) {
     return true
   } else {

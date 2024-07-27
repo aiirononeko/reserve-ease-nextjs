@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
@@ -12,57 +14,40 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { date, format } from '@formkit/tempo'
+import type { Database } from '@/types/supabase'
+import { addHour, date, format } from '@formkit/tempo'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { deleteReservation, updateReservation } from './action'
+import { updateReservation } from './action'
 import { updateReservationSchema } from './schema'
 
 interface Props {
-  reservation: {
-    id: number
-    start_datetime: string
-    end_datetime: string
-  }
-  storeId: number
-  onClose: () => void
+  reservation: Database['public']['Tables']['reservations']['Row']
 }
 
-export const ReservationUpdateForm = ({
-  reservation,
-  storeId,
-  onClose,
-}: Props) => {
+export const ReservationUpdateForm = ({ reservation }: Props) => {
+  const router = useRouter()
   const form = useForm<z.infer<typeof updateReservationSchema>>({
     defaultValues: {
       id: reservation.id,
       start_datetime: format({
-        date: date(reservation.start_datetime),
+        date: addHour(date(reservation.start_datetime), 9),
         format: 'YYYY-MM-DDTHH:mm',
       }),
       end_datetime: format({
-        date: date(reservation.end_datetime),
+        date: addHour(date(reservation.end_datetime), 9),
         format: 'YYYY-MM-DDTHH:mm',
       }),
-      store_id: String(storeId),
+      store_id: String(reservation.store_id),
     },
     resolver: zodResolver(updateReservationSchema),
   })
 
-  const handleClickDelete = async () => {
-    try {
-      await deleteReservation(form.getValues('id'))
-      onClose()
-      toast.success('予約を削除しました')
-    } catch (e) {
-      toast.error('予約の削除に失敗しました')
-    }
-  }
-
   const onSubmit = async (values: z.infer<typeof updateReservationSchema>) => {
     try {
       await updateReservation(values)
-      onClose()
+      router.push('/dashboard/reservations')
       toast.success('予約内容を変更しました')
     } catch (e: unknown) {
       if (e instanceof Error) {
@@ -79,11 +64,6 @@ export const ReservationUpdateForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-8'>
-        <div>
-          <p>顧客: {customers.name}</p>
-          <p>メニュー: {menus.name}</p>
-          <p>スタッフ: {users.name}</p>
-        </div>
         <FormField
           control={form.control}
           name='start_datetime'
@@ -114,36 +94,41 @@ export const ReservationUpdateForm = ({
             </FormItem>
           )}
         />
-        <div className='flex flex-row space-x-4'>
-          <Button
-            type='button'
-            variant='destructive'
-            disabled={form.formState.isLoading}
-            onClick={handleClickDelete}
-            className='w-full font-bold'
-          >
-            {form.formState.isSubmitting ? (
-              <Loader2 className='mr-2 size-4 animate-spin' />
+        <div className='grid w-full grid-cols-2 border p-4 text-start'>
+          <div className='col-span-1 space-y-4'>
+            <p>メニュー</p>
+            <p>担当スタッフ</p>
+            <p>お客様氏名</p>
+            <p>お客様電話番号</p>
+            <p>お客様メールアドレス</p>
+          </div>
+          <div className='col-span-1 space-y-4 text-primary'>
+            <p>{menus.name}</p>
+            <p>{users.name}</p>
+            {customers.name ? <p>{customers.name}</p> : <p>未入力</p>}
+            {customers.phone_number ? (
+              <p>{customers.phone_number}</p>
             ) : (
-              <>削除</>
+              <p>未入力</p>
             )}
-          </Button>
-          <Button
-            type='submit'
-            disabled={
-              !form.formState.isValid ||
-              !form.formState.isDirty ||
-              form.formState.isLoading
-            }
-            className='w-full font-bold'
-          >
-            {form.formState.isSubmitting ? (
-              <Loader2 className='mr-2 size-4 animate-spin' />
-            ) : (
-              <>変更</>
-            )}
-          </Button>
+            {customers.email ? <p>{customers.email}</p> : <p>未入力</p>}
+          </div>
         </div>
+        <Button
+          type='submit'
+          disabled={
+            !form.formState.isValid ||
+            !form.formState.isDirty ||
+            form.formState.isLoading
+          }
+          className='w-full font-bold'
+        >
+          {form.formState.isSubmitting ? (
+            <Loader2 className='mr-2 size-4 animate-spin' />
+          ) : (
+            <>変更</>
+          )}
+        </Button>
       </form>
     </Form>
   )
