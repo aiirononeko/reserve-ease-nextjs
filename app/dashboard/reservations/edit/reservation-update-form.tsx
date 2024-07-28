@@ -46,7 +46,11 @@ export const ReservationUpdateForm = ({ reservation }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof updateReservationSchema>) => {
     try {
-      await updateReservation(values)
+      await updateReservation({
+        ...values,
+        start_datetime: date(values.start_datetime).toISOString(),
+        end_datetime: date(values.end_datetime).toISOString(),
+      })
       router.push('/dashboard/reservations')
       toast.success('予約内容を変更しました')
     } catch (e: unknown) {

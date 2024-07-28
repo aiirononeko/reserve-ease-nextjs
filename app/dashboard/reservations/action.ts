@@ -27,13 +27,8 @@ export const createReservation = async (
     throw new Error('User not found.')
   }
 
-  // localだと失敗する
-  // 予約追加してもリロードしないと反映されない
   const startDatetime = date(input.start_datetime)
   const endDatetime = date(input.end_datetime)
-  console.log(
-    `DEBUG: ${startDatetime.toISOString()}, ${endDatetime.toISOString()}`,
-  )
   const storeId = Number(input.store_id)
 
   if (

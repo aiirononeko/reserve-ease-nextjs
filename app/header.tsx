@@ -25,7 +25,7 @@ export const Header = async () => {
           </PopoverTrigger>
           <PopoverContent className='flex w-40 flex-col'>
             <Button variant='link' asChild>
-              <Link href='/dashboard'>ダッシュボード</Link>
+              <Link href='/dashboard/reservations'>ダッシュボード</Link>
             </Button>
             <Button variant='link' asChild>
               <Link href='/dashboard/menus'>メニュー管理</Link>
