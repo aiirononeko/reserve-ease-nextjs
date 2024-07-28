@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { isBefore } from '@formkit/tempo'
+import { isAfter, isBefore, isEqual, tzDate } from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 
 export const checkUserRole = (user: AuthUser | null): string => {
@@ -26,29 +26,47 @@ export const checkReservationDuplication = async (
 
   const supabase = createClient()
 
-  // 更新の場合は対象の予約以外でチェックする
+  // 更新の場合は対象の予約を取得
   const query = reservationId
     ? supabase
         .from('reservations')
-        .select('id')
+        .select('start_datetime, end_datetime')
         .neq('id', reservationId)
-        .gte('start_datetime', startDatetime.toISOString())
-        .lte('end_datetime', endDatetime.toISOString())
-    : supabase
-        .from('reservations')
-        .select('id')
-        .gte('start_datetime', startDatetime.toISOString())
-        .lte('end_datetime', endDatetime.toISOString())
+    : supabase.from('reservations').select('start_datetime, end_datetime')
 
   const { data, error } = await query
   if (error) {
     throw error
   }
 
+  const result = data.filter((reservation) => {
+    const reservationStart = tzDate(reservation.start_datetime, 'UTC')
+    const reservationEnd = tzDate(reservation.end_datetime, 'UTC')
+
+    // 予約の開始時刻が指定範囲内にある場合
+    const startInRange =
+      (isEqual(reservationStart, startDatetime) ||
+        isAfter(reservationStart, startDatetime)) &&
+      isBefore(reservationStart, endDatetime)
+
+    // 予約の終了時刻が指定範囲内にある場合
+    const endInRange =
+      (isEqual(reservationEnd, endDatetime) ||
+        isBefore(reservationEnd, endDatetime)) &&
+      isAfter(reservationEnd, startDatetime)
+
+    // 予約が指定範囲を完全に包含する場合
+    const reservationContainsRange =
+      isBefore(reservationStart, startDatetime) &&
+      isAfter(reservationEnd, endDatetime)
+
+    return startInRange || endInRange || reservationContainsRange
+  })
+
   const capacity = await getStoreCapacity(storeId)
 
   // 同じ時刻の総予約数が店舗のキャパシティを上回らないかチェック
-  if (data.length < capacity) {
+  if (result.length < capacity) {
     return true
   } else {
     return false
