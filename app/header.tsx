@@ -4,6 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { PopoverClose } from '@radix-ui/react-popover'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { getUser } from './data'
@@ -24,26 +25,38 @@ export const Header = async () => {
             <Menu />
           </PopoverTrigger>
           <PopoverContent className='flex w-40 flex-col'>
-            <Button variant='link' asChild>
-              <Link href='/dashboard/reservations'>ダッシュボード</Link>
-            </Button>
-            <Button variant='link' asChild>
-              <Link href='/dashboard/menus'>メニュー管理</Link>
-            </Button>
-            <Button variant='link' asChild>
-              <Link href='/dashboard/profile'>プロフィール管理</Link>
-            </Button>
+            <PopoverClose asChild>
+              <Button variant='link' asChild>
+                <Link href='/dashboard/reservations'>予約管理</Link>
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button variant='link' asChild>
+                <Link href='/dashboard/menus'>メニュー管理</Link>
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button variant='link' asChild>
+                <Link href='/dashboard/profile'>プロフィール管理</Link>
+              </Button>
+            </PopoverClose>
             {userRole === 'owner' && (
               <>
-                <Button variant='link' asChild>
-                  <Link href='/dashboard/store'>店舗情報管理</Link>
-                </Button>
-                <Button variant='link' asChild>
-                  <Link href='/dashboard/business-hours'>営業時間管理</Link>
-                </Button>
-                <Button variant='link' asChild>
-                  <Link href='/dashboard/staff'>スタッフ管理</Link>
-                </Button>
+                <PopoverClose asChild>
+                  <Button variant='link' asChild>
+                    <Link href='/dashboard/store'>店舗情報管理</Link>
+                  </Button>
+                </PopoverClose>
+                <PopoverClose asChild>
+                  <Button variant='link' asChild>
+                    <Link href='/dashboard/business-hours'>営業時間管理</Link>
+                  </Button>
+                </PopoverClose>
+                <PopoverClose asChild>
+                  <Button variant='link' asChild>
+                    <Link href='/dashboard/staff'>スタッフ管理</Link>
+                  </Button>
+                </PopoverClose>
               </>
             )}
           </PopoverContent>
