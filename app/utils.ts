@@ -14,6 +14,7 @@ export const checkReservationDuplication = async (
   startDatetime: Date,
   endDatetime: Date,
   storeId: number,
+  reservationId?: number,
 ) => {
   'use server'
 
@@ -25,11 +26,21 @@ export const checkReservationDuplication = async (
 
   const supabase = createClient()
 
-  const { data, error } = await supabase
-    .from('reservations')
-    .select('*')
-    .gte('start_datetime', startDatetime.toISOString())
-    .lte('end_datetime', endDatetime.toISOString())
+  // 更新の場合は対象の予約以外でチェックする
+  const query = reservationId
+    ? supabase
+        .from('reservations')
+        .select('id')
+        .neq('id', reservationId)
+        .gte('start_datetime', startDatetime.toISOString())
+        .lte('end_datetime', endDatetime.toISOString())
+    : supabase
+        .from('reservations')
+        .select('id')
+        .gte('start_datetime', startDatetime.toISOString())
+        .lte('end_datetime', endDatetime.toISOString())
+
+  const { data, error } = await query
   if (error) {
     throw error
   }
