@@ -1,13 +1,13 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { Database } from '@/types/supabase'
+import { useState } from 'react'
 import { ReservationCreateForm } from './reservation-create-form'
 
 interface Props {
@@ -18,23 +18,34 @@ interface Props {
 }
 
 export function EmptyCard({ date, userId, storeId, menus }: Props) {
+  const [open, setOpen] = useState(false)
+
+  const closeModal = () => {
+    setOpen(false)
+    window.location.reload() // TODO: 一旦リロード
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='h-20 w-full'>
         <div className='h-20 w-full border-r'></div>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader className='mt-2 space-y-10'>
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className='max-h-[90%] overflow-hidden'
+      >
+        <DialogHeader className='my-4'>
           <DialogTitle>予約作成</DialogTitle>
-          <DialogDescription className='text-primary'>
-            <ReservationCreateForm
-              initialDate={date}
-              userId={userId}
-              storeId={storeId}
-              menus={menus}
-            />
-          </DialogDescription>
         </DialogHeader>
+        <div className='dialog-scroll overflow-y-scroll px-4'>
+          <ReservationCreateForm
+            initialDate={date}
+            userId={userId}
+            storeId={storeId}
+            menus={menus}
+            closeModal={closeModal}
+          />
+        </div>
         <DialogFooter />
       </DialogContent>
     </Dialog>

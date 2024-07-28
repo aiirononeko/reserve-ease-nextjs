@@ -12,6 +12,7 @@ import { Form } from '@/components/ui/form'
 import type { Database } from '@/types/supabase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -20,9 +21,12 @@ import { deleteReservationSchema } from './schema'
 
 interface Props {
   reservation: Database['public']['Tables']['reservations']['Row']
+  closeModal: () => void
 }
 
-export const ReservationDeleteDialog = ({ reservation }: Props) => {
+export const ReservationDeleteDialog = ({ reservation, closeModal }: Props) => {
+  const [open, setOpen] = useState(false)
+
   const form = useForm<z.infer<typeof deleteReservationSchema>>({
     defaultValues: {
       id: String(reservation.id),
@@ -33,6 +37,8 @@ export const ReservationDeleteDialog = ({ reservation }: Props) => {
   const onSubmit = async (values: z.infer<typeof deleteReservationSchema>) => {
     try {
       await deleteReservation(values)
+      setOpen(false)
+      closeModal()
       toast.success('予約を削除しました')
     } catch (e: unknown) {
       if (e instanceof Error) {
@@ -44,7 +50,7 @@ export const ReservationDeleteDialog = ({ reservation }: Props) => {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button variant='ghost'>
           <Trash2 />

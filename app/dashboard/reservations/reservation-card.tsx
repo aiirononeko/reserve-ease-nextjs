@@ -14,6 +14,7 @@ import type { Database } from '@/types/supabase'
 import { addHour, date, format } from '@formkit/tempo'
 import { Pencil } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
 import { ReservationDeleteDialog } from './reservation-delete-dialog'
 
 interface Props {
@@ -23,13 +24,20 @@ interface Props {
 }
 
 export function ReservationCard({ cardHeight, reservation, userId }: Props) {
+  const [open, setOpen] = useState(false)
+
   const startDatetime = date(reservation.start_datetime)
   const endDatetime = date(reservation.end_datetime)
 
   const isOwnReservation = reservation.user_id === userId
 
+  const closeModal = () => {
+    setOpen(false)
+    window.location.reload()
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='w-full'>
         <div className='relative h-20'>
           <div
@@ -110,7 +118,10 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
               <Pencil />
             </Link>
           </Button>
-          <ReservationDeleteDialog reservation={reservation} />
+          <ReservationDeleteDialog
+            reservation={reservation}
+            closeModal={closeModal}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

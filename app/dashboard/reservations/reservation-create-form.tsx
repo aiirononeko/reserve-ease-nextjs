@@ -36,6 +36,7 @@ interface Props {
   userId: string
   storeId: number
   menus: Database['public']['Tables']['menus']['Row'][]
+  closeModal: () => void
 }
 
 export const ReservationCreateForm = ({
@@ -43,6 +44,7 @@ export const ReservationCreateForm = ({
   userId,
   storeId,
   menus,
+  closeModal,
 }: Props) => {
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
@@ -78,6 +80,7 @@ export const ReservationCreateForm = ({
         start_datetime: date(values.start_datetime).toISOString(),
         end_datetime: date(values.end_datetime).toISOString(),
       })
+      closeModal()
       toast.success('予約を作成しました')
     } catch (e: unknown) {
       if (e instanceof Error) {

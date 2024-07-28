@@ -39,6 +39,7 @@ export const checkReservationDuplication = async (
     throw error
   }
 
+  // 対象の時刻にある予約データを抽出
   const result = data.filter((reservation) => {
     const reservationStart = tzDate(reservation.start_datetime, 'UTC')
     const reservationEnd = tzDate(reservation.end_datetime, 'UTC')
