@@ -1,68 +1,42 @@
--- /*
---  * stores RLS.
---  * Select: Admin or associated Owner or Staff.
---  * Insert: Admin
---  * Update: Admin or associated Owner or Staff.
---  * Delete: Admin
---  */
--- alter table public.stores enable row level security;
---
--- create policy "Stores are viewable only by admin or associated owner or staff"
---   on stores
---   for select
---   to authenticated
---   using (
---     exists (
---       select 1 from users
---       join roles on users.role_id = roles.id
---       where users.id = auth.uid() and (
---         roles.name = 'admin' or
---         (roles.name in ('owner', 'staff') and users.store_id = stores.id)
---       )
---     )
---   );
---
--- create policy "Stores can insert only by admin."
---   on stores
---   for insert
---   to authenticated
---   with check (
---     exists (
---       select 1 from users
---       join roles on users.role_id = roles.id
---       where users.id = auth.uid() and (
---         roles.name = 'admin'
---       )
---     )
---   );
---
--- create policy "Stores are update only by admin or associated owner or staff"
---   on stores for update
---   to authenticated
---   using (
---     exists (
---       select 1 from users
---       join roles on users.role_id = roles.id
---       where users.id = auth.uid() and (
---         roles.name = 'admin' or
---         (roles.name in ('owner', 'staff') and users.store_id = stores.id)
---       )
---     )
---   );
---
--- create policy "Stores can delete only by admin."
---   on stores for delete
---   to authenticated
---   using (
---     exists (
---       select 1 from users
---       join roles on users.role_id = roles.id
---       where users.id = auth.uid() and (
---         roles.name = 'admin'
---       )
---     )
---   );
---
+/*
+ * Select: Everyone.
+ * Insert: Authenticated Users.
+ * Update: Authenticated Users.
+ * Delete: Authenticated Users.
+ */
+alter table public.stores enable row level security;
+
+create policy "Stores can visible by everyone"
+  on stores
+  for select
+  to authenticated, anon
+  using (true);
+
+create policy "Stores can insert only by Authenticated Users"
+  on stores
+  for insert
+  to authenticated
+  with check (true);
+
+create policy "Stores can be updated only by their own data"
+  on stores
+  for update
+  to authenticated
+  using (
+    (auth.jwt() -> 'user_metadata' ->> 'store_id')::text = id::text
+  )
+  with check (
+    (auth.jwt() -> 'user_metadata' ->> 'store_id')::text = id::text
+  );
+
+create policy "Stores can be deleted only by their own data"
+  on stores
+  for delete
+  to authenticated
+  using (
+    (auth.jwt() -> 'user_metadata' ->> 'store_id')::text = id::text
+  );
+
 -- /*
 --  * roles RLS.
 --  */
