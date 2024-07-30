@@ -22,7 +22,6 @@ export function EmptyCard({ date, userId, storeId, menus }: Props) {
 
   const closeModal = () => {
     setOpen(false)
-    window.location.reload() // TODO: 一旦リロード
   }
 
   return (

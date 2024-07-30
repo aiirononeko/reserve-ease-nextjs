@@ -22,9 +22,11 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import type { Database } from '@/types/supabase'
-import { addHour, date, format } from '@formkit/tempo'
+import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { startTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -46,6 +48,7 @@ export const ReservationCreateForm = ({
   menus,
   closeModal,
 }: Props) => {
+  const router = useRouter()
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
       start_datetime: format({
@@ -77,10 +80,22 @@ export const ReservationCreateForm = ({
     try {
       await createReservation({
         ...values,
-        start_datetime: date(values.start_datetime).toISOString(),
-        end_datetime: date(values.end_datetime).toISOString(),
+        start_datetime: format({
+          date: new Date(values.start_datetime),
+          format: 'YYYY-MM-DDTHH:mm:ssZ',
+          tz: 'UTC',
+        }),
+        end_datetime: format({
+          date: new Date(values.end_datetime),
+          format: 'YYYY-MM-DDTHH:mm:ssZ',
+          tz: 'UTC',
+        }),
       })
+
       closeModal()
+
+      startTransition(() => router.refresh())
+
       toast.success('予約を作成しました')
     } catch (e: unknown) {
       if (e instanceof Error) {

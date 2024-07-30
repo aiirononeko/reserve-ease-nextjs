@@ -59,7 +59,7 @@ export const BusinessHoursForm = ({ businessHours }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof businessHoursSchema>) => {
     await updateBusinessHours(values)
-    toast.success('営業時間を更新しました！')
+    toast.success('営業時間を更新しました')
   }
 
   return (

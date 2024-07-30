@@ -48,10 +48,20 @@ export const ReservationUpdateForm = ({ reservation }: Props) => {
     try {
       await updateReservation({
         ...values,
-        start_datetime: date(values.start_datetime).toISOString(),
-        end_datetime: date(values.end_datetime).toISOString(),
+        start_datetime: format({
+          date: new Date(values.start_datetime),
+          format: 'YYYY-MM-DDTHH:mm:ssZ',
+          tz: 'UTC',
+        }),
+        end_datetime: format({
+          date: new Date(values.end_datetime),
+          format: 'YYYY-MM-DDTHH:mm:ssZ',
+          tz: 'UTC',
+        }),
       })
+
       router.push('/dashboard/reservations')
+
       toast.success('予約内容を変更しました')
     } catch (e: unknown) {
       if (e instanceof Error) {

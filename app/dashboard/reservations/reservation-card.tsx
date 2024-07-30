@@ -33,7 +33,6 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
 
   const closeModal = () => {
     setOpen(false)
-    window.location.reload()
   }
 
   return (

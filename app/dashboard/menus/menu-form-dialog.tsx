@@ -53,7 +53,7 @@ export const MenuFormDialog = ({ menu }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className='w-28'>編集</Button>
+        <Button className='h-10 w-20 text-xs'>編集</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

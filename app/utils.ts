@@ -1,5 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
-import { isAfter, isBefore, isEqual, tzDate } from '@formkit/tempo'
+import {
+  addMinute,
+  dayStart,
+  diffMinutes,
+  isAfter,
+  isBefore,
+  isEqual,
+  tzDate,
+} from '@formkit/tempo'
 import type { AuthUser } from '@supabase/supabase-js'
 
 export const checkUserRole = (user: AuthUser | null): string => {
@@ -24,6 +32,53 @@ export const checkReservationDuplication = async (
     return false
   }
 
+  // 対象の予約データを取得
+  const reservations = await getReservations(
+    reservationId,
+    dayStart(startDatetime).toISOString(),
+    endDatetime.toISOString(),
+  )
+
+  // 店舗のキャパシティを取得
+  const capacity = await getStoreCapacity(storeId)
+
+  // startDatetimeからendDatetimeまで30分刻みで予約データ数を確認
+  const diff = diffMinutes(endDatetime, startDatetime)
+  Array.from({ length: diff / 30 }).forEach((_, index) => {
+    const targetDatetime = addMinute(startDatetime, index * 30)
+
+    // 対象の時刻に存在する予約データを抽出
+    const result = reservations.filter((reservation) => {
+      const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
+      const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
+
+      const isEqualStartDatetime = isEqual(
+        targetDatetime,
+        reservationStartDatetime,
+      )
+      const isDuringReservationDatetime =
+        isAfter(targetDatetime, reservationStartDatetime) &&
+        isBefore(targetDatetime, reservationEndDatetime)
+
+      return isEqualStartDatetime || isDuringReservationDatetime
+    })
+
+    // すでにcapacityに達している場合は登録不可とする
+    if (result.length === capacity) {
+      throw new Error(
+        '予約がいっぱいです。作成日時を見直すか、店舗情報管理から最大予約数を増やしてください。',
+      )
+    }
+  })
+}
+
+const getReservations = async (
+  reservationId: number | undefined,
+  startDatetime: string,
+  endDatetime: string,
+) => {
+  'use server'
+
   const supabase = createClient()
 
   // 更新の場合は対象の予約を取得
@@ -32,46 +87,20 @@ export const checkReservationDuplication = async (
         .from('reservations')
         .select('start_datetime, end_datetime')
         .neq('id', reservationId)
-    : supabase.from('reservations').select('start_datetime, end_datetime')
+        .gte('start_datetime', startDatetime)
+        .lte('end_datetime', endDatetime)
+    : supabase
+        .from('reservations')
+        .select('start_datetime, end_datetime')
+        .gte('start_datetime', startDatetime)
+        .lte('end_datetime', endDatetime)
 
   const { data, error } = await query
   if (error) {
     throw error
   }
 
-  // 対象の時刻にある予約データを抽出
-  const result = data.filter((reservation) => {
-    const reservationStart = tzDate(reservation.start_datetime, 'UTC')
-    const reservationEnd = tzDate(reservation.end_datetime, 'UTC')
-
-    // 予約の開始時刻が指定範囲内にある場合
-    const startInRange =
-      (isEqual(reservationStart, startDatetime) ||
-        isAfter(reservationStart, startDatetime)) &&
-      isBefore(reservationStart, endDatetime)
-
-    // 予約の終了時刻が指定範囲内にある場合
-    const endInRange =
-      (isEqual(reservationEnd, endDatetime) ||
-        isBefore(reservationEnd, endDatetime)) &&
-      isAfter(reservationEnd, startDatetime)
-
-    // 予約が指定範囲を完全に包含する場合
-    const reservationContainsRange =
-      isBefore(reservationStart, startDatetime) &&
-      isAfter(reservationEnd, endDatetime)
-
-    return startInRange || endInRange || reservationContainsRange
-  })
-
-  const capacity = await getStoreCapacity(storeId)
-
-  // 同じ時刻の総予約数が店舗のキャパシティを上回らないかチェック
-  if (result.length < capacity) {
-    return true
-  } else {
-    return false
-  }
+  return data
 }
 
 const getStoreCapacity = async (storeId: number) => {

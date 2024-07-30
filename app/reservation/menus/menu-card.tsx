@@ -38,7 +38,7 @@ export const MenuCard = ({ menu }: Props) => {
           </p>
         )}
       </div>
-      <Button onClick={handleClick} className='h-8 text-xs'>
+      <Button onClick={handleClick} className='h-10 text-xs'>
         このメニューで予約する
       </Button>
     </div>

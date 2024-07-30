@@ -31,11 +31,8 @@ export const createReservation = async (
   const endDatetime = date(input.end_datetime)
   const storeId = Number(input.store_id)
 
-  if (
-    !(await checkReservationDuplication(startDatetime, endDatetime, storeId))
-  ) {
-    throw new Error('予約の時間が重複しています。別の時間を指定してください。')
-  }
+  // 予約が重複していないか確認
+  await checkReservationDuplication(startDatetime, endDatetime, storeId)
 
   const customer = await createCustomer(
     input.customer_name,

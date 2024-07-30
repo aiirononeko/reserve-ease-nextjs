@@ -24,16 +24,13 @@ export const updateReservation = async (
   const endDatetime = date(input.end_datetime)
   const storeId = Number(input.store_id)
 
-  if (
-    !(await checkReservationDuplication(
-      startDatetime,
-      endDatetime,
-      storeId,
-      input.id,
-    ))
-  ) {
-    throw new Error('予約の時間が重複しています。別の時間を指定してください。')
-  }
+  // 更新後の時間で予約が重複していないか確認
+  await checkReservationDuplication(
+    startDatetime,
+    endDatetime,
+    storeId,
+    input.id,
+  )
 
   const { error } = await supabase
     .from('reservations')
