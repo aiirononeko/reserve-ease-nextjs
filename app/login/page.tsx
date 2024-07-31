@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <div className='mx-4 flex flex-col items-center space-y-6 py-8'>
-      <h1 className='text-xl font-bold'>ログイン</h1>
+    <div className='my-8 flex max-w-96 flex-col space-y-8 md:mx-auto'>
+      <h1 className='text-center text-xl font-bold'>ログイン</h1>
       <div className='flex w-full flex-col items-center justify-center space-y-4 px-4'>
         <LoginForm />
         <div className='flex space-x-1 text-[14px]'>

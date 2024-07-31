@@ -53,13 +53,6 @@ export const checkReservationDuplication = async (
       const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
       const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
 
-      console.log(
-        'DEBUG:',
-        targetDatetime,
-        reservationStartDatetime,
-        reservationEndDatetime,
-      )
-
       const isEqualStartDatetime = isEqual(
         targetDatetime,
         reservationStartDatetime,
@@ -67,8 +60,6 @@ export const checkReservationDuplication = async (
       const isDuringReservationDatetime =
         isAfter(targetDatetime, reservationStartDatetime) &&
         isBefore(targetDatetime, reservationEndDatetime)
-
-      console.log(`DEBUG:`, isEqualStartDatetime, isDuringReservationDatetime)
 
       return isEqualStartDatetime || isDuringReservationDatetime
     })

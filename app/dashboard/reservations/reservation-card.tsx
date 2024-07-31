@@ -35,6 +35,8 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
     setOpen(false)
   }
 
+  return <div className='h-20 w-full border-r'>reserve {reservation.id}</div>
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='w-full'>

@@ -8,13 +8,13 @@ interface Props {
   times: Date[]
   maxCapacity: number
   getGridCols: (maxCapacity: number) => string
-  getReservation: (
+  filteredReservations: (
     time: Date,
   ) => Database['public']['Tables']['reservations']['Row'][]
-  duringReservation: (
+  duringReservations: (
     time: Date,
-    reservation: Database['public']['Tables']['reservations']['Row'],
-  ) => boolean
+    reservations: Database['public']['Tables']['reservations']['Row'][],
+  ) => Database['public']['Tables']['reservations']['Row'][]
   getHeight: (
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => string
@@ -27,8 +27,8 @@ export function TimeGrid({
   times,
   maxCapacity,
   getGridCols,
-  getReservation,
-  duringReservation,
+  filteredReservations,
+  duringReservations,
   getHeight,
   userId,
   storeId,
@@ -60,114 +60,64 @@ export function TimeGrid({
                 className={`grid h-20 border-t ${getGridCols(maxCapacity)}`}
               >
                 {((): ReactNode => {
-                  // 対象時刻の予約データを取得
-                  const reservations = getReservation(time)
+                  // 当日の予約データをフィルタリング
+                  const reservations = filteredReservations(time)
 
-                  // 対象時刻に予約データが存在するか？
-                  return reservations.length > 0 ? (
-                    // 予約が存在する場合、予約数やキャパシティに応じてブロックを描画していく
-                    // 存在する予約数はmax_capacityの数より少ないか？
+                  return (
                     <>
-                      {reservations.length < maxCapacity ? (
-                        // 存在する予約を描画し、足りない数分空のブロックを描画する
-                        <>
-                          {reservations.map((reservation) => (
-                            // 描画しようとしている予約はすでに描画済みか？
-                            <div key={reservation.id}>
-                              {duringReservation(time, reservation) ? (
-                                <>
-                                  {/* 同時刻の予約数とキャパが同じかどうか？ */}
-                                  {/* MEMO: 同じでない場合、表示が崩れることがあるため制御する */}
-                                  {reservations.length === maxCapacity ? (
-                                    // 同時刻の予約数とキャパが同じ場合、空のブロックを描画して、次の予約が横並びになるようにする
+                      {Array.from({ length: maxCapacity }).map((_, i) => (
+                        <div key={i}>
+                          {reservations.length === 0 ? (
+                            // reservationsがない場合はEmptyCardを描画する
+                            <EmptyCard
+                              key={i}
+                              date={time}
+                              userId={userId}
+                              storeId={storeId}
+                              menus={menus}
+                            />
+                          ) : (
+                            <>
+                              {((): ReactNode => {
+                                if (!reservations[i])
+                                  return (
+                                    <EmptyCard
+                                      key={i}
+                                      date={time}
+                                      userId={userId}
+                                      storeId={storeId}
+                                      menus={menus}
+                                    />
+                                  )
+
+                                // 重なるreservationがあるか判定
+                                const during = duringReservations(
+                                  time,
+                                  reservations,
+                                )
+
+                                if (during.length > 0) {
+                                  // ある場合は重なるreservationのstart_datetimeから過去のreservationsを取得
+                                  // 描画位置(index)を取得し、順番に応じてJSXの配列を生成
+                                  return (
                                     <div className='h-20 w-full border-r'>
-                                      during {reservation.id}
+                                      during {reservations[i].id}
                                     </div>
-                                  ) : (
-                                    // 同時刻の予約数とキャパが違う場合、表示を崩れさせないために制御
-                                    // MEMO: 一個前の時刻の予約を取得して、indexを確認して、indexの分emptyを作る処理してる
-                                    // MEMO: キャパシティ2以上だとバグりそう
-                                    <>
-                                      {((): ReactNode => {
-                                        const prevIndex = getReservation(
-                                          times[index - 1],
-                                        ).indexOf(reservation)
-
-                                        return Array.from({
-                                          length: prevIndex,
-                                        }).map((_, index) => (
-                                          <EmptyCard
-                                            key={index}
-                                            date={time}
-                                            userId={userId}
-                                            storeId={storeId}
-                                            menus={menus}
-                                          />
-                                        ))
-                                      })()}
-                                    </>
-                                  )}
-                                </>
-                              ) : (
-                                // 予約のブロックを予約時間に応じて高さを計算し、描画する
-                                <ReservationCard
-                                  cardHeight={getHeight(reservation)}
-                                  reservation={reservation}
-                                  userId={userId}
-                                />
-                              )}
-                            </div>
-                          ))}
-                          {
-                            // 予約は存在しないがキャパシティが空いている場合、空のブロックを描画する
-                            Array.from({
-                              length: maxCapacity - reservations.length,
-                            }).map((_, index) => (
-                              <EmptyCard
-                                key={index}
-                                date={time}
-                                userId={userId}
-                                storeId={storeId}
-                                menus={menus}
-                              />
-                            ))
-                          }
-                        </>
-                      ) : (
-                        // 存在する予約を全て描画する
-                        <>
-                          {reservations.map((reservation) => (
-                            // 描画しようとしている予約はすでに描画済みか？
-                            <div key={reservation.id}>
-                              {duringReservation(time, reservation) ? (
-                                // 空のブロックを描画して、次の予約が横並びになるようにする
-                                <div className='h-20 w-full border-r'>
-                                  during {reservation.id}
-                                </div>
-                              ) : (
-                                // 予約のブロックを予約時間に応じて高さを計算し、描画する
-                                <ReservationCard
-                                  cardHeight={getHeight(reservation)}
-                                  reservation={reservation}
-                                  userId={userId}
-                                />
-                              )}
-                            </div>
-                          ))}
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    // 予約が存在しない場合、空のブロックをmax_capacity分描画する
-                    <>
-                      {Array.from({ length: maxCapacity }).map((_, index) => (
-                        <EmptyCard
-                          key={index}
-                          date={time}
-                          userId={userId}
-                          storeId={storeId}
-                          menus={menus}
-                        />
+                                  )
+                                } else {
+                                  // ない場合はそのまま順番でJSXの配列を生成
+                                  return (
+                                    <ReservationCard
+                                      cardHeight={getHeight(reservations[i])}
+                                      reservation={reservations[i]}
+                                      userId={userId}
+                                    />
+                                  )
+                                }
+                              })()}
+                            </>
+                          )}
+                        </div>
                       ))}
                     </>
                   )

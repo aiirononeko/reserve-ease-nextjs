@@ -21,8 +21,13 @@ export function Calender({ store, menus, userId }: Props) {
     Database['public']['Tables']['reservations']['Row'][]
   >([])
 
-  const { times, getGridCols, getReservation, duringReservation, getHeight } =
-    useCalendar(currentDate, reservations)
+  const {
+    times,
+    getGridCols,
+    filteredReservations,
+    duringReservations,
+    getHeight,
+  } = useCalendar(currentDate, reservations)
 
   useEffect(() => {
     const get = async () => {
@@ -43,8 +48,8 @@ export function Calender({ store, menus, userId }: Props) {
           times={times}
           maxCapacity={store.max_capacity}
           getGridCols={getGridCols}
-          getReservation={getReservation}
-          duringReservation={duringReservation}
+          filteredReservations={filteredReservations}
+          duringReservations={duringReservations}
           getHeight={getHeight}
           userId={userId}
           storeId={store.id}

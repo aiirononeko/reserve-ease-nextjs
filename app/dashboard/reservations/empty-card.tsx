@@ -27,7 +27,7 @@ export function EmptyCard({ date, userId, storeId, menus }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='h-20 w-full'>
-        <div className='h-20 w-full border-r'></div>
+        <div className='h-20 w-full border-r'>empty</div>
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}

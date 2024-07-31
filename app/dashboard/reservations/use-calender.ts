@@ -5,8 +5,8 @@ import {
   diffMinutes,
   isAfter,
   isBefore,
-  sameHour,
-  sameMinute,
+  isEqual,
+  tzDate,
 } from '@formkit/tempo'
 import { useMemo } from 'react'
 import { generateHourlyIntervals } from './utils'
@@ -22,25 +22,40 @@ export function useCalendar(
     )
   }, [currentDate])
 
-  const getReservation = (target: Date) => {
+  const filteredReservations = (targetDatetime: Date) => {
     return reservations.filter((reservation) => {
-      return (
-        (sameHour(addHour(date(reservation.start_datetime), 9), target) &&
-          sameMinute(addHour(date(reservation.start_datetime)), target)) ||
-        (isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
-          isBefore(target, addHour(date(reservation.end_datetime), 9)))
+      const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
+      const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
+
+      const isEqualStartDatetime = isEqual(
+        targetDatetime,
+        reservationStartDatetime,
       )
+      const isDuringReservationDatetime =
+        isAfter(targetDatetime, reservationStartDatetime) &&
+        isBefore(targetDatetime, reservationEndDatetime)
+
+      return isEqualStartDatetime || isDuringReservationDatetime
     })
   }
 
-  const duringReservation = (
-    target: Date,
-    reservation: Database['public']['Tables']['reservations']['Row'],
+  const duringReservations = (
+    targetDatetime: Date,
+    reservations: Database['public']['Tables']['reservations']['Row'][],
   ) => {
-    return (
-      isAfter(target, addHour(date(reservation.start_datetime), 9)) &&
-      isBefore(target, addHour(date(reservation.end_datetime), 9))
-    )
+    return reservations.filter((reservation) => {
+      const reservationStartDatetime = addHour(
+        date(reservation.start_datetime),
+        9,
+      ) // TODO:
+      const reservationEndDatetime = addHour(date(reservation.end_datetime), 9) // TODO:
+      console.log(reservationStartDatetime, reservationEndDatetime)
+
+      return (
+        isAfter(targetDatetime, reservationStartDatetime) &&
+        isBefore(targetDatetime, reservationEndDatetime)
+      )
+    })
   }
 
   // TODO: TailwindCSSの設定いじって動的に生成できるようにする
@@ -131,8 +146,8 @@ export function useCalendar(
   return {
     times,
     getGridCols,
-    getReservation,
-    duringReservation,
+    filteredReservations,
+    duringReservations,
     getHeight,
   }
 }
