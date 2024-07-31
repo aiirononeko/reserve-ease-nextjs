@@ -24,8 +24,8 @@ export function Calender({ store, menus, userId }: Props) {
   const {
     times,
     getGridCols,
-    filteredReservations,
-    duringReservations,
+    filteringReservations,
+    filteringDuringReservations,
     getHeight,
   } = useCalendar(currentDate, reservations)
 
@@ -48,8 +48,8 @@ export function Calender({ store, menus, userId }: Props) {
           times={times}
           maxCapacity={store.max_capacity}
           getGridCols={getGridCols}
-          filteredReservations={filteredReservations}
-          duringReservations={duringReservations}
+          filteringReservations={filteringReservations}
+          filteringDuringReservations={filteringDuringReservations}
           getHeight={getHeight}
           userId={userId}
           storeId={store.id}

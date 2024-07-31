@@ -22,7 +22,7 @@ export function useCalendar(
     )
   }, [currentDate])
 
-  const filteredReservations = (targetDatetime: Date) => {
+  const filteringReservations = (targetDatetime: Date) => {
     return reservations.filter((reservation) => {
       const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
       const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
@@ -39,10 +39,7 @@ export function useCalendar(
     })
   }
 
-  const duringReservations = (
-    targetDatetime: Date,
-    reservations: Database['public']['Tables']['reservations']['Row'][],
-  ) => {
+  const filteringDuringReservations = (targetDatetime: Date) => {
     return reservations.filter((reservation) => {
       const reservationStartDatetime = addHour(
         date(reservation.start_datetime),
@@ -146,8 +143,8 @@ export function useCalendar(
   return {
     times,
     getGridCols,
-    filteredReservations,
-    duringReservations,
+    filteringReservations,
+    filteringDuringReservations,
     getHeight,
   }
 }

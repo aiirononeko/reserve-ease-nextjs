@@ -8,12 +8,11 @@ interface Props {
   times: Date[]
   maxCapacity: number
   getGridCols: (maxCapacity: number) => string
-  filteredReservations: (
+  filteringReservations: (
     time: Date,
   ) => Database['public']['Tables']['reservations']['Row'][]
-  duringReservations: (
+  filteringDuringReservations: (
     time: Date,
-    reservations: Database['public']['Tables']['reservations']['Row'][],
   ) => Database['public']['Tables']['reservations']['Row'][]
   getHeight: (
     reservation: Database['public']['Tables']['reservations']['Row'],
@@ -27,8 +26,8 @@ export function TimeGrid({
   times,
   maxCapacity,
   getGridCols,
-  filteredReservations,
-  duringReservations,
+  filteringReservations,
+  filteringDuringReservations,
   getHeight,
   userId,
   storeId,
@@ -60,67 +59,106 @@ export function TimeGrid({
                 className={`grid h-20 border-t ${getGridCols(maxCapacity)}`}
               >
                 {((): ReactNode => {
-                  // 当日の予約データをフィルタリング
-                  const reservations = filteredReservations(time)
+                  // 該当時刻の予約データ(Duringを含む)をフィルタリング
+                  const reservations = filteringReservations(time)
 
-                  return (
-                    <>
-                      {Array.from({ length: maxCapacity }).map((_, i) => (
-                        <div key={i}>
-                          {reservations.length === 0 ? (
-                            // reservationsがない場合はEmptyCardを描画する
-                            <EmptyCard
-                              key={i}
-                              date={time}
-                              userId={userId}
-                              storeId={storeId}
-                              menus={menus}
-                            />
-                          ) : (
-                            <>
-                              {((): ReactNode => {
-                                if (!reservations[i])
-                                  return (
-                                    <EmptyCard
-                                      key={i}
-                                      date={time}
-                                      userId={userId}
-                                      storeId={storeId}
-                                      menus={menus}
-                                    />
-                                  )
+                  // 該当時刻の予約データ(Duringのみ)をフィルタリング
+                  const duringReservations = filteringDuringReservations(time)
 
-                                // 重なるreservationがあるか判定
-                                const during = duringReservations(
-                                  time,
-                                  reservations,
-                                )
+                  // 取得した予約データを使って描画するブロックを生成
+                  const blocks = Array.from({ length: maxCapacity }).map(
+                    (_, i) => {
+                      // 全て予約なしの場合、Duringなし
+                      // EmptyCardをcapacity分描画
+                      if (reservations.length === 0) {
+                        return (
+                          <EmptyCard
+                            key={i}
+                            date={time}
+                            userId={userId}
+                            storeId={storeId}
+                            menus={menus}
+                          />
+                        )
+                      }
 
-                                if (during.length > 0) {
-                                  // ある場合は重なるreservationのstart_datetimeから過去のreservationsを取得
-                                  // 描画位置(index)を取得し、順番に応じてJSXの配列を生成
-                                  return (
-                                    <div className='h-20 w-full border-r'>
-                                      during {reservations[i].id}
-                                    </div>
-                                  )
-                                } else {
-                                  // ない場合はそのまま順番でJSXの配列を生成
-                                  return (
-                                    <ReservationCard
-                                      cardHeight={getHeight(reservations[i])}
-                                      reservation={reservations[i]}
-                                      userId={userId}
-                                    />
-                                  )
-                                }
-                              })()}
-                            </>
-                          )}
-                        </div>
-                      ))}
-                    </>
+                      // 全て予約ありの場合、Duringなし
+                      // ReservationCardをcapacity分描画
+                      if (
+                        reservations.length === maxCapacity &&
+                        duringReservations.length === 0
+                      ) {
+                        return (
+                          <ReservationCard
+                            key={reservations[i].id}
+                            cardHeight={getHeight(reservations[i])}
+                            reservation={reservations[i]}
+                            userId={userId}
+                          />
+                        )
+                      }
+
+                      // 全て予約ありの場合かつ全てDuring
+                      // DuringCardをcapacity分描画
+                      if (
+                        reservations.length === maxCapacity &&
+                        duringReservations.length === maxCapacity
+                      ) {
+                        return (
+                          <div key={i} className='h-20 w-full border-r'>
+                            during {reservations[i].id}
+                          </div>
+                        )
+                      }
+
+                      // 全て予約ありの場合かつ一部During
+                      // DuringReservationのstart_datetimeから描画位置を判定し、並び替えてcapacity分描画 // TODO:
+                      if (
+                        reservations.length === maxCapacity &&
+                        duringReservations.length > 0
+                      ) {
+                        return (
+                          <div key={i} className='h-20 w-full border-r'>
+                            during {reservations[i].id}
+                          </div>
+                        )
+                      }
+
+                      // 一部予約ありの場合、Duringなし
+                      // あらかじめReservationCardを描画し、残ったブロックはEmptyCardを描画
+                      if (duringReservations.length === 0) {
+                        return reservations[i] ? (
+                          <ReservationCard
+                            key={reservations[i].id}
+                            cardHeight={getHeight(reservations[i])}
+                            reservation={reservations[i]}
+                            userId={userId}
+                          />
+                        ) : (
+                          <EmptyCard
+                            key={i}
+                            date={time}
+                            userId={userId}
+                            storeId={storeId}
+                            menus={menus}
+                          />
+                        )
+                      }
+
+                      // 一部予約ありの場合かつ一部During
+                      // DuringReservationのstart_datetimeから描画位置を判定し、並び替えてcapacity分描画 // TODO:
+                      // 余ったブロックにはEmptyCardを描画 // TODO:
+                      if (duringReservations.length > 0) {
+                        return (
+                          <div key={i} className='h-20 w-full border-r'>
+                            during
+                          </div>
+                        )
+                      }
+                    },
                   )
+
+                  return blocks
                 })()}
               </div>
             ),
