@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import type { Database } from '@/types/supabase'
-import { addHour, format } from '@formkit/tempo'
+import { addHour, dayEnd, dayStart, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -81,12 +81,12 @@ export const ReservationCreateForm = ({
       await createReservation({
         ...values,
         start_datetime: format({
-          date: new Date(values.start_datetime),
+          date: dayStart(new Date(values.start_datetime)),
           format: 'YYYY-MM-DDTHH:mm:ssZ',
           tz: 'UTC',
         }),
         end_datetime: format({
-          date: new Date(values.end_datetime),
+          date: dayEnd(new Date(values.end_datetime)),
           format: 'YYYY-MM-DDTHH:mm:ssZ',
           tz: 'UTC',
         }),

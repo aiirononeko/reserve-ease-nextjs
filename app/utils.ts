@@ -1,8 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import {
   addMinute,
-  dayEnd,
-  dayStart,
   diffMinutes,
   isAfter,
   isBefore,
@@ -38,8 +36,8 @@ export const checkReservationDuplication = async (
   // 対象の予約データを取得
   const reservations = await getReservations(
     reservationId,
-    dayStart(startDatetime).toISOString(),
-    dayEnd(endDatetime).toISOString(),
+    startDatetime.toISOString(),
+    endDatetime.toISOString(),
   )
 
   console.log('DEBUG:', JSON.stringify(reservations))
