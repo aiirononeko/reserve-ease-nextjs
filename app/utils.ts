@@ -33,6 +33,8 @@ export const checkReservationDuplication = async (
     return false
   }
 
+  console.log('DEBUG: out getReservations', startDatetime, endDatetime)
+
   // 対象の予約データを取得
   const reservations = await getReservations(
     reservationId,
