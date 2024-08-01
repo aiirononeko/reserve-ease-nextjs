@@ -91,6 +91,8 @@ const getReservations = async (
 
   const supabase = createClient()
 
+  console.log('DEBUG: in getReservations, ', startDatetime, endDatetime)
+
   // 更新の場合は対象の予約を取得
   const query = reservationId
     ? supabase
