@@ -31,16 +31,12 @@ export const checkReservationDuplication = async (
     return false
   }
 
-  console.log('DEBUG: out getReservations', startDatetime, endDatetime)
-
   // 対象の予約データを取得
   const reservations = await getReservations(
     reservationId,
     startDatetime.toISOString(),
     endDatetime.toISOString(),
   )
-
-  console.log('DEBUG:', JSON.stringify(reservations))
 
   // 店舗のキャパシティを取得
   const capacity = await getStoreCapacity(storeId)
@@ -54,13 +50,6 @@ export const checkReservationDuplication = async (
     const result = reservations.filter((reservation) => {
       const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
       const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
-
-      console.log(
-        'DEBUG:',
-        targetDatetime,
-        reservationStartDatetime,
-        reservationEndDatetime,
-      )
 
       const isEqualStartDatetime = isEqual(
         targetDatetime,
@@ -90,8 +79,6 @@ const getReservations = async (
   'use server'
 
   const supabase = createClient()
-
-  console.log('DEBUG: in getReservations, ', startDatetime, endDatetime)
 
   // 更新の場合は対象の予約を取得
   const query = reservationId
