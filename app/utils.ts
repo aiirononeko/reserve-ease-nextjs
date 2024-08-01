@@ -45,7 +45,7 @@ export const checkReservationDuplication = async (
 
   // startDatetimeからendDatetimeまで30分刻みで予約データ数を確認
   const diff = diffMinutes(endDatetime, startDatetime)
-  Array.from({ length: diff / 30 + 1 }).forEach((_, index) => {
+  Array.from({ length: diff / 30 }).forEach((_, index) => {
     const targetDatetime = addMinute(startDatetime, index * 30)
 
     // 対象の時刻に存在する予約データを抽出

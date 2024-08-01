@@ -46,7 +46,6 @@ export function useCalendar(
         9,
       ) // TODO:
       const reservationEndDatetime = addHour(date(reservation.end_datetime), 9) // TODO:
-      console.log(reservationStartDatetime, reservationEndDatetime)
 
       return (
         isAfter(targetDatetime, reservationStartDatetime) &&
