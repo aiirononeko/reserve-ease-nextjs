@@ -40,6 +40,8 @@ export const checkReservationDuplication = async (
     dayEnd(endDatetime).toISOString(),
   )
 
+  console.log('DEBUG:', JSON.stringify(reservations))
+
   // 店舗のキャパシティを取得
   const capacity = await getStoreCapacity(storeId)
 
@@ -52,6 +54,13 @@ export const checkReservationDuplication = async (
     const result = reservations.filter((reservation) => {
       const reservationStartDatetime = tzDate(reservation.start_datetime, 'UTC')
       const reservationEndDatetime = tzDate(reservation.end_datetime, 'UTC')
+
+      console.log(
+        'DEBUG:',
+        targetDatetime,
+        reservationStartDatetime,
+        reservationEndDatetime,
+      )
 
       const isEqualStartDatetime = isEqual(
         targetDatetime,
