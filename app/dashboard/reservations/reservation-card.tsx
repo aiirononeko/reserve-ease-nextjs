@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { Database } from '@/types/supabase'
-import { addHour, date, format } from '@formkit/tempo'
+import { addHour, date, format, isAfter } from '@formkit/tempo'
 import { useState } from 'react'
 import { ReservationDeleteDialog } from './reservation-delete-dialog'
 import { ReservationUpdateDialog } from './reservation-update-dialog'
@@ -24,28 +24,27 @@ interface Props {
 export function ReservationCard({ cardHeight, reservation, userId }: Props) {
   const [open, setOpen] = useState(false)
 
-  const startDatetime = date(reservation.start_datetime)
-  const endDatetime = date(reservation.end_datetime)
+  const startDatetime = addHour(date(reservation.start_datetime), 9)
+  const endDatetime = addHour(date(reservation.end_datetime), 9)
 
   const isOwnReservation = reservation.user_id === userId
+  const hasCompletedReservation = isAfter(new Date(), endDatetime)
 
   const closeModal = () => {
     setOpen(false)
   }
-
-  // return <div className='h-20 w-full border-r'>reserve {reservation.id}</div>
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='w-full'>
         <div className='relative h-20'>
           <div
-            className={`absolute flex w-full flex-col justify-center space-y-1 px-2 text-xs font-semibold tracking-wide ${cardHeight} ${isOwnReservation ? 'border border-white bg-primary text-white' : 'border border-primary bg-white text-primary'}`}
+            className={`absolute flex w-full flex-col justify-center space-y-1 px-2 text-xs font-semibold tracking-wide ${cardHeight} ${isOwnReservation ? 'border border-white bg-primary text-white' : 'border border-primary bg-white text-primary'} ${hasCompletedReservation && 'opacity-50'}`}
           >
             <div className='space-x-1'>
-              <span>{format(addHour(startDatetime, 9), 'HH:mm')}</span>
+              <span>{format(startDatetime, 'HH:mm')}</span>
               <span>~</span>
-              <span>{format(addHour(endDatetime, 9), 'HH:mm')}</span>
+              <span>{format(endDatetime, 'HH:mm')}</span>
             </div>
             {/* @ts-expect-error because JOINした時の型定義あとでやる */}
             {reservation.customers.name && (
@@ -110,14 +109,18 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='flex flex-row justify-end'>
-          <ReservationUpdateDialog
-            reservation={reservation}
-            closeModal={closeModal}
-          />
-          <ReservationDeleteDialog
-            reservation={reservation}
-            closeModal={closeModal}
-          />
+          {!hasCompletedReservation && (
+            <>
+              <ReservationUpdateDialog
+                reservation={reservation}
+                closeModal={closeModal}
+              />
+              <ReservationDeleteDialog
+                reservation={reservation}
+                closeModal={closeModal}
+              />
+            </>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

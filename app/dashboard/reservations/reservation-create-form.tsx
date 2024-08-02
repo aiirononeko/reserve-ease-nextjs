@@ -26,7 +26,6 @@ import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { startTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -94,7 +93,8 @@ export const ReservationCreateForm = ({
 
       closeModal()
 
-      startTransition(() => router.refresh())
+      // TODO: リロードしたくないので改善する
+      window.location.reload()
 
       toast.success('予約を作成しました')
     } catch (e: unknown) {

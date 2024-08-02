@@ -1,9 +1,8 @@
 'use client'
 
-import Loading from '@/app/loading'
 import type { Database } from '@/types/supabase'
 import { addDay, dayStart } from '@formkit/tempo'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getReservations } from './data'
 import { DateSelector } from './date-selector'
 import { TimeGrid } from './time-grid'
@@ -43,19 +42,17 @@ export function Calender({ store, menus, userId }: Props) {
   return (
     <div className='space-y-4'>
       <DateSelector currentDate={currentDate} prev={prev} next={next} />
-      <Suspense fallback={<Loading />}>
-        <TimeGrid
-          times={times}
-          maxCapacity={store.max_capacity}
-          getGridCols={getGridCols}
-          filteringReservations={filteringReservations}
-          filteringDuringReservations={filteringDuringReservations}
-          getHeight={getHeight}
-          userId={userId}
-          storeId={store.id}
-          menus={menus}
-        />
-      </Suspense>
+      <TimeGrid
+        times={times}
+        maxCapacity={store.max_capacity}
+        getGridCols={getGridCols}
+        filteringReservations={filteringReservations}
+        filteringDuringReservations={filteringDuringReservations}
+        getHeight={getHeight}
+        userId={userId}
+        storeId={store.id}
+        menus={menus}
+      />
     </div>
   )
 }
