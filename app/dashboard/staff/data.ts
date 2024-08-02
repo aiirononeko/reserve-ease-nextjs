@@ -13,7 +13,7 @@ export const getAllStaff = async () => {
   }
 
   const { data, error } = await supabase
-    .from('users')
+    .from('staffs')
     .select('*')
     .eq('store_id', user.user_metadata.store_id)
     .order('created_at', { ascending: true })

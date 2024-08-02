@@ -52,7 +52,7 @@ const createStaff = async (
   const supabase = createClient()
 
   const { error } = await supabase
-    .from('users')
+    .from('staffs')
     .insert({ id: userId, name, email, store_id: storeId })
   if (error) {
     console.error(error.message)

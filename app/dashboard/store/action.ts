@@ -28,7 +28,7 @@ export const updateStore = async (input: z.infer<typeof storeSchema>) => {
       post_code: input.post_code,
       address: input.address,
       phone_number: input.phone_number,
-      max_capacity: Number(input.max_capacity),
+      capacity: Number(input.capacity),
     })
     .eq('id', input.id)
   if (error) {

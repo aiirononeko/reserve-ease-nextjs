@@ -12,12 +12,12 @@ import { ReservationCreateForm } from './reservation-create-form'
 
 interface Props {
   date: Date
-  userId: string
+  staffId: string
   storeId: number
   menus: Database['public']['Tables']['menus']['Row'][]
 }
 
-export function EmptyCard({ date, userId, storeId, menus }: Props) {
+export function EmptyCard({ date, staffId, storeId, menus }: Props) {
   const [open, setOpen] = useState(false)
 
   const closeModal = () => {
@@ -39,7 +39,7 @@ export function EmptyCard({ date, userId, storeId, menus }: Props) {
         <div className='dialog-scroll overflow-y-scroll px-4'>
           <ReservationCreateForm
             initialDate={date}
-            userId={userId}
+            staffId={staffId}
             storeId={storeId}
             menus={menus}
             closeModal={closeModal}

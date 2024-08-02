@@ -22,7 +22,7 @@ export const getReservations = async (targetDate: Date) => {
         name,
         minutes
       ),
-      users:user_id (
+      staffs:staff_id (
         name
       ),
       customers:customer_id (

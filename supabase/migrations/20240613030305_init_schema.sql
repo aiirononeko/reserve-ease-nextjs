@@ -8,7 +8,7 @@ create table public.stores (
   post_code varchar(8) unique,
   address varchar(512) unique,
   phone_number varchar(15) unique,
-  max_capacity int not null default 1,
+  capacity int not null default 1,
   icon_url varchar(256),
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
@@ -17,9 +17,9 @@ create table public.stores (
 );
 
 /*
- * ユーザー.
+ * スタッフ.
  */
-create table public.users (
+create table public.staffs (
   id uuid not null references auth.users on delete cascade,
   email varchar(256) not null unique,
   name varchar(50),
@@ -46,7 +46,7 @@ create table public.menus (
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now(),
 
-  user_id uuid not null references public.users(id) on delete cascade,
+  staff_id uuid not null references public.staffs(id) on delete cascade,
 
   primary key (id)
 );
@@ -92,7 +92,7 @@ create table public.reservations (
   updated_at timestamp with time zone not null default now(),
 
   store_id bigserial not null references public.stores(id) on delete cascade,
-  user_id uuid not null references public.users(id) on delete cascade,
+  staff_id uuid not null references public.staffs(id) on delete cascade,
   customer_id bigserial references public.customers(id) on delete cascade,
   menu_id bigserial references public.menus(id) on delete cascade,
 

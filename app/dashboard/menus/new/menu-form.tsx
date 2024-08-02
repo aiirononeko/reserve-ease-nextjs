@@ -34,7 +34,7 @@ export const MenuForm = ({ user }: Props) => {
       amount: undefined,
       discount: '0',
       minutes: '60',
-      user_id: user.id,
+      staff_id: user.id,
     },
   })
 

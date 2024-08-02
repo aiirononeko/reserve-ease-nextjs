@@ -6,5 +6,5 @@ export const createMenuSchema = z.object({
   amount: z.string(),
   discount: z.string(),
   minutes: z.string(),
-  user_id: z.string().min(1),
+  staff_id: z.string().min(1),
 })

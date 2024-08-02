@@ -10,7 +10,7 @@ import type { Database } from '@/types/supabase'
 import { Trash2 } from 'lucide-react'
 
 interface Props {
-  allStaff: Database['public']['Tables']['users']['Row'][]
+  allStaff: Database['public']['Tables']['staffs']['Row'][]
 }
 
 export const StaffTable = ({ allStaff }: Props) => {

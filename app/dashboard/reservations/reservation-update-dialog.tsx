@@ -83,7 +83,7 @@ export const ReservationUpdateDialog = ({ reservation, closeModal }: Props) => {
   }
 
   // @ts-expect-error because JOINした時の型定義あとでやる
-  const { customers, menus, users } = reservation
+  const { customers, menus, staffs } = reservation
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -156,7 +156,7 @@ export const ReservationUpdateDialog = ({ reservation, closeModal }: Props) => {
               </div>
               <div className='col-span-1 space-y-4 text-primary'>
                 <p>{menus.name}</p>
-                <p>{users.name}</p>
+                <p>{staffs.name}</p>
                 {customers.name ? <p>{customers.name}</p> : <p>未入力</p>}
                 {customers.phone_number ? (
                   <p>{customers.phone_number}</p>

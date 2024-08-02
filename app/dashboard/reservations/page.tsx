@@ -18,7 +18,7 @@ export default async function Page() {
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-6 py-4'>
-      <Calender store={store} menus={menus} userId={user.id} />
+      <Calender store={store} menus={menus} staffId={user.id} />
     </div>
   )
 }

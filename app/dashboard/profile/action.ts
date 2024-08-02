@@ -20,7 +20,7 @@ export const updateProfile = async (input: z.infer<typeof profileSchema>) => {
   const storagePath = await manageImage(input.icon_url, input.id)
 
   const { error } = await supabase
-    .from('users')
+    .from('staffs')
     .update({
       name: input.name,
       icon_url: storagePath,
@@ -34,14 +34,14 @@ export const updateProfile = async (input: z.infer<typeof profileSchema>) => {
   revalidatePath('/dashboard/profile')
 }
 
-const manageImage = async (image: string | undefined, userId: string) => {
+const manageImage = async (image: string | undefined, staffId: string) => {
   const supabase = createClient()
 
   if (!image) {
     // ストレージから画像を削除
     const { error } = await supabase.storage
       .from('images')
-      .remove([`users/${userId}.jpeg`])
+      .remove([`staffs/${staffId}.jpeg`])
     if (error) {
       throw error
     }
@@ -54,7 +54,7 @@ const manageImage = async (image: string | undefined, userId: string) => {
     const buffer = decode(base64String)
     const { data, error } = await supabase.storage
       .from('images')
-      .upload(`users/${userId}.jpeg`, buffer, {
+      .upload(`users/${staffId}.jpeg`, buffer, {
         upsert: true,
         contentType: 'image/jpeg',
       })

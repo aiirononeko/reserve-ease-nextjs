@@ -42,7 +42,7 @@ export default function DateSelector({ businessHours }: Props) {
       const result = await getDisabledTimes(
         reservation.store.id,
         selectedDate,
-        reservation.store.max_capacity,
+        reservation.store.capacity,
       )
       setDisabledTimes(result)
     }

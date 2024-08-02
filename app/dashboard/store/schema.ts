@@ -8,5 +8,5 @@ export const storeSchema = z.object({
   post_code: z.string().max(8),
   address: z.string().max(512),
   phone_number: z.string().min(1).max(15),
-  max_capacity: z.string().min(1).max(1000),
+  capacity: z.string().min(1).max(1000),
 })

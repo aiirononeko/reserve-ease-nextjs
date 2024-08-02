@@ -23,7 +23,7 @@ import { updateProfile } from './action'
 import { profileSchema } from './schema'
 
 interface Props {
-  user: Database['public']['Tables']['users']['Row']
+  user: Database['public']['Tables']['staffs']['Row']
 }
 
 export const ProfileForm = ({ user }: Props) => {

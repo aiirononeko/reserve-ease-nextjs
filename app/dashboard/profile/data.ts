@@ -13,7 +13,7 @@ export const getUser = async () => {
   }
 
   const { data, error } = await supabase
-    .from('users')
+    .from('staffs')
     .select('*')
     .eq('id', user.id)
     .single()

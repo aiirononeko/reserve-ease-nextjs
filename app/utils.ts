@@ -110,12 +110,12 @@ const getStoreCapacity = async (storeId: number) => {
 
   const { data, error } = await supabase
     .from('stores')
-    .select('max_capacity')
+    .select('capacity')
     .eq('id', storeId)
     .single()
   if (error) {
     throw error
   }
 
-  return data.max_capacity
+  return data.capacity
 }

@@ -18,16 +18,16 @@ import { ReservationUpdateDialog } from './reservation-update-dialog'
 interface Props {
   cardHeight: string
   reservation: Database['public']['Tables']['reservations']['Row']
-  userId: string
+  staffId: string
 }
 
-export function ReservationCard({ cardHeight, reservation, userId }: Props) {
+export function ReservationCard({ cardHeight, reservation, staffId }: Props) {
   const [open, setOpen] = useState(false)
 
   const startDatetime = addHour(date(reservation.start_datetime), 9)
   const endDatetime = addHour(date(reservation.end_datetime), 9)
 
-  const isOwnReservation = reservation.user_id === userId
+  const isOwnReservation = reservation.staff_id === staffId
   const hasCompletedReservation = isAfter(new Date(), endDatetime)
 
   const closeModal = () => {
@@ -54,7 +54,7 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
             {/* @ts-expect-error because JOINした時の型定義あとでやる */}
             <p>{reservation.menus.name}</p>
             {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-            <p>{reservation.users.name}</p>
+            <p>{reservation.staffs.name}</p>
           </div>
         </div>
       </DialogTrigger>
@@ -87,7 +87,7 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
                 {/* @ts-expect-error because JOINした時の型定義あとでやる */}
                 <p>{reservation.menus.name}</p>
                 {/* @ts-expect-error because JOINした時の型定義あとでやる */}
-                <p>{reservation.users.name}</p>
+                <p>{reservation.staffs.name}</p>
                 <a
                   // @ts-expect-error because JOINした時の型定義あとでやる */}
                   href={`tel:${reservation.customers.phone_number}`}

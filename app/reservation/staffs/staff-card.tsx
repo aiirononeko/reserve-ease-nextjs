@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { reservationAtom } from '../jotai'
 
 interface Props {
-  staff: Database['public']['Tables']['users']['Row']
+  staff: Database['public']['Tables']['staffs']['Row']
 }
 
 export const StaffCard = ({ staff }: Props) => {

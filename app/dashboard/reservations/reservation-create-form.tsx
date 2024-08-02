@@ -25,7 +25,6 @@ import type { Database } from '@/types/supabase'
 import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -34,7 +33,7 @@ import { createReservationSchema } from './schema'
 
 interface Props {
   initialDate: Date
-  userId: string
+  staffId: string
   storeId: number
   menus: Database['public']['Tables']['menus']['Row'][]
   closeModal: () => void
@@ -42,12 +41,11 @@ interface Props {
 
 export const ReservationCreateForm = ({
   initialDate,
-  userId,
+  staffId,
   storeId,
   menus,
   closeModal,
 }: Props) => {
-  const router = useRouter()
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
       start_datetime: format({
@@ -59,7 +57,7 @@ export const ReservationCreateForm = ({
         format: 'YYYY-MM-DDTHH:mm',
       }),
       store_id: String(storeId),
-      user_id: userId,
+      staff_id: staffId,
       menu_id: undefined,
       customer_name: undefined,
       customer_phone_number: undefined,

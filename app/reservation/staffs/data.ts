@@ -6,7 +6,7 @@ export const getStaffs = async (storeId: number) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('users')
+    .from('staffs')
     .select('*')
     .eq('store_id', storeId)
     .order('created_at', { ascending: true })

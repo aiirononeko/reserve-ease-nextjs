@@ -11,10 +11,10 @@ import { useCalendar } from './use-calender'
 interface Props {
   store: Database['public']['Tables']['stores']['Row']
   menus: Database['public']['Tables']['menus']['Row'][]
-  userId: string
+  staffId: string
 }
 
-export function Calender({ store, menus, userId }: Props) {
+export function Calender({ store, menus, staffId }: Props) {
   const [currentDate, setCurrentDate] = useState(dayStart(new Date()))
   const [reservations, setReservations] = useState<
     Database['public']['Tables']['reservations']['Row'][]
@@ -44,12 +44,12 @@ export function Calender({ store, menus, userId }: Props) {
       <DateSelector currentDate={currentDate} prev={prev} next={next} />
       <TimeGrid
         times={times}
-        maxCapacity={store.max_capacity}
+        maxCapacity={store.capacity}
         getGridCols={getGridCols}
         filteringReservations={filteringReservations}
         filteringDuringReservations={filteringDuringReservations}
         getHeight={getHeight}
-        userId={userId}
+        staffId={staffId}
         storeId={store.id}
         menus={menus}
       />

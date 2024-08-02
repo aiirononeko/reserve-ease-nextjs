@@ -49,7 +49,7 @@ export const createReservation = async (
     start_datetime: startDatetime.toISOString(),
     end_datetime: endDatetime.toISOString(),
     store_id: storeId,
-    user_id: input.user_id,
+    staff_id: input.staff_id,
     customer_id: customer ? customer.id : undefined,
     menu_id: input.menu_id ? Number(input.menu_id) : undefined,
   })

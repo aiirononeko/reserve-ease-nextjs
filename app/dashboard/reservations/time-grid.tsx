@@ -18,7 +18,7 @@ interface Props {
   getHeight: (
     reservation: Database['public']['Tables']['reservations']['Row'],
   ) => string
-  userId: string
+  staffId: string
   storeId: number
   menus: Database['public']['Tables']['menus']['Row'][]
 }
@@ -37,7 +37,7 @@ export function TimeGrid({
   filteringReservations,
   filteringDuringReservations,
   getHeight,
-  userId,
+  staffId,
   storeId,
   menus,
 }: Props) {
@@ -90,7 +90,7 @@ export function TimeGrid({
                 <EmptyCard
                   key={`empty-${currentTime.toISOString()}-${index}`}
                   date={currentTime}
-                  userId={userId}
+                  staffId={staffId}
                   storeId={storeId}
                   menus={menus}
                 />
@@ -108,7 +108,7 @@ export function TimeGrid({
                   key={`${isDuring ? 'during' : 'reservation'}-${reservation.id}-${currentTime.toISOString()}`}
                   cardHeight={getHeight(reservation)}
                   reservation={reservation}
-                  userId={userId}
+                  staffId={staffId}
                 />
               )
             } else {

@@ -37,7 +37,7 @@ export const StoreForm = ({ store }: Props) => {
       phone_number: store.phone_number ?? '',
       post_code: store.post_code ?? '',
       address: store.address ?? '',
-      max_capacity: store.max_capacity.toString(),
+      capacity: store.capacity.toString(),
     },
     resolver: zodResolver(storeSchema),
   })
@@ -157,7 +157,7 @@ export const StoreForm = ({ store }: Props) => {
         />
         <FormField
           control={form.control}
-          name='max_capacity'
+          name='capacity'
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required={true} className='font-bold'>
