@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import {
   addMinute,
+  dayEnd,
+  dayStart,
   diffMinutes,
   isAfter,
   isBefore,
@@ -34,8 +36,8 @@ export const checkReservationDuplication = async (
   // 対象の予約データを取得
   const reservations = await getReservations(
     reservationId,
-    startDatetime.toISOString(),
-    endDatetime.toISOString(),
+    dayStart(startDatetime).toISOString(),
+    dayEnd(endDatetime).toISOString(),
   )
 
   // 店舗のキャパシティを取得
@@ -80,7 +82,6 @@ const getReservations = async (
 
   const supabase = createClient()
 
-  // 更新の場合は対象の予約を取得
   const query = reservationId
     ? supabase
         .from('reservations')

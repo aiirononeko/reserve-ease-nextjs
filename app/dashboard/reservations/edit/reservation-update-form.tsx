@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import type { Database } from '@/types/supabase'
-import { addHour, date, dayEnd, dayStart, format } from '@formkit/tempo'
+import { addHour, date, format } from '@formkit/tempo'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -49,12 +49,12 @@ export const ReservationUpdateForm = ({ reservation }: Props) => {
       await updateReservation({
         ...values,
         start_datetime: format({
-          date: dayStart(new Date(values.start_datetime)),
+          date: new Date(values.start_datetime),
           format: 'YYYY-MM-DDTHH:mm:ssZ',
           tz: 'UTC',
         }),
         end_datetime: format({
-          date: dayEnd(new Date(values.end_datetime)),
+          date: new Date(values.end_datetime),
           format: 'YYYY-MM-DDTHH:mm:ssZ',
           tz: 'UTC',
         }),
