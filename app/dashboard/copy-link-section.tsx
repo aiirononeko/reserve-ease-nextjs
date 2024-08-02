@@ -42,7 +42,7 @@ export const CopyLinkSection = ({ storeId, staffId }: Props) => {
           }
           className='h-8'
         >
-          スタッフページ
+          スタッフ指名済みページ
         </Button>
       </div>
     </div>

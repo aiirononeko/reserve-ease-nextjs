@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className='my-8 flex max-w-96 flex-col md:mx-auto'>
+    <div className='my-8 flex flex-col'>
       <FirstView />
       <div className='relative h-[400px] w-full'>
         <Image
