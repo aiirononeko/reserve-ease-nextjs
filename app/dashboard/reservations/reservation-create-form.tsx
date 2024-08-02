@@ -118,7 +118,7 @@ export const ReservationCreateForm = ({
                 予約開始時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='datetime-local' />
+                <Input {...field} type='datetime-local' className='w-full' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,7 +133,7 @@ export const ReservationCreateForm = ({
                 予約終了時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='datetime-local' />
+                <Input {...field} type='datetime-local' className='w-full' />
               </FormControl>
               <FormMessage />
             </FormItem>

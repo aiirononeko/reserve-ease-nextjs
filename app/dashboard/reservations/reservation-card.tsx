@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -12,10 +11,9 @@ import {
 } from '@/components/ui/dialog'
 import type { Database } from '@/types/supabase'
 import { addHour, date, format } from '@formkit/tempo'
-import { Pencil } from 'lucide-react'
-import Link from 'next/link'
 import { useState } from 'react'
 import { ReservationDeleteDialog } from './reservation-delete-dialog'
+import { ReservationUpdateDialog } from './reservation-update-dialog'
 
 interface Props {
   cardHeight: string
@@ -112,13 +110,10 @@ export function ReservationCard({ cardHeight, reservation, userId }: Props) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='flex flex-row justify-end'>
-          <Button variant='ghost' asChild>
-            <Link
-              href={`/dashboard/reservations/edit?reservationId=${reservation.id}`}
-            >
-              <Pencil />
-            </Link>
-          </Button>
+          <ReservationUpdateDialog
+            reservation={reservation}
+            closeModal={closeModal}
+          />
           <ReservationDeleteDialog
             reservation={reservation}
             closeModal={closeModal}

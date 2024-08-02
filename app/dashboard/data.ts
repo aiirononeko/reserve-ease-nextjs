@@ -23,8 +23,7 @@ export const getRecentReservation = async () => {
     .limit(1)
     .single()
   if (error) {
-    console.error(error)
-    return
+    return undefined
   }
 
   return data

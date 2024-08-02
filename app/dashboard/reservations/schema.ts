@@ -11,6 +11,13 @@ export const createReservationSchema = z.object({
   customer_email: z.string().optional(),
 })
 
+export const updateReservationSchema = z.object({
+  id: z.number(),
+  start_datetime: z.string(),
+  end_datetime: z.string(),
+  store_id: z.string(),
+})
+
 export const deleteReservationSchema = z.object({
   id: z.string(),
 })

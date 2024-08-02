@@ -19,8 +19,8 @@ import { addHour, date, format } from '@formkit/tempo'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { updateReservation } from './action'
-import { updateReservationSchema } from './schema'
+import { updateReservation } from './edit/action'
+import { updateReservationSchema } from './edit/schema'
 
 interface Props {
   reservation: Database['public']['Tables']['reservations']['Row']
@@ -87,7 +87,7 @@ export const ReservationUpdateForm = ({ reservation }: Props) => {
                 予約開始時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='datetime-local' />
+                <Input {...field} type='datetime-local' className='w-full' />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,7 +102,7 @@ export const ReservationUpdateForm = ({ reservation }: Props) => {
                 予約終了時刻
               </FormLabel>
               <FormControl>
-                <Input {...field} type='datetime-local' />
+                <Input {...field} type='datetime-local' className='w-full' />
               </FormControl>
               <FormMessage />
             </FormItem>
