@@ -41,7 +41,9 @@ export const LoginForm = () => {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>メールアドレス</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                メールアドレス
+              </FormLabel>
               <FormControl>
                 <Input
                   type='email'
@@ -58,7 +60,9 @@ export const LoginForm = () => {
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='font-bold'>パスワード</FormLabel>
+              <FormLabel aria-required={true} className='font-bold'>
+                パスワード
+              </FormLabel>
               <FormControl>
                 <Input
                   type='password'

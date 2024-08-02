@@ -101,7 +101,6 @@ export function TimeGrid({
             const CardComponent = isDuring ? DuringCard : ReservationCard
             const startTime = addHour(date(reservation.start_datetime), 9)
 
-            // Only render the card if this is the start slot or it's a during card
             if (startTime.getTime() === currentTime.getTime() || isDuring) {
               return (
                 <CardComponent
@@ -112,7 +111,6 @@ export function TimeGrid({
                 />
               )
             } else {
-              // Render an empty div to maintain the grid structure
               return (
                 <div
                   key={`placeholder-${reservation.id}-${currentTime.toISOString()}`}

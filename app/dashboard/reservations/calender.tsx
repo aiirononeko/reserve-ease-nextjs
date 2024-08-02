@@ -33,6 +33,7 @@ export function Calender({ store, menus, staffId }: Props) {
       const result = await getReservations(currentDate)
       setReservations(result)
     }
+
     get()
   }, [currentDate])
 
