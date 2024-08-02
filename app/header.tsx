@@ -27,6 +27,11 @@ export const Header = async () => {
           <PopoverContent className='flex w-40 flex-col'>
             <PopoverClose asChild>
               <Button variant='link' asChild>
+                <Link href='/dashboard'>ダッシュボード</Link>
+              </Button>
+            </PopoverClose>
+            <PopoverClose asChild>
+              <Button variant='link' asChild>
                 <Link href='/dashboard/reservations'>予約管理</Link>
               </Button>
             </PopoverClose>
