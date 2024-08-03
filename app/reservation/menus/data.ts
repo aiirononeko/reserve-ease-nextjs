@@ -16,3 +16,18 @@ export const getMenus = async (staffId: string) => {
 
   return data
 }
+
+export const getStaff = async (staffId: string) => {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('staffs')
+    .select('*')
+    .eq('id', staffId)
+    .single()
+  if (error) {
+    throw error
+  }
+
+  return data
+}

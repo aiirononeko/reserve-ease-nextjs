@@ -47,7 +47,7 @@ export const LoginForm = () => {
               <FormControl>
                 <Input
                   type='email'
-                  placeholder='info@hogehoge.com'
+                  placeholder='resa@reserve-ease.com'
                   {...field}
                 />
               </FormControl>

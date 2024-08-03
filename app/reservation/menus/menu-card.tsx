@@ -4,15 +4,23 @@ import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { reservationAtom } from '../jotai'
 
 interface Props {
   menu: Database['public']['Tables']['menus']['Row']
+  staff: Database['public']['Tables']['staffs']['Row'] | undefined
 }
 
-export const MenuCard = ({ menu }: Props) => {
+export const MenuCard = ({ menu, staff }: Props) => {
   const router = useRouter()
   const [reservation, setReservation] = useAtom(reservationAtom)
+
+  useEffect(() => {
+    if (staff) {
+      setReservation({ ...reservation, staff })
+    }
+  }, [staff])
 
   const handleClick = () => {
     setReservation({ ...reservation, menu })

@@ -80,8 +80,8 @@ export function ReservationCard({ cardHeight, reservation, staffId }: Props) {
                 <p>お客様メールアドレス</p>
               </div>
               <div className='col-span-2 space-y-4 text-primary'>
-                <p>{format(addHour(startDatetime, 9), 'YYYY/MM/DD HH:mm')}</p>
-                <p>{format(addHour(endDatetime, 9), 'YYYY/MM/DD HH:mm')}</p>
+                <p>{format(startDatetime, 'YYYY/MM/DD HH:mm')}</p>
+                <p>{format(endDatetime, 'YYYY/MM/DD HH:mm')}</p>
                 {/* @ts-expect-error because JOINした時の型定義あとでやる */}
                 <p>{reservation.menus.minutes} 分</p>
                 {/* @ts-expect-error because JOINした時の型定義あとでやる */}
