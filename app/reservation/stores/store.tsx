@@ -36,7 +36,7 @@ export const Store = ({ store }: Props) => {
       )}
       <div className='mx-4 mt-6 space-y-6'>
         <p className='text-2xl font-bold'>{store.name}</p>
-        <p className=''>{store.description}</p>
+        <p className='whitespace-pre-wrap'>{store.description}</p>
         <Button onClick={handleClick} className='w-full'>
           この店舗を予約する
           <ChevronRight className='ml-1' />
