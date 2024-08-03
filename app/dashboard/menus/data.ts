@@ -15,7 +15,7 @@ export const getMenus = async () => {
   const { data, error } = await supabase
     .from('menus')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('staff_id', user.id)
     .order('updated_at', { ascending: false })
   if (error) {
     console.error(error)

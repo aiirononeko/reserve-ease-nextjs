@@ -6,9 +6,8 @@ export default async function Page({
 }: {
   searchParams: { [key: string]: string | undefined }
 }) {
-  const menus = searchParams.staff_id
-    ? await getMenus(searchParams.staff_id)
-    : undefined
+  const staffId = searchParams.staff_id ?? undefined
+  const menus = staffId ? await getMenus(staffId) : undefined
 
   return (
     <div className='mx-4 flex flex-col items-center py-8'>

@@ -17,7 +17,7 @@ export const getRecentReservation = async () => {
     .select(
       'start_datetime, end_datetime, menus:menu_id (name), customers:customer_id (name)',
     )
-    .eq('user_id', user.id)
+    .eq('staff_id', user.id)
     .gte('start_datetime', new Date().toISOString())
     .order('start_datetime', { ascending: true })
     .limit(1)
