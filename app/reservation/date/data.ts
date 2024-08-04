@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { dayEnd } from '@formkit/tempo'
+import { addDay } from '@formkit/tempo'
 
 export const getBusinessHours = async (storeId: number) => {
   const supabase = createClient()
@@ -25,7 +25,7 @@ export const getReservations = async (storeId: number, selectedDate: Date) => {
     .select('*')
     .eq('store_id', storeId)
     .gte('start_datetime', selectedDate.toISOString())
-    .lte('end_datetime', dayEnd(selectedDate).toISOString())
+    .lt('start_datetime', addDay(selectedDate, 1).toISOString())
 
   if (error) {
     console.error('Error fetching reservations:', error)

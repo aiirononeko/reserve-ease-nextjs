@@ -56,6 +56,7 @@ export const getDisabledTimes = async (
   selectedDate: Date,
   maxReservationsPerSlot: number,
 ): Promise<string[]> => {
+  console.log(selectedDate)
   const reservations = await getReservations(storeId, selectedDate)
   const reservationTimes: { [key: string]: number } = {}
 
