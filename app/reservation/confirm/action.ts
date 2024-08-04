@@ -15,11 +15,8 @@ export const createReservation = async (
   const endDatetime = addMinute(date(input.startDatetime), input.menu.minutes)
   const storeId = input.store.id
 
-  if (
-    !(await checkReservationDuplication(startDatetime, endDatetime, storeId))
-  ) {
-    throw new Error('予約できる時間帯ではありません')
-  }
+  // 予約が重複していないか確認
+  await checkReservationDuplication(startDatetime, endDatetime, storeId)
 
   const { error } = await supabase.from('reservations').insert({
     start_datetime: startDatetime.toISOString(),

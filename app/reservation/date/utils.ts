@@ -56,7 +56,6 @@ export const getDisabledTimes = async (
   selectedDate: Date,
   maxReservationsPerSlot: number,
 ): Promise<string[]> => {
-  console.log(selectedDate)
   const reservations = await getReservations(storeId, selectedDate)
   const reservationTimes: { [key: string]: number } = {}
 
@@ -68,15 +67,6 @@ export const getDisabledTimes = async (
     const startMinute = Number(format(startDatetime, 'mm'))
     const endHour = Number(format(endDatetime, 'HH'))
     const endMinute = Number(format(endDatetime, 'mm'))
-
-    console.log('--------startDatetime, endDatetime-------------')
-    console.log(startDatetime, endDatetime)
-    console.log('------------------------------------------------')
-    console.log(
-      '--------startHour, startMinute, endHour, endMinute-------------',
-    )
-    console.log(startHour, startMinute, endHour, endMinute)
-    console.log('------------------------------------------------')
 
     // start から end までの各30分枠をカウント
     let currentHour = startHour
@@ -96,13 +86,8 @@ export const getDisabledTimes = async (
     }
   })
 
-  console.log('-------------------reservationTimes---------------')
-  console.log(reservationTimes)
-  console.log('------------------------------------------------')
-
   const disabledTimes = Object.keys(reservationTimes).filter(
     (timeSlot) => reservationTimes[timeSlot] >= maxReservationsPerSlot,
   )
-  console.log(disabledTimes)
   return disabledTimes
 }
