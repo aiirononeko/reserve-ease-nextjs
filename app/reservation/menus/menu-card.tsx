@@ -8,19 +8,20 @@ import { useEffect } from 'react'
 import { reservationAtom } from '../jotai'
 
 interface Props {
+  store: Database['public']['Tables']['stores']['Row'] | undefined
   menu: Database['public']['Tables']['menus']['Row']
   staff: Database['public']['Tables']['staffs']['Row'] | undefined
 }
 
-export const MenuCard = ({ menu, staff }: Props) => {
+export const MenuCard = ({ store, menu, staff }: Props) => {
   const router = useRouter()
   const [reservation, setReservation] = useAtom(reservationAtom)
 
   useEffect(() => {
-    if (staff) {
-      setReservation({ ...reservation, staff })
+    if (staff && store) {
+      setReservation({ ...reservation, store, staff })
     }
-  }, [staff])
+  }, [store, staff])
 
   const handleClick = () => {
     setReservation({ ...reservation, menu })

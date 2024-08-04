@@ -21,8 +21,10 @@ export const updateBusinessHours = async (
     const { error } = await supabase
       .from('business_hours')
       .update({
-        open_time: businessHour.open_time,
-        close_time: businessHour.close_time,
+        open_time:
+          businessHour.open_time !== '' ? businessHour.open_time : null,
+        close_time:
+          businessHour.close_time !== '' ? businessHour.close_time : null,
       })
       .eq('id', businessHour.id)
     if (error) {
