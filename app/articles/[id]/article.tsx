@@ -30,7 +30,7 @@ export const Article = ({ article }: Props) => {
       <div className={styles.content}>{parse(article.content)}</div>
       <div className='pt-6'>
         <Button asChild className='w-full'>
-          <Link href='/'>
+          <Link href='/signup'>
             初月無料でReserveEaseをはじめる
             <ChevronRight className='ml-1' />
           </Link>

@@ -28,7 +28,7 @@ export const FirstView = () => {
         </p>
       </div>
       <Button variant='default' asChild>
-        <Link href='/'>
+        <Link href='/signup'>
           初月無料で始める
           <ChevronRight className='ml-1' />
         </Link>
