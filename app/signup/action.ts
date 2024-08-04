@@ -58,7 +58,7 @@ const createStore = async (storeName: string) => {
 const createBusinessHours = async (storeId: number) => {
   const supabase = createClient()
 
-  for (let i: number = 0; i < 6; i++) {
+  for (let i: number = 0; i < 7; i++) {
     const { error } = await supabase.from('business_hours').insert({
       day_of_week: i,
       open_time: '08:00',
