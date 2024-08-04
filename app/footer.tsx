@@ -38,6 +38,15 @@ export const Footer = () => {
               プライバシーポリシー
             </Link>
           </Button>
+          <Button
+            variant='link'
+            asChild
+            className='h-8 p-0 font-normal underline'
+          >
+            <Link href='/specified' className='text-xs'>
+              特商法表記
+            </Link>
+          </Button>
         </div>
         <p className='text-xs'>&copy; 2024 ReserveEase. All rights reserved.</p>
       </div>
