@@ -25,12 +25,13 @@ export default function DateSelector({ businessHours }: Props) {
 
   const [reservation, setReservation] = useAtom(reservationAtom)
 
-  const [selectedDate, setSelectedDate] = useState<Date>(dayStart(date()))
+  const [selectedDate, setSelectedDate] = useState<Date>(dayStart(new Date()))
   const [times, setTimes] = useState<string[]>()
   const [disabledTimes, setDisabledTimes] = useState<string[]>()
 
-  const today = dayStart(date())
-  const dates = Array.from({ length: 14 }, (_, i) => addDay(today, i))
+  const dates = Array.from({ length: 14 }, (_, i) =>
+    addDay(dayStart(new Date()), i),
+  )
 
   useEffect(() => {
     const result = getTimes(businessHours, selectedDate)

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { AuthUser } from '@supabase/supabase-js'
+import { redirect } from 'next/navigation'
 import type { z } from 'zod'
 import { signUpSchema } from './schema'
 
@@ -33,6 +34,9 @@ export const signUp = async (input: z.infer<typeof signUpSchema>) => {
   }
 
   await createStaff(data.user, input.name, input.email, store.id)
+  await createBusinessHours(store.id)
+
+  redirect('/signup/complete')
 }
 
 const createStore = async (storeName: string) => {
@@ -49,6 +53,22 @@ const createStore = async (storeName: string) => {
     throw error
   }
   return data
+}
+
+const createBusinessHours = async (storeId: number) => {
+  const supabase = createClient()
+
+  for (let i: number = 0; i < 6; i++) {
+    const { error } = await supabase.from('business_hours').insert({
+      day_of_week: i,
+      open_time: '08:00',
+      close_time: '19:00',
+      store_id: storeId,
+    })
+    if (error) {
+      throw error
+    }
+  }
 }
 
 const createStaff = async (

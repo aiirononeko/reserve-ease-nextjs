@@ -68,6 +68,15 @@ export const getDisabledTimes = async (
     const endHour = Number(format(endDatetime, 'HH'))
     const endMinute = Number(format(endDatetime, 'mm'))
 
+    console.log('--------startDatetime, endDatetime-------------')
+    console.log(startDatetime, endDatetime)
+    console.log('------------------------------------------------')
+    console.log(
+      '--------startHour, startMinute, endHour, endMinute-------------',
+    )
+    console.log(startHour, startMinute, endHour, endMinute)
+    console.log('------------------------------------------------')
+
     // start から end までの各30分枠をカウント
     let currentHour = startHour
     let currentMinute = startMinute
@@ -85,6 +94,10 @@ export const getDisabledTimes = async (
       }
     }
   })
+
+  console.log('-------------------reservationTimes---------------')
+  console.log(reservationTimes)
+  console.log('------------------------------------------------')
 
   const disabledTimes = Object.keys(reservationTimes).filter(
     (timeSlot) => reservationTimes[timeSlot] >= maxReservationsPerSlot,
