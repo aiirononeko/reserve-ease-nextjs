@@ -16,7 +16,7 @@ interface Case {
   company: string
 }
 
-interface Response {
+interface CaseResponse {
   contents: Case[]
   totalCount: number
   offset: number

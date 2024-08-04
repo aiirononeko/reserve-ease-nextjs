@@ -17,7 +17,7 @@ interface Article {
   metaDescription: string
 }
 
-interface Response {
+interface ArticleResponse {
   contents: Article[]
   totalCount: number
   offset: number
