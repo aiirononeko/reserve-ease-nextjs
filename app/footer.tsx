@@ -25,7 +25,7 @@ export const Footer = () => {
             asChild
             className='h-8 p-0 font-normal underline'
           >
-            <Link href='/' className='text-xs'>
+            <Link href='/terms' className='text-xs'>
               利用規約
             </Link>
           </Button>
@@ -34,7 +34,7 @@ export const Footer = () => {
             asChild
             className='h-8 p-0 font-normal underline'
           >
-            <Link href='/' className='text-xs'>
+            <Link href='/privacy-policy' className='text-xs'>
               プライバシーポリシー
             </Link>
           </Button>
