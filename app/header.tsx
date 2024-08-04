@@ -7,18 +7,19 @@ import {
 import { PopoverClose } from '@radix-ui/react-popover'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
-import { getUser } from './data'
+import { getStoreName, getUser } from './data'
 import { checkUserRole } from './utils'
 
 export const Header = async () => {
   try {
     const user = await getUser()
+    const storeName = await getStoreName(user.user_metadata.store_id)
     const userRole = checkUserRole(user)
 
     return (
       <header className='flex h-14 flex-row items-center justify-between border-b bg-background px-4'>
         <div className='flex flex-row space-x-1'>
-          <h1 className='text-xl font-semibold text-primary'>ReserveEase</h1>
+          <h1 className='text-xl font-semibold text-primary'>{storeName}</h1>
         </div>
         <Popover>
           <PopoverTrigger>

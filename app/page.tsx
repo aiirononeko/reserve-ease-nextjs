@@ -3,7 +3,9 @@ import { ChevronRight } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FirstView } from './_sections/first-view'
+import { Case } from './_components/case'
+import { FirstView } from './_components/first-view'
+import { getCases } from './data'
 
 export const metadata: Metadata = {
   title: 'フリーランス向けの圧倒的低価格な予約システム | ReserveEase',
@@ -11,7 +13,9 @@ export const metadata: Metadata = {
     '月額500円、従量課金なしで利用できるフリーランス・個人店向け予約管理システムです。初月無料、最短3分で導入できるため、今すぐあなたのビジネスの予約を管理できます。',
 }
 
-export default function Page() {
+export default async function Page() {
+  const cases = await getCases()
+
   return (
     <div className='my-8 flex flex-col'>
       <FirstView />
@@ -89,17 +93,11 @@ export default function Page() {
           </Button>
         </div>
       </div>
+      <Case cases={cases} />
       <div className='flex flex-col space-y-8 py-8'>
         <div className='space-y-2'>
           <h2 className='text-center text-4xl font-bold'>Features</h2>
           <h3 className='text-center text-xl font-bold'>機能一覧</h3>
-        </div>
-        <div className='mx-4 grid grid-cols-1 gap-8'></div>
-      </div>
-      <div className='flex flex-col space-y-8 bg-primary py-8 text-background'>
-        <div className='space-y-2'>
-          <h2 className='text-center text-4xl font-bold'>Case</h2>
-          <h3 className='text-center text-xl font-bold'>導入事例</h3>
         </div>
         <div className='mx-4 grid grid-cols-1 gap-8'></div>
       </div>
