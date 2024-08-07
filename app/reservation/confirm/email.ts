@@ -43,7 +43,8 @@ export const sendEmailToCustomer = async (
       menuName: reservation.menu.name,
       reservationDatetime,
       menuMinutes: reservation.menu.minutes,
-      menuAmount: reservation.menu.amount.toLocaleString(),
+      menuAmount: reservation.menu.amount,
+      menuDiscount: reservation.menu.discount,
     }) as React.ReactElement,
   })
   if (error) {
@@ -91,7 +92,8 @@ export const sendEmailToStaff = async (
       menuName: reservation.menu.name,
       reservationDatetime,
       menuMinutes: reservation.menu.minutes,
-      menuAmount: reservation.menu.amount.toLocaleString(),
+      menuAmount: reservation.menu.amount,
+      menuDiscount: reservation.menu.discount,
     }) as React.ReactElement,
   })
   if (error) {

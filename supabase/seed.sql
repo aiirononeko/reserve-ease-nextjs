@@ -1,4 +1,4 @@
--- WITH credentials(id, mail, pass) AS (
+-- WITH credentials(id, mail, pass)   AS (
 --   SELECT * FROM (VALUES 
 --     ('123e4567-e89b-12d3-a456-426614174000', 'user1@example.com', 'password'), 
 --     ('123e4567-e89b-12d3-a456-426614174001', 'user2@example.com', 'password'), 

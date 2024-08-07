@@ -15,6 +15,7 @@ import { Form } from '@/components/ui/form'
 import type { Database } from '@/types/supabase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -26,6 +27,8 @@ interface Props {
 }
 
 export const MenuDeleteDialog = ({ menu }: Props) => {
+  const [open, setOpen] = useState(false)
+
   const form = useForm<z.infer<typeof deleteMenuSchema>>({
     resolver: zodResolver(deleteMenuSchema),
     defaultValues: {
@@ -35,11 +38,12 @@ export const MenuDeleteDialog = ({ menu }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof deleteMenuSchema>) => {
     await deleteMenu(values)
+    setOpen(false)
     toast.success('メニューを削除しました')
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Trash2 />
       </DialogTrigger>

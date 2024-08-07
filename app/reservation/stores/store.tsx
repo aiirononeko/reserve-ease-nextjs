@@ -3,9 +3,10 @@
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
 import { useAtom } from 'jotai'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { reservationAtom } from '../jotai'
 
 interface Props {
@@ -15,10 +16,13 @@ interface Props {
 export const Store = ({ store }: Props) => {
   const router = useRouter()
   const [reservation, setReservation] = useAtom(reservationAtom)
+  const [loading, setLoading] = useState(false)
 
   const handleClick = () => {
+    setLoading(true)
     setReservation({ ...reservation, store })
     router.push(`/reservation/staffs?store_id=${store.id}`)
+    setLoading(false)
   }
 
   return (
@@ -38,7 +42,11 @@ export const Store = ({ store }: Props) => {
         <p className='text-2xl font-bold'>{store.name}</p>
         <p className='whitespace-pre-wrap'>{store.description}</p>
         <Button onClick={handleClick} className='w-full'>
-          この店舗を予約する
+          {loading ? (
+            <Loader2 className='mr-2 size-4 animate-spin' />
+          ) : (
+            <>この店舗を予約する</>
+          )}
           <ChevronRight className='ml-1' />
         </Button>
       </div>

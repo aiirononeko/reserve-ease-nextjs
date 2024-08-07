@@ -60,7 +60,7 @@ export const Header = async () => {
                 </PopoverClose>
                 <PopoverClose asChild>
                   <Button variant='link' asChild>
-                    <Link href='/dashboard/staff'>スタッフ管理</Link>
+                    <Link href='/dashboard/staffs'>スタッフ管理</Link>
                   </Button>
                 </PopoverClose>
               </>

@@ -11,6 +11,7 @@ import {
   format,
 } from '@formkit/tempo'
 import { useAtom } from 'jotai'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { reservationAtom } from '../jotai'
@@ -22,8 +23,8 @@ interface Props {
 
 export default function DateSelector({ businessHours }: Props) {
   const router = useRouter()
-
   const [reservation, setReservation] = useAtom(reservationAtom)
+  const [loading, setLoading] = useState(false)
 
   const [selectedDate, setSelectedDate] = useState<Date>(dayStart(new Date()))
   const [times, setTimes] = useState<string[]>()
@@ -52,6 +53,7 @@ export default function DateSelector({ businessHours }: Props) {
   }, [selectedDate])
 
   const handleClick = (selectedDate: Date, selectedTime: string) => {
+    setLoading(true)
     const [hours, minutes] = selectedTime.split(':').map(Number)
     const startDatetime = addHour(
       addMinute(date(selectedDate), minutes),
@@ -59,6 +61,7 @@ export default function DateSelector({ businessHours }: Props) {
     ).toISOString()
     setReservation({ ...reservation, startDatetime })
     router.push('/reservation/customer')
+    setLoading(false)
   }
 
   return (
@@ -100,10 +103,16 @@ export default function DateSelector({ businessHours }: Props) {
                 disabledTimes.includes(t) ? 'w-full bg-gray-300' : 'w-full'
               }
             >
-              {disabledTimes.includes(t) ? (
-                <span className='line-through'>{t}</span>
+              {loading ? (
+                <Loader2 className='mr-2 size-4 animate-spin' />
               ) : (
-                <span className='font-bold'>{t}</span>
+                <>
+                  {disabledTimes.includes(t) ? (
+                    <span className='line-through'>{t}</span>
+                  ) : (
+                    <span className='font-bold'>{t}</span>
+                  )}
+                </>
               )}
             </Button>
           ))}

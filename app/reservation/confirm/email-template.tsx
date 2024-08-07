@@ -8,7 +8,8 @@ interface ToCustomerEmailTemplateProps {
   menuName: string
   reservationDatetime: string
   menuMinutes: number
-  menuAmount: string
+  menuAmount: number
+  menuDiscount: number
 }
 
 interface ToStaffEmailTemplateProps {
@@ -19,7 +20,8 @@ interface ToStaffEmailTemplateProps {
   menuName: string
   reservationDatetime: string
   menuMinutes: number
-  menuAmount: string
+  menuAmount: number
+  menuDiscount: number
 }
 
 export const ToCustomerEmailTemplate: React.FC<
@@ -33,6 +35,7 @@ export const ToCustomerEmailTemplate: React.FC<
   reservationDatetime,
   menuMinutes,
   menuAmount,
+  menuDiscount,
 }) => (
   <div>
     <p>{customerName}様のご予約を承りました。</p>
@@ -45,7 +48,14 @@ export const ToCustomerEmailTemplate: React.FC<
       <p>メニュー: {menuName}</p>
       <p>来店日時: {reservationDatetime}</p>
       <p>所要時間(目安): {menuMinutes}分</p>
-      <p>合計金額: {menuAmount}円(税込)</p>
+      {menuDiscount > 0 ? (
+        <p>
+          合計金額: {(menuAmount - menuDiscount)?.toLocaleString()}
+          円(税込)
+        </p>
+      ) : (
+        <p>合計金額: {menuAmount?.toLocaleString()}円(税込)</p>
+      )}
     </div>
     <p>当日はお気をつけてお越しくださいませ。</p>
     <p>連絡先</p>
@@ -65,6 +75,7 @@ export const ToStaffEmailTemplate: React.FC<
   reservationDatetime,
   menuMinutes,
   menuAmount,
+  menuDiscount,
 }) => (
   <div>
     <p>{staffName}様に新しく予約が入りましたのでお知らせいたします。</p>
@@ -75,7 +86,14 @@ export const ToStaffEmailTemplate: React.FC<
       <p>メニュー: {menuName}</p>
       <p>来店日時: {reservationDatetime}</p>
       <p>所要時間(目安): {menuMinutes}分</p>
-      <p>合計金額: {menuAmount}円(税込)</p>
+      {menuDiscount > 0 ? (
+        <p>
+          合計金額: {(menuAmount - menuDiscount)?.toLocaleString()}
+          円(税込)
+        </p>
+      ) : (
+        <p>合計金額: {menuAmount?.toLocaleString()}円(税込)</p>
+      )}
     </div>
     <p>ReserveEaseのダッシュボードからも予約内容をご確認いただけます。</p>
     <a href='https://reserve-ease.com/dashboard'>ダッシュボードへアクセス</a>

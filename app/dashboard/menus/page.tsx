@@ -8,17 +8,17 @@ export default async function Page() {
   const menus = await getMenus()
 
   return (
-    <div className='mx-4 flex flex-col items-center space-y-6 py-8'>
+    <div className='mx-4 flex flex-col items-center space-y-4 py-8'>
       <h1 className='text-xl font-bold'>メニュー管理</h1>
       <div className='w-full space-y-4'>
-        <div className='flex items-center justify-center rounded border border-dotted border-primary bg-card'>
-          <Button variant='link' asChild>
-            <Link href='/dashboard/menus/new' className='text-xs'>
+        <Button variant='link' asChild className='w-full p-0'>
+          <Link href='/dashboard/menus/new'>
+            <div className='flex h-12 w-full items-center justify-center rounded border border-dotted border-primary bg-card'>
               <CirclePlus className='pr-1' />
               メニューを追加する
-            </Link>
-          </Button>
-        </div>
+            </div>
+          </Link>
+        </Button>
         {menus &&
           menus.length > 0 &&
           menus.map((menu) => <MenuCard key={menu.id} menu={menu} />)}

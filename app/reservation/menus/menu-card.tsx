@@ -3,8 +3,9 @@
 import { Button } from '@/components/ui/button'
 import type { Database } from '@/types/supabase'
 import { useAtom } from 'jotai'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { reservationAtom } from '../jotai'
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 export const MenuCard = ({ store, menu, staff }: Props) => {
   const router = useRouter()
   const [reservation, setReservation] = useAtom(reservationAtom)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (staff && store) {
@@ -24,8 +26,10 @@ export const MenuCard = ({ store, menu, staff }: Props) => {
   }, [store, staff])
 
   const handleClick = () => {
+    setLoading(true)
     setReservation({ ...reservation, menu })
     router.push(`/reservation/date?store_id=${reservation.store.id}`)
+    setLoading(false)
   }
 
   return (
@@ -48,7 +52,11 @@ export const MenuCard = ({ store, menu, staff }: Props) => {
         )}
       </div>
       <Button onClick={handleClick} className='h-10 text-xs'>
-        このメニューで予約する
+        {loading ? (
+          <Loader2 className='mr-2 size-4 animate-spin' />
+        ) : (
+          <>このメニューで予約する</>
+        )}
       </Button>
     </div>
   )

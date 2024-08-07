@@ -3,7 +3,9 @@
 import { Button } from '@/components/ui/button'
 import { date, format } from '@formkit/tempo'
 import { useAtomValue } from 'jotai'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { reservationAtom } from '../jotai'
 import { createReservation } from './action'
@@ -12,6 +14,7 @@ import { sendEmailToCustomer, sendEmailToStaff } from './email'
 export const Confirmation = () => {
   const router = useRouter()
   const reservation = useAtomValue(reservationAtom)
+  const [loading, setLoading] = useState(false)
 
   const reservationStartDatetime = format({
     date: date(reservation.startDatetime),
@@ -20,6 +23,7 @@ export const Confirmation = () => {
 
   const handleClick = () => {
     const reserve = async () => {
+      setLoading(true)
       try {
         // reservationsテーブルに予約データ作成
         await createReservation(reservation)
@@ -29,10 +33,14 @@ export const Confirmation = () => {
         await sendEmailToStaff(reservation)
 
         router.push('/reservation/complete')
+
+        setLoading(false)
       } catch (e) {
         toast.error(
           '予約の作成に失敗しました。もう一度最初からやり直してください。',
         )
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -79,7 +87,11 @@ export const Confirmation = () => {
         </div>
       </div>
       <Button onClick={handleClick} className='w-full'>
-        予約を確定する
+        {loading ? (
+          <Loader2 className='mr-2 size-4 animate-spin' />
+        ) : (
+          <>予約を確定する</>
+        )}
       </Button>
     </div>
   )
