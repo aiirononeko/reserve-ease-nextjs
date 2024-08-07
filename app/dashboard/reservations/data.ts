@@ -85,3 +85,24 @@ export const getStore = async () => {
 
   return data
 }
+
+export const getBusinessHours = async () => {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not found.')
+  }
+
+  const { data, error } = await supabase
+    .from('business_hours')
+    .select('*')
+    .eq('store_id', user.user_metadata.store_id)
+  if (error) {
+    throw error
+  }
+
+  return data
+}

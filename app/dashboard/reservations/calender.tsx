@@ -9,12 +9,13 @@ import { TimeGrid } from './time-grid'
 import { useCalendar } from './use-calender'
 
 interface Props {
+  businessHours: Database['public']['Tables']['business_hours']['Row'][]
   store: Database['public']['Tables']['stores']['Row']
   menus: Database['public']['Tables']['menus']['Row'][]
   staffId: string
 }
 
-export function Calender({ store, menus, staffId }: Props) {
+export function Calender({ businessHours, store, menus, staffId }: Props) {
   const [currentDate, setCurrentDate] = useState(dayStart(new Date()))
   const [reservations, setReservations] = useState<
     Database['public']['Tables']['reservations']['Row'][]
@@ -26,7 +27,7 @@ export function Calender({ store, menus, staffId }: Props) {
     filteringReservations,
     filteringDuringReservations,
     getHeight,
-  } = useCalendar(currentDate, reservations)
+  } = useCalendar(currentDate, businessHours, reservations)
 
   useEffect(() => {
     const get = async () => {

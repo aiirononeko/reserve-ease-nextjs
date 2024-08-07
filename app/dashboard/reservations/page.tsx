@@ -1,7 +1,7 @@
 import { getUser } from '@/app/data'
 import type { Metadata } from 'next'
 import { Calender } from './calender'
-import { getMenus, getStore } from './data'
+import { getBusinessHours, getMenus, getStore } from './data'
 
 export const metadata: Metadata = {
   robots: {
@@ -12,13 +12,19 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
+  const businessHours = await getBusinessHours()
   const store = await getStore()
   const menus = await getMenus()
   const user = await getUser()
 
   return (
     <div className='mx-4 flex flex-col items-center space-y-6 py-4'>
-      <Calender store={store} menus={menus} staffId={user.id} />
+      <Calender
+        businessHours={businessHours}
+        store={store}
+        menus={menus}
+        staffId={user.id}
+      />
     </div>
   )
 }

@@ -127,22 +127,30 @@ export function TimeGrid({
 
   return (
     <div className='grid grid-cols-6 border-y'>
-      <div className='col-span-1 border-r py-2'>
-        {times.map((time, index) => (
-          <div key={time.toISOString()}>
-            {times.length > index + 1 ? (
-              <div className='h-20 font-semibold tracking-wide text-gray-500'>
-                {format(time, 'HH:mm')}
+      {times.length > 0 ? (
+        <>
+          <div className='col-span-1 border-r py-2'>
+            {times.map((time, index) => (
+              <div key={time.toISOString()}>
+                {times.length > index + 1 ? (
+                  <div className='h-20 font-semibold tracking-wide text-gray-500'>
+                    {format(time, 'HH:mm')}
+                  </div>
+                ) : (
+                  <div className='font-semibold tracking-wide text-gray-500'>
+                    {format(time, 'HH:mm')}
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className='font-semibold tracking-wide text-gray-500'>
-                {format(time, 'HH:mm')}
-              </div>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
-      <div className='col-span-5 py-5'>{renderTimeSlots()}</div>
+          <div className='col-span-5 py-5'>{renderTimeSlots()}</div>
+        </>
+      ) : (
+        <div className='col-span-6 flex h-20 items-center justify-center'>
+          <p className='text-muted-foreground'>定休日です</p>
+        </div>
+      )}
     </div>
   )
 }

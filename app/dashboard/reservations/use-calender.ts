@@ -13,14 +13,34 @@ import { generateHourlyIntervals } from './utils'
 
 export function useCalendar(
   currentDate: Date,
+  businessHours: Database['public']['Tables']['business_hours']['Row'][],
   reservations: Database['public']['Tables']['reservations']['Row'][],
 ) {
   const times = useMemo(() => {
+    const todaysBusinessHour = businessHours.find((businessHour) => {
+      return businessHour.day_of_week === currentDate.getDay()
+    })
+
+    if (!todaysBusinessHour?.open_time || !todaysBusinessHour?.close_time) {
+      return []
+    }
+
+    const openHour = extractHour(todaysBusinessHour?.open_time)
+    const closeHour = extractHour(todaysBusinessHour?.close_time)
+
     return generateHourlyIntervals(
-      addHour(currentDate, 7),
-      addHour(currentDate, 22),
+      addHour(currentDate, openHour),
+      addHour(currentDate, closeHour),
     )
   }, [currentDate])
+
+  function extractHour(timeString: string): number {
+    const match = timeString.match(/^(\d{1,2}):/)
+    if (match) {
+      return parseInt(match[1], 10)
+    }
+    throw new Error('Invalid time format')
+  }
 
   const filteringReservations = (targetDatetime: Date) => {
     return reservations.filter((reservation) => {
