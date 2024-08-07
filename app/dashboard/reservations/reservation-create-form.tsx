@@ -25,6 +25,7 @@ import type { Database } from '@/types/supabase'
 import { addHour, format } from '@formkit/tempo'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -46,6 +47,7 @@ export const ReservationCreateForm = ({
   menus,
   closeModal,
 }: Props) => {
+  const [open, setOpen] = useState(false)
   const form = useForm<z.infer<typeof createReservationSchema>>({
     defaultValues: {
       start_datetime: format({
@@ -145,7 +147,7 @@ export const ReservationCreateForm = ({
               <FormLabel aria-required={true} className='font-bold'>
                 メニュー
               </FormLabel>
-              <Popover>
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -178,6 +180,7 @@ export const ReservationCreateForm = ({
                           key={option.value}
                           onSelect={() => {
                             form.setValue('menu_id', option.value)
+                            setOpen(false)
                           }}
                         >
                           <Check
